@@ -23,6 +23,10 @@ export const OPCOES_PADRAO = {
   // (tests/test_fixtures_tse.py). Usadas no modo ensaio (a 6259 tem as 27 UFs) e como filtro se a configuração
   // do 2º turno listar a 6260 com abrangência "br": consultar as 27 daria 20 respostas 404 e bloqueio do IP.
   ufsGovernador2T: ["ac", "am", "df", "es", "rj", "rn", "to"],
+  // Máximo de arquivos com conteúdo novo processados numa execução. Acima disso o resto fica para uma
+  // execução seguinte (retorno continuar: true) e os arquivos públicos só são refeitos quando todos
+  // chegarem. No Node não há limite; no Worker, mantém cada execução dentro do limite de CPU do plano gratuito.
+  maxNovosPorExecucao: Infinity,
 };
 
 const DISPUTAS = ["presidente", "governador"];
@@ -33,31 +37,47 @@ export function estadoInicial() {
 
 const seg = (a, b) => (Date.parse(a) - Date.parse(b)) / 1000;
 const MAX_EVENTOS = 500;
+const MAX_CORRECOES = 1000;
 
 /**
- * @returns {Promise<{ estado: object, saidas: Record<string, object|string>, brutos: Record<string, string>, log: object[] }>}
+ * @returns {Promise<{ estado: object, saidas: Record<string, object|string>, brutos: Record<string, string>, log: object[], continuar?: boolean }>}
  *   brutos: corpos oficiais novos nesta rodada, por SHA-256, para o adaptador guardar
  */
 export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   const op = { ...OPCOES_PADRAO, ...opcoesEntrada };
-  const estado = { ...estadoInicial(), ...structuredClone(estadoAnterior ?? {}) };
+  // Cópia rasa: os mapas e listas são novos, os valores que não mudam são reaproveitados (nunca alterados
+  // no lugar). Copiar o estado inteiro a cada rodada custava mais CPU que todo o resto.
+  const ant = estadoAnterior ?? {};
+  const estado = {
+    ...estadoInicial(),
+    ...ant,
+    recortes: { ...ant.recortes },
+    ultimos: { ...ant.ultimos },
+    coleta: { ...ant.coleta },
+    historico: { ...ant.historico },
+    series: { ...ant.series },
+    correcoes: ant.correcoes ?? [],
+    eventos: ant.eventos ?? [],
+    snapshots: ant.snapshots ?? [],
+  };
   const inicio = new Date(fonte.agora()).toISOString();
   const log = [];
   /** @type {Record<string, string>} */
   const brutos = {};
   const fonteCfg = { base: op.base, ambiente: op.ambiente, ciclo: op.ciclo };
   const evento = (tipo, dados) => {
-    estado.eventos.push({ em: new Date(fonte.agora()).toISOString(), tipo, ...dados });
-    if (estado.eventos.length > MAX_EVENTOS) estado.eventos.splice(0, estado.eventos.length - MAX_EVENTOS);
+    estado.eventos = [...estado.eventos, { em: new Date(fonte.agora()).toISOString(), tipo, ...dados }].slice(-MAX_EVENTOS);
   };
 
+  const novosSnapshots = [];
+  let novosNestaExecucao = 0, pendentes = 0;
   /** Guarda o corpo e registra o snapshot quando o conteúdo mudou (200 com corpo novo). */
   const snapshot = async (r, meta) => {
     if (!r.ok || r.status !== 200 || !r.alterado || typeof r.texto !== "string") return null;
     const sha256 = await sha256Hex(r.texto);
     brutos[sha256] = r.texto;
     const entrada = { coletado_em: r.horario_coleta, url: r.url, etag: r.etag ?? null, sha256, bytes: r.texto.length, ...meta };
-    estado.snapshots = acrescentarSnapshot(estado.snapshots, entrada);
+    novosSnapshots.push(entrada);
     return entrada;
   };
 
@@ -65,11 +85,14 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   if (!estado.config || !estado.config_em || seg(inicio, estado.config_em) >= op.intervaloConfigS) {
     const r = await fonte.obter(urlConfig(fonteCfg));
     log.push(r);
-    if (r.ok) {
+    if (r.ok && !r.alterado && estado.config && !estado.config_erro) {
+      estado.config_em = r.horario_coleta; // mesma configuração já validada
+    } else if (r.ok) {
       try {
-        descobrir(r.dados, { ciclo: op.ciclo, modo: op.modo }); // valida antes de aceitar
-        await snapshot(r, { tipo: "configuracao", geracao: horarioTSE(r.dados.dg, r.dados.hg), idg: r.dados.idg ?? null, aceito: true });
-        estado.config = r.dados;
+        const dados = r.dados;
+        descobrir(dados, { ciclo: op.ciclo, modo: op.modo }); // valida antes de aceitar
+        await snapshot(r, { tipo: "configuracao", geracao: horarioTSE(dados.dg, dados.hg), idg: dados.idg ?? null, aceito: true });
+        estado.config = dados;
         estado.config_em = r.horario_coleta;
         estado.config_erro = null;
       } catch (e) {
@@ -81,7 +104,10 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
       estado.config_erro = { em: r.horario_coleta, mensagem: r.erro, status: r.status };
     }
   }
-  if (estado.config) estado.descoberta = descobrir(estado.config, { ciclo: op.ciclo, modo: op.modo });
+  if (estado.config && (estado.config !== ant.config || !estado.descoberta || ant.modo !== op.modo)) {
+    estado.descoberta = descobrir(estado.config, { ciclo: op.ciclo, modo: op.modo });
+  }
+  estado.modo = op.modo;
 
   // 2. Recortes de cada disputa e 3. resultados
   for (const chave of DISPUTAS) {
@@ -96,6 +122,10 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
     let sentinelaSem = false;
     for (const abr of ordem) {
       const id = `${chave}:${d.eleicao}:${abr}`;
+      if (novosNestaExecucao >= op.maxNovosPorExecucao) {
+        pendentes++; // fica como estava; será consultado na execução seguinte
+        continue;
+      }
       const url = urlResultado(estado.config, fonteCfg, d.eleicao, d.cargo, abr);
       const r = sentinelaSem
         ? { ok: false, url, status: null, adiado: true, nao_publicado: true, erro: "aguardando o primeiro arquivo da disputa ser publicado", horario_coleta: new Date(fonte.agora()).toISOString() }
@@ -113,7 +143,11 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
         alertas: anterior.alertas ?? [],
         sha256: anterior.sha256 ?? null,
       };
-      if (r.ok) {
+      if (r.ok && !r.alterado && estado.ultimos[id] && anterior.situacao === "atualizado" && !anterior.fora_de_ordem) {
+        // Mesmo corpo já aceito na rodada anterior (304): nada a validar, normalizar ou recalcular.
+        Object.assign(coleta, { ultimo_sucesso: r.horario_coleta, situacao: "atualizado", sem_alteracao: true, fora_de_ordem: null, nova_versao: false, correcao: false });
+      } else if (r.ok) {
+        novosNestaExecucao++;
         let norm = null;
         try {
           norm = normalizarResultado(r.dados, { eleicao: d.eleicao, cargo: d.cargo, territorio: abr, turno: d.turno });
@@ -148,8 +182,9 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
             const shaAnterior = anterior.sha256 ?? null;
             if (snap) coleta.sha256 = snap.sha256;
             if (reg.nova) coleta.ultima_mudanca = r.horario_coleta;
+            if (reg.nova && chave === "presidente" && abr === BRASIL) estado.serie_pendente = { correcao: Boolean(reg.correcao) };
             if (reg.correcao) {
-              estado.correcoes.push({ recorte: abr, disputa: chave, eleicao: d.eleicao, ...reg.correcao, de_sha256: shaAnterior, para_sha256: coleta.sha256 });
+              estado.correcoes = [...estado.correcoes, { recorte: abr, disputa: chave, eleicao: d.eleicao, ...reg.correcao, de_sha256: shaAnterior, para_sha256: coleta.sha256 }].slice(-MAX_CORRECOES);
               evento("correcao_oficial", { recorte: abr, disputa: chave });
             }
             if (norm.alertas.length) evento("alerta_aritmetico", { recorte: abr, disputa: chave, alertas: norm.alertas });
@@ -164,6 +199,13 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
       }
       estado.coleta[id] = coleta;
     }
+  }
+
+  if (novosSnapshots.length) estado.snapshots = acrescentarSnapshot(estado.snapshots, ...novosSnapshots);
+  if (pendentes) {
+    // Execução parcial: os arquivos públicos continuam os da última execução completa, que é coerente.
+    estado.fonte = fonte.estado;
+    return { estado, saidas: {}, brutos, log, continuar: true };
   }
 
   // 4. Contrato
@@ -188,10 +230,11 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   const dPres = estado.descoberta?.disputas?.presidente;
   if (dPres?.eleicao) {
     const idBr = `presidente:${dPres.eleicao}:${BRASIL}`;
-    if (estado.coleta[idBr]?.nova_versao && pres.brasil.oficial) {
-      estado.series[idBr] = acrescentarPonto(estado.series[idBr], pontoSerie(pres.brasil.oficial, estado.coleta[idBr].ultimo_sucesso, estado.coleta[idBr].correcao, estado.coleta[idBr].sha256));
-      estado.coleta[idBr].nova_versao = false;
+    if (estado.serie_pendente && pres.brasil.oficial) {
+      const c = estado.coleta[idBr];
+      estado.series[idBr] = acrescentarPonto(estado.series[idBr], pontoSerie(pres.brasil.oficial, c.ultima_mudanca, estado.serie_pendente.correcao, c.sha256));
     }
+    estado.serie_pendente = null;
   }
   const serieBr = dPres?.eleicao ? estado.series[`presidente:${dPres.eleicao}:${BRASIL}`] ?? [] : [];
 
@@ -211,7 +254,11 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   gov.coleta_geral = resumoColeta;
   saidas["v1/presidente.json"] = pres;
   saidas["v1/governador.json"] = gov;
-  saidas["v1/historico.json"] = {
+  // historico.json e snapshots.json só são refeitos quando o conteúdo deles muda; senão o adaptador
+  // mantém a versão já gravada.
+  const novo = !estadoAnterior || ant.modo !== op.modo;
+  const chaveSerie = `presidente:${dPres?.eleicao}:${BRASIL}`;
+  if (novo || estado.series[chaveSerie] !== ant.series?.[chaveSerie] || estado.correcoes !== ant.correcoes || estado.eventos !== ant.eventos) saidas["v1/historico.json"] = {
     schema: SCHEMA,
     tipo: "historico",
     gerado_em: pres.gerado_em,
@@ -222,7 +269,7 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
     correcoes: estado.correcoes.filter((c) => !dPres?.eleicao || c.eleicao === dPres.eleicao || c.disputa === "governador").slice(-200),
     eventos: estado.eventos.slice(-200),
   };
-  saidas["v1/snapshots.json"] = {
+  if (novo || estado.snapshots !== ant.snapshots) saidas["v1/snapshots.json"] = {
     schema: SCHEMA,
     tipo: "snapshots",
     modo: op.modo,

@@ -33,6 +33,7 @@ Cada critério do prompt (seções 2, 3, 4, 7, 8 e 9) que cabe ao coletor tem pe
 | Tabela TSE × IBGE explícita e conferida | `territorios` › tabela TSE × IBGE… |
 | Estado do Durable Object volta igual após reinício | `cloudflare` › estado dividido no storage… |
 | Cabe no plano gratuito (linhas gravadas/dia) | `cloudflare` › plano gratuito: rodada sem novidade do TSE regrava poucas chaves |
+| Cabe no limite de CPU: execução dividida chega ao mesmo resultado, sem arquivo público pela metade | `rodada` › limite de arquivos novos por execução… (CPU medida com `npm run cpu`, ver docs/arquitetura/DADOS.md) |
 | Situação da coleta para a página (ok, atrasada, bloqueada) | `rodada` › resumo da coleta para a página… |
 | Ensaio e simulação identificados; nunca como 2º turno real | `rodada` › dados de teste nunca saem como apuração real: modo e aviso em todos os arquivos e no CSV |
 | Exportação CSV/JSON com origem e horário | `rodada` › dados de teste nunca saem como apuração real… (confere `origem`, horários, `url_fonte`, `sha256_arquivo`) |

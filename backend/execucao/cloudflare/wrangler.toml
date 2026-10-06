@@ -8,6 +8,7 @@ compatibility_date = "2026-10-01"
 MODO = "oficial"        # "ensaio" usa o 1º turno de 04/10
 INTERVALO_S = "15"      # mínimo 10
 PAUSADO = "nao"         # "sim" para o coletor parar de consultar o TSE (também dá para pausar por POST /admin/pausar)
+MAX_NOVOS_POR_EXECUCAO = "12"  # arquivos novos por execução; o resto segue 1 s depois (limite de CPU do plano gratuito)
 # HOSTS_EXTRAS_TESTE = "127.0.0.1:8788"   # só em teste local; nunca em produção
 
 [[durable_objects.bindings]]

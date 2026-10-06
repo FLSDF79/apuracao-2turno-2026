@@ -112,7 +112,9 @@ export class Fonte {
         this.estado.seguidos404 = 0;
         st.falhas = 0;
         st.ultimoOk = coleta;
-        return { ok: true, url, status: 304, alterado: false, dados: JSON.parse(st.corpo), texto: st.corpo, etag: st.etag, horario_coleta: coleta, ms: this.agora() - t0 };
+        const texto = st.corpo;
+        // dados só é lido (JSON.parse) se quem chamou precisar: a rodada pula arquivos que não mudaram.
+        return { ok: true, url, status: 304, alterado: false, get dados() { return JSON.parse(texto); }, texto, etag: st.etag, horario_coleta: coleta, ms: this.agora() - t0 };
       }
       if (r.status === 200) {
         const texto = await r.text();

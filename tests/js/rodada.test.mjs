@@ -28,7 +28,8 @@ test("ensaio com os arquivos reais do 1º turno: contrato completo, conferência
   assert.deepEqual(r2.saidas["v1/saude.json"].coletor.status_http, { 304: 36 });
   const p2 = r2.saidas["v1/presidente.json"];
   assert.deepEqual(p2.brasil.calculado.votos, p.brasil.calculado.votos); // arquivo cumulativo não é somado de novo
-  assert.equal(r2.saidas["v1/historico.json"].serie_brasil.length, 1);
+  assert.equal(r2.saidas["v1/historico.json"], undefined); // nada novo: o histórico gravado continua valendo
+  assert.equal(r2.estado.series["presidente:6257:br"].length, 1);
 });
 
 test("noite simulada do 2º turno: espera, apuração, atraso de UF, falha, correção e eleito", async () => {
@@ -198,4 +199,32 @@ test("configuração do 2º turno publicada antes dos arquivos: um 404 por dispu
   assert.equal(p.estado_publicacao, "aguardando_resultados");
   assert.equal(p.territorios.sp.coleta.situacao, "atualizado");
   assert.equal(Object.values(r.saidas["v1/governador.json"].ufs).filter((u) => u.coleta.situacao === "atualizado").length, 7);
+});
+
+test("limite de arquivos novos por execução: continua em execuções seguintes e chega ao mesmo resultado", async () => {
+  const base = await carregarBase(RAIZ);
+  const site = montarSite(base, { hora: "25/10/2026 18:00:00", fracao: { padrao: 0.4 } });
+  const rodar = async (limite) => {
+    const rel = relogio("2026-10-25T21:00:00Z");
+    const fonte = new Fonte({ fetch: fetchSimulado(() => site), ...rel });
+    let r = await rodada(fonte, null, { modo: "oficial", maxNovosPorExecucao: limite });
+    let execucoes = 1;
+    while (r.continuar) {
+      assert.deepEqual(r.saidas, {}); // parcial: nada público é refeito pela metade
+      rel.avancar(1000);
+      r = await rodada(fonte, r.estado, { modo: "oficial", maxNovosPorExecucao: limite });
+      execucoes++;
+    }
+    return { r, execucoes };
+  };
+  const tudo = await rodar(Infinity);
+  const partes = await rodar(10);
+  assert.equal(tudo.execucoes, 1);
+  assert.equal(partes.execucoes, 4); // 36 arquivos novos de resultado + config/abrangência
+  const a = tudo.r.saidas["v1/presidente.json"], b = partes.r.saidas["v1/presidente.json"];
+  assert.deepEqual(b.brasil.calculado.votos, a.brasil.calculado.votos);
+  assert.equal(b.conferencia.classificacao.codigo, "compativel");
+  assert.equal(Object.values(b.territorios).filter((t) => t.coleta.situacao === "atualizado").length, 28);
+  assert.equal(partes.r.estado.series["presidente:6258:br"].length, 1);
+  assert.equal(partes.r.estado.snapshots.length, tudo.r.estado.snapshots.length);
 });

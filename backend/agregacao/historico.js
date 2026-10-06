@@ -2,8 +2,12 @@
 // Uma versão nova com menos votos ou menos seções que a anterior é registrada como correção oficial e aceita
 // como está; o painel não força crescimento monotônico.
 
-const MAX_VERSOES = 400;
-const MAX_PONTOS = 3000;
+// Só a última versão de cada recorte é guardada aqui: é o que basta para detectar versão nova e correção.
+// O registro completo de cada arquivo recebido fica no índice de snapshots (com o corpo por SHA-256), e
+// regravar 400 versões de 38 recortes a cada atualização custava mais CPU que a rodada inteira.
+const MAX_VERSOES = 1;
+const MAX_CORRECOES = 20;
+const MAX_PONTOS = 1000;
 
 function resumo(r, coletadoEm) {
   return {
@@ -42,6 +46,7 @@ export function registrarVersao(historico, resultado, coletadoEm) {
   h.versoes.push(atual);
   if (h.versoes.length > MAX_VERSOES) h.versoes.splice(0, h.versoes.length - MAX_VERSOES);
   if (correcao) h.correcoes.push(correcao);
+  if (h.correcoes.length > MAX_CORRECOES) h.correcoes.splice(0, h.correcoes.length - MAX_CORRECOES);
   return { historico: h, nova: true, correcao };
 }
 

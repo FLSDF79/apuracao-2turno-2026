@@ -92,10 +92,13 @@ test("snapshot: SHA-256 igual ao do arquivo oficial byte a byte; rodadas repetid
     rel.avancar(15000);
     r = await rodada(fonte, r.estado, { modo: "ensaio" });
   }
-  assert.equal(r.saidas["v1/snapshots.json"].total, r1.saidas["v1/snapshots.json"].total);
+  // sem conteúdo novo: índice e histórico não são refeitos (o adaptador mantém os já gravados)
+  assert.equal(r.saidas["v1/snapshots.json"], undefined);
+  assert.equal(r.saidas["v1/historico.json"], undefined);
+  assert.equal(r.estado.snapshots.length, r1.saidas["v1/snapshots.json"].total);
   assert.deepEqual(Object.keys(r.brutos), []);
   assert.deepEqual(r.saidas["v1/presidente.json"].brasil.calculado.votos, r1.saidas["v1/presidente.json"].brasil.calculado.votos);
-  assert.equal(r.saidas["v1/historico.json"].serie_brasil.length, 1);
+  assert.equal(r.estado.series[`presidente:6257:br`].length, 1);
 });
 
 test("três horários separados: consulta avança, publicação e mudança só quando o dado muda", async () => {

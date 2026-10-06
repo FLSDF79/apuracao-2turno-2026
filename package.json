@@ -14,7 +14,8 @@
     "tipos": "tsc -p .",
     "tipos:painel": "tsc -p js/tsconfig.json",
     "coletor": "node backend/execucao/node.js",
-    "exemplo": "node tools/gerar-exemplo.mjs"
+    "exemplo": "node tools/gerar-exemplo.mjs",
+    "cpu": "node tools/medir-cpu.mjs --sha-sincrono --max=12"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

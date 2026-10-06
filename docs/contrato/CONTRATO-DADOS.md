@@ -9,7 +9,7 @@ Para regenerar: `node tools/gerar-exemplo.mjs`.
 
 ## Arquivos
 
-Servidos em `/dados/v1/…` (Cloudflare) ou gravados em `<saida>/v1/…` (Node). São regravados a cada rodada do coletor (padrão 15 s), mas o `gerado_em` só muda quando algum dado mudou de fato (ver "Horários").
+Servidos em `/dados/v1/…` (Cloudflare) ou gravados em `<saida>/v1/…` (Node). `presidente.json`, `governador.json`, `saude.json` e os CSVs são regravados a cada rodada do coletor (padrão 15 s), mas o `gerado_em` só muda quando algum dado mudou de fato (ver "Horários"). `historico.json` e `snapshots.json` só são regravados quando o conteúdo deles muda. Quando muitos arquivos do TSE mudam de uma vez, o Worker processa em partes de até 12 e só regrava os arquivos públicos quando todas as partes chegam: nunca há um arquivo público montado pela metade.
 
 | Arquivo | Conteúdo |
 |---|---|
