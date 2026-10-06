@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d1117">
+<title>Apuração 2º turno 2026 — Presidente</title>
+<meta name="description" content="Painel independente de apuração em tempo real do 2º turno presidencial de 25/10/2026, com dados abertos do TSE.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%228%22 height=%2216%22 fill=%22%232f6bff%22/%3E%3Crect x=%228%22 width=%228%22 height=%2216%22 fill=%22%23e5383b%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topo">
+  <div>
+    <h1>Apuração Presidente 2026</h1>
+    <p class="sub" id="subtitulo">Carregando…</p>
+  </div>
+  <div class="status" id="status"><span class="ponto"></span><span id="statusTxt">conectando</span></div>
+</header>
+
+<div id="avisos" aria-live="polite"></div>
+
+<main>
+  <!-- 1. Placar nacional -->
+  <section class="card" id="placar">
+    <div class="progresso">
+      <div class="prog-txt"><strong id="pctSecoes">–</strong> das seções totalizadas <span id="secoesNum" class="mut"></span></div>
+      <div class="barra"><div id="barraSecoes"></div></div>
+    </div>
+    <div class="cands" id="cands"></div>
+    <div class="barra-disputa" id="barraDisputa"></div>
+    <div class="dif" id="diferenca"></div>
+    <div class="mini-grid" id="miniGrid"></div>
+    <p class="mut atual" id="ultimaAtualizacao"></p>
+  </section>
+
+  <!-- 7. Projeção -->
+  <section class="card" id="projecao">
+    <h2>Projeção simples <span class="tag">ESTIMATIVA</span></h2>
+    <div id="projConteudo"></div>
+    <details>
+      <summary>Metodologia</summary>
+      <p>Para cada UF (e Exterior), os votos ainda não totalizados são estimados assim:
+      <em>eleitorado das seções não totalizadas × comparecimento já observado na UF × proporção de votos válidos já observada na UF</em>.
+      Esses votos válidos faltantes são divididos entre os candidatos na <strong>mesma proporção atual de cada UF</strong>.
+      UFs ainda sem nenhuma seção totalizada usam as proporções nacionais do momento.
+      Somam-se os votos já apurados aos estimados e calcula-se o % de válidos.</p>
+      <p>É uma conta aritmética, não um modelo estatístico: ignora diferenças dentro da UF (capital × interior, zonas que chegam antes), votos em trânsito e o ritmo real da totalização. <strong>Não é resultado oficial.</strong></p>
+    </details>
+  </section>
+
+  <!-- 2. Conferência soma UFs x nacional -->
+  <section class="card" id="conferencia">
+    <h2>Conferência: soma das UFs × total nacional</h2>
+    <div id="confConteudo"></div>
+  </section>
+
+  <!-- 5. Mapa -->
+  <section class="card" id="mapaCard">
+    <h2>Mapa por estado</h2>
+    <div class="legenda" id="legenda"></div>
+    <div class="mapa-wrap">
+      <svg id="mapa" role="img" aria-label="Mapa do Brasil por estado"></svg>
+      <div id="tooltip" class="tooltip" hidden></div>
+    </div>
+    <p class="mut peq">Cor = candidato à frente; intensidade = margem em pontos percentuais dos votos válidos. Cinza = sem seções totalizadas. Toque/passe o mouse num estado.</p>
+  </section>
+
+  <!-- 6. Evolução -->
+  <section class="card" id="evolucaoCard">
+    <h2>Evolução: % de votos válidos × % apurado</h2>
+    <svg id="grafico" role="img" aria-label="Gráfico de evolução"></svg>
+    <p class="mut peq" id="grafNota">Histórico guardado neste navegador (localStorage) a partir do momento em que o painel foi aberto. Linhas tracejadas = pausas de mais de 10 min na totalização do TSE.</p>
+    <button class="btn" id="limparHist" type="button">Limpar histórico deste navegador</button>
+  </section>
+
+  <!-- 4. Regiões -->
+  <section class="card" id="regioesCard">
+    <h2>Totais por região</h2>
+    <div class="tabela-wrap"><table id="tabRegioes"></table></div>
+  </section>
+
+  <!-- 3. Tabela por UF -->
+  <section class="card" id="ufsCard">
+    <h2>Por estado <span class="mut peq">(toque no cabeçalho para ordenar)</span></h2>
+    <div class="tabela-wrap"><table id="tabUFs"></table></div>
+  </section>
+</main>
+
+<footer>
+  <p><strong>Dados: TSE – Divulgação de Resultados. Painel independente, sem vínculo oficial.</strong></p>
+  <p class="mut peq" id="fonteInfo"></p>
+  <p class="mut peq">Mapa: malha estadual do IBGE. Horários do TSE em horário de Brasília. Atualização automática a cada ~45 s.</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
