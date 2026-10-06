@@ -1,6 +1,7 @@
 // Converte o arquivo de resultado do TSE (EA20, "-u.json") num objeto normalizado.
 // Regras: contagens viram inteiros (Number, exatas até 2^53); campo ausente vira null, nunca 0;
-// percentuais do TSE são guardados só para conferência, os do painel saem de calcular.js.
+// percentuais do TSE são guardados só para conferência, os do painel saem de agregacao/calcular.js.
+import { validarResultado } from "./validar.js";
 
 const SECOES = { ts: "total", st: "totalizadas", snt: "nao_totalizadas", si: "instaladas", sni: "nao_instaladas", sa: "apuradas", sna: "nao_apuradas" };
 const ELEITORADO = {
@@ -55,13 +56,14 @@ export function candidatosBrutos(cargo) {
 }
 
 /**
- * @param bruto  JSON do TSE já parseado
- * @param esperado { eleicao, cargo, territorio } — se o arquivo declarar outra coisa, é rejeitado
+ * @param {any} bruto  JSON do TSE já parseado
+ * @param {{ eleicao?: string|number, cargo?: number, territorio?: string, turno?: number }} [esperado]
+ *   se o arquivo declarar outra coisa, é rejeitado
  */
 export function normalizarResultado(bruto, esperado = {}) {
-  if (!bruto || typeof bruto !== "object") throw new ErroFonte("arquivo vazio ou não é JSON");
-  const cargo = (bruto.carg || [])[0];
-  if (!cargo) throw new ErroFonte("arquivo sem cargo (carg)");
+  const { erros, alertas } = validarResultado(bruto, esperado);
+  if (erros.length) throw new ErroFonte(erros.slice(0, 3).join("; "));
+  const cargo = bruto.carg[0];
   const declarado = { eleicao: String(bruto.ele), cargo: Number(cargo.cd), territorio: String(bruto.cdabr) };
   for (const k of ["eleicao", "cargo", "territorio"]) {
     if (esperado[k] !== undefined && String(esperado[k]) !== String(declarado[k])) {
@@ -100,6 +102,7 @@ export function normalizarResultado(bruto, esperado = {}) {
     eleitorado: bloco(bruto.e, ELEITORADO, "e"),
     votos: bloco(bruto.v, VOTOS, "v"),
     candidatos,
+    alertas,
     oficial: {
       pct_totalizadas: percentual(bruto.s?.pstn ?? bruto.s?.pst),
       pct_comparecimento: percentual(bruto.e?.pcn ?? bruto.e?.pc),

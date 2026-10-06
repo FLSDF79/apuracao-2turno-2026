@@ -313,6 +313,10 @@ main { max-width: 1320px; margin: 0 auto; padding: 8px 20px 40px; display: grid;
 .fontes-resumo b { display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--mudo); }
 .fontes-resumo span { font-weight: 700; }
 .aviso-base { font-size: .84rem; color: var(--tinta-2); border-left: 3px solid var(--ambar); padding: 6px 12px; margin-bottom: 8px; }
+.eventos { margin-top: 14px; }
+.eventos ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: .84rem; color: var(--tinta-2); }
+.eventos li { border-left: 2px solid var(--regua-forte); padding-left: 10px; }
+.eventos .mudo { color: var(--mudo); }
 .aviso-base a { color: var(--tinta); font-weight: 600; }
 .tabela-fontes td:nth-child(2) { text-align: left; white-space: normal; min-width: 220px; color: var(--tinta-2); }
 .tabela-fontes a { font-family: var(--mono); font-size: .76rem; }

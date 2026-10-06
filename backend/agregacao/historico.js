@@ -21,7 +21,7 @@ function mesmaVersao(a, b) {
   return a.idg === b.idg && a.totalizacao === b.totalizacao && JSON.stringify(a.votos) === JSON.stringify(b.votos) && a.secoes_totalizadas === b.secoes_totalizadas;
 }
 
-/** @returns { historico, nova, correcao } — historico é um objeto novo; o anterior não é alterado. */
+/** Devolve { historico, nova, correcao }; historico é um objeto novo e o anterior não é alterado. */
 export function registrarVersao(historico, resultado, coletadoEm) {
   const h = { versoes: [...(historico?.versoes || [])], correcoes: [...(historico?.correcoes || [])] };
   const atual = resumo(resultado, coletadoEm);

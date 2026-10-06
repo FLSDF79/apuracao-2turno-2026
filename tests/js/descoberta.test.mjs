@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { descobrir, urlResultado, urlAbrangencia, urlConfig, recortesDaAbrangencia } from "../../nucleo/descoberta.js";
-import { carregarBase, montarSite } from "../../coletor/simulador.js";
+import { descobrir, urlResultado, urlAbrangencia, urlConfig, recortesDaAbrangencia } from "../../backend/conectores/tse.js";
+import { carregarBase, montarSite } from "../../backend/conectores/simulador.js";
 import { ler, RAIZ } from "./apoio.mjs";
 
 const fonte = { base: "https://resultados.tse.jus.br", ambiente: "oficial", ciclo: "ele2026" };

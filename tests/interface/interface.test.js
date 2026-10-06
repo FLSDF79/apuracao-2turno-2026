@@ -174,22 +174,27 @@ test("marca de teste: simulação, ensaio, outro turno e modo desconhecido; ofic
   for (const k of ["ensaio", "simulacao", "outro_turno", "desconhecido"]) assert.ok(MARCAS[k].faixa && MARCAS[k].detalhe);
 });
 
-test("três horários separados: publicação do TSE, consulta e mudança (do snapshot quando vier)", () => {
+test("três horários separados: publicação do TSE, consulta e mudança, do bloco tempos do coletor", () => {
   const { modelo } = normalizar(simulado, CFG);
-  assert.equal(modelo.tempos.publicacaoTSE, simulado.brasil.oficial.horario.geracao);
-  assert.equal(modelo.tempos.consultaOk, simulado.brasil.coleta.ultimo_sucesso);
-  assert.equal(modelo.tempos.mudanca, null);
-  const com = structuredClone(simulado);
-  com.snapshot = { id: "s-9", sha256: "f".repeat(64), mudou_em: "2026-10-25T21:09:00Z", anterior_sha256: "e".repeat(64) };
-  const m2 = normalizar(com, CFG).modelo;
-  assert.equal(m2.tempos.mudanca, "2026-10-25T21:09:00Z");
-  assert.deepEqual(m2.snapshot, { id: "s-9", sha256: "f".repeat(64), mudouEm: "2026-10-25T21:09:00Z", anterior: "e".repeat(64) });
+  assert.equal(modelo.tempos.publicacaoTSE, simulado.tempos.publicacao_fonte);
+  assert.equal(modelo.tempos.consultaOk, simulado.tempos.ultima_consulta_ok);
+  assert.equal(modelo.tempos.mudanca, simulado.tempos.ultima_mudanca);
+  assert.equal(modelo.avisoModo, simulado.aviso_modo);
+  assert.equal(modelo.sha256BR, simulado.brasil.coleta.sha256);
+  // sem o bloco tempos (coletor antigo): cai nos campos do arquivo nacional
+  const antigo = structuredClone(simulado);
+  delete antigo.tempos; delete antigo.brasil.coleta.ultima_mudanca;
+  const m2 = normalizar(antigo, CFG).modelo;
+  assert.equal(m2.tempos.publicacaoTSE, simulado.brasil.oficial.horario.geracao);
+  assert.equal(m2.tempos.consultaOk, simulado.brasil.coleta.ultimo_sucesso);
+  assert.equal(m2.tempos.mudanca, null);
 });
 
 test("assinatura do conteúdo ignora horários de coleta e muda com os números", () => {
   const a = structuredClone(simulado), b = structuredClone(simulado);
   b.gerado_em = "2030-01-01T00:00:00Z";
   b.coleta_geral.rodada_em = "2030-01-01T00:00:00Z";
+  b.tempos.ultima_consulta_ok = "2030-01-01T00:00:00Z";
   b.brasil.coleta.ultimo_sucesso = "2030-01-01T00:00:00Z";
   assert.equal(assinaturaConteudo(a), assinaturaConteudo(b));
   b.brasil.oficial.candidatos[0].votos += 1;

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizarResultado } from "../../nucleo/normalizar.js";
-import { registrarVersao } from "../../nucleo/historico.js";
+import { normalizarResultado } from "../../backend/normalizacao/normalizar.js";
+import { registrarVersao } from "../../backend/agregacao/historico.js";
 import { presidente } from "./apoio.mjs";
 
 test("mesma versão não duplica; versão nova substitui (não soma); queda vira correção aceita", () => {

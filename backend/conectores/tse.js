@@ -1,7 +1,7 @@
 // Descoberta das eleições e dos arquivos a consultar, sempre a partir da configuração oficial (ele-c.json)
 // e da lista de abrangência (-ab.json). Nenhuma URL é montada por tentativa: 404 em série bloqueia o IP.
-import { ErroFonte } from "./normalizar.js";
-import { COMPONENTES_BRASIL, BRASIL, SIGLAS_UF } from "./territorios.js";
+import { ErroFonte } from "../normalizacao/normalizar.js";
+import { COMPONENTES_BRASIL, BRASIL, SIGLAS_UF } from "../normalizacao/territorios.js";
 
 export const DISPUTAS = {
   presidente: { eleicao1T: "6257", cargo: 1, nome: "Presidente" },
@@ -13,12 +13,14 @@ const pad = (v, n) => String(v).padStart(n, "0");
 function diretorio(cfg, tp, { base, ambiente, ciclo, eleicao, abr }) {
   const modelo = (cfg.arq || []).find((a) => a.tp === tp)?.dir;
   if (!modelo) throw new ErroFonte(`ele-c.json sem diretório para o tipo "${tp}"`);
+  // O modelo vem da configuração oficial; só aceitamos caminhos relativos à base do TSE, nunca outro host.
+  if (!modelo.startsWith("<base>/<ambiente>/") || /[?#\\]|\.\./.test(modelo)) throw new ErroFonte(`modelo de diretório inesperado para "${tp}": ${modelo}`);
   return modelo
     .replace("<base>", base)
     .replace("<ambiente>", ambiente)
     .replace("<ciclo>", ciclo)
     .replace("<cd_eleicao>", eleicao)
-    .replace("<uf>", abr ?? "");
+    .replace("<uf>", encodeURIComponent(abr ?? ""));
 }
 
 export function urlConfig({ base, ambiente }) {
