@@ -4,7 +4,24 @@ Painel independente (pt-BR, modo escuro, mobile) da apuração do **2º turno de
 
 **Dados: TSE – Divulgação de Resultados. Painel independente, sem vínculo oficial.**
 
-## Como funciona
+## Coletor e motor de cálculo
+
+Um coletor único consulta o TSE para todos os visitantes e publica JSON prontos para a página: placar, UFs, regiões, exterior, conferência soma × TSE, histórico com correções e exportação CSV. A página não recalcula nada.
+
+- Contrato de dados: [docs/contrato/CONTRATO-DADOS.md](docs/contrato/CONTRATO-DADOS.md), com exemplos em `exemplos/` (1º turno real e 2º turno simulado).
+- `nucleo/`: cálculo puro (normalização, agregação, conferência, histórico, exportação). Roda em Node e na Cloudflare.
+- `coletor/`: cliente HTTP (ETag/304, timeout, backoff, Retry-After, pausa diante de bloqueio ou de 404 em série), rodada, simulador de noite de apuração, adaptadores Node (`coletor/node.js`) e Cloudflare (`coletor/cloudflare/`, Durable Object com alarme).
+- Descoberta só pela configuração oficial (`ele-c.json` e lista de abrangência). Enquanto o 2º turno não estiver na configuração, o coletor só consulta o `ele-c.json`.
+
+```bash
+npm test                                                     # testes do coletor (Node 20+)
+python3 -m unittest discover -s tests                        # testes das fontes
+node coletor/node.js --saida public/dados                    # 2º turno, a cada 15 s
+node coletor/node.js --modo ensaio --fixtures tests/fixtures/tse-2026-10-06 --uma-vez   # 1º turno offline
+node tools/gerar-exemplo.mjs                                 # regenera exemplos/
+```
+
+## Como funciona (v0, consulta direta pelo navegador)
 
 - **Site 100% estático** (HTML + CSS + JS puro, sem bibliotecas, sem servidor, grátis no GitHub Pages).
 - O navegador de cada visitante busca direto os JSON oficiais em `resultados.tse.jus.br`.
