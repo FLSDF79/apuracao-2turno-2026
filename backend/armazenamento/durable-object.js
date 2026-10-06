@@ -19,6 +19,11 @@ function memoria(storage) {
 // gravar o texto evita uma segunda serialização pelo storage.
 const ler = (v) => (typeof v === "string" ? JSON.parse(v) : v);
 
+/** Esquece o que já foi gravado neste storage (use depois de storage.deleteAll()): tudo volta a ser gravado. */
+export function esquecerGravados(storage) {
+  gravados.delete(storage);
+}
+
 export async function carregarEstado(storage) {
   const raiz = ler(await storage.get("estado:raiz"));
   if (!raiz) return null;
