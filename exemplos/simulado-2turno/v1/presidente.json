@@ -1,7 +1,7 @@
 {
  "schema": "apuracao-2t-2026/v1",
  "tipo": "presidente",
- "gerado_em": "2026-10-25T20:40:12.000Z",
+ "gerado_em": "2026-10-25T21:10:33.000Z",
  "modo": "simulacao",
  "aviso": "Painel independente com dados oficiais. Nenhum TRE publica arquivo estruturado próprio: os resultados de cada UF são o recorte daquela UF na base de totalização do TSE (resultados.tse.jus.br).",
  "fonte": {
@@ -165,8 +165,8 @@
   },
   "coleta": {
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
-   "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-   "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+   "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+   "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
    "status_http": 200,
    "ultimo_erro": null,
    "situacao": "atualizado",
@@ -296,8 +296,8 @@
   "esperado": true,
   "coleta": {
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/zz/zz-c0001-e006258-u.json",
-   "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-   "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+   "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+   "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
    "status_http": 200,
    "ultimo_erro": null,
    "situacao": "atualizado",
@@ -407,8 +407,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ac/ac-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -517,8 +517,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/al/al-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -627,8 +627,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/am/am-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -737,8 +737,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ap/ap-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -847,8 +847,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ba/ba-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -957,8 +957,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ce/ce-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1067,8 +1067,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/df/df-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1177,8 +1177,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/es/es-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1287,8 +1287,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/go/go-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:30.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:30.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1397,8 +1397,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ma/ma-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1507,8 +1507,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/mg/mg-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1617,8 +1617,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ms/ms-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1727,8 +1727,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/mt/mt-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1837,8 +1837,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pa/pa-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -1947,8 +1947,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pb/pb-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2057,8 +2057,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pe/pe-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2167,8 +2167,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pi/pi-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2277,8 +2277,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pr/pr-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2387,8 +2387,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rj/rj-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:31.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:31.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2497,8 +2497,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rn/rn-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2607,8 +2607,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ro/ro-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2717,8 +2717,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rr/rr-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2827,8 +2827,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rs/rs-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -2937,8 +2937,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/sc/sc-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -3047,8 +3047,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/se/se-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -3157,8 +3157,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/sp/sp-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 304,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -3267,8 +3267,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/to/to-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -3375,8 +3375,8 @@
    "esperado": true,
    "coleta": {
     "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/zz/zz-c0001-e006258-u.json",
-    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
-    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "ultima_tentativa": "2026-10-25T21:10:32.000Z",
+    "ultimo_sucesso": "2026-10-25T21:10:32.000Z",
     "status_http": 200,
     "ultimo_erro": null,
     "situacao": "atualizado",
@@ -4135,14 +4135,14 @@
    "codigo": "horarios_diferentes",
    "texto": "Atualizações em horários diferentes",
    "motivo": "UFs totalizadas entre 2026-10-25T18:00:00-03:00 e 2026-10-25T18:10:00-03:00; total nacional às 2026-10-25T18:10:00-03:00.",
-   "desde": "2026-10-25T20:40:12.000Z"
+   "desde": "2026-10-25T21:10:33.000Z"
   }
  },
  "coleta_geral": {
   "estado": "ok",
   "mensagem": null,
-  "rodada_em": "2026-10-25T20:40:12.000Z",
-  "proxima_em": "2026-10-25T20:40:27.000Z",
+  "rodada_em": "2026-10-25T21:10:33.000Z",
+  "proxima_em": "2026-10-25T21:10:48.000Z",
   "intervalo_s": 15
  }
 }

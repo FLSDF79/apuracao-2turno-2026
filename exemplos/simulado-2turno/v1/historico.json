@@ -1,7 +1,7 @@
 {
  "schema": "apuracao-2t-2026/v1",
  "tipo": "historico",
- "gerado_em": "2026-10-25T20:40:12.000Z",
+ "gerado_em": "2026-10-25T21:10:33.000Z",
  "eleicao": {
   "estado": "publicada",
   "eleicao": "6258",
@@ -17,7 +17,7 @@
  },
  "serie_brasil": [
   {
-   "coletado_em": "2026-10-25T20:10:02.000Z",
+   "coletado_em": "2026-10-25T20:20:32.000Z",
    "totalizacao": "2026-10-25T17:20:00-03:00",
    "idg": "1792948800",
    "pct_totalizadas": 9.997235842707433,
@@ -39,7 +39,7 @@
    "correcao": false
   },
   {
-   "coletado_em": "2026-10-25T20:20:05.000Z",
+   "coletado_em": "2026-10-25T20:40:32.000Z",
    "totalizacao": "2026-10-25T17:40:00-03:00",
    "idg": "1792950000",
    "pct_totalizadas": 25.020430727814635,
@@ -61,7 +61,7 @@
    "correcao": false
   },
   {
-   "coletado_em": "2026-10-25T20:30:08.000Z",
+   "coletado_em": "2026-10-25T21:00:32.000Z",
    "totalizacao": "2026-10-25T18:00:00-03:00",
    "idg": "1792951200",
    "pct_totalizadas": 39.942874082620264,
@@ -83,7 +83,7 @@
    "correcao": false
   },
   {
-   "coletado_em": "2026-10-25T20:40:11.000Z",
+   "coletado_em": "2026-10-25T21:10:32.000Z",
    "totalizacao": "2026-10-25T18:10:00-03:00",
    "idg": "1792951800",
    "pct_totalizadas": 40.98103547735795,
@@ -110,7 +110,7 @@
    "recorte": "ac",
    "disputa": "presidente",
    "eleicao": "6258",
-   "coletado_em": "2026-10-25T20:30:06.000Z",
+   "coletado_em": "2026-10-25T21:00:30.000Z",
    "de_idg": "1792950000",
    "para_idg": "1792951200",
    "totalizacao": "2026-10-25T18:00:00-03:00",
@@ -141,7 +141,7 @@
    "recorte": "ac",
    "disputa": "governador",
    "eleicao": "6260",
-   "coletado_em": "2026-10-25T20:30:09.000Z",
+   "coletado_em": "2026-10-25T21:00:33.000Z",
    "de_idg": "1792950000",
    "para_idg": "1792951200",
    "totalizacao": "2026-10-25T18:00:00-03:00",
