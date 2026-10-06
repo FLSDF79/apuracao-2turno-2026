@@ -1,0 +1,12 @@
+HTTP/2 304 
+last-modified: Mon, 05 Oct 2026 15:52:12 GMT
+etag: "2da19dbacd44746287f057d454ed01f0"
+cache-control: max-age=47
+expires: Tue, 06 Oct 2026 13:05:29 GMT
+date: Tue, 06 Oct 2026 13:04:42 GMT
+alt-svc: h3=":443"; ma=93600
+content-type: application/json
+strict-transport-security: max-age=63072000 ; includeSubDomains ; preload
+akamai-grn: 0.286c1002.1791291882.4b4f93d6
+cdn-cache-status: Hit from child
+
