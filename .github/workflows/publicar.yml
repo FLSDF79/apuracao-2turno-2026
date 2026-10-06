@@ -1,0 +1,77 @@
+# Publica o painel na Cloudflare (página + coletor único). Substitui o antigo fluxo do GitHub Pages,
+# que não roda coletor.
+#
+# Precisa de dois segredos no repositório (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   token com o modelo "Edit Cloudflare Workers"
+#   CLOUDFLARE_ACCOUNT_ID  ID da conta (painel da Cloudflare, Workers & Pages, barra lateral)
+# Sem eles o fluxo roda os testes, monta o site e avisa que pulou a publicação.
+#
+# Push na main publica a PRODUÇÃO. "Run workflow" deixa escolher produção ou ensaio.
+name: Publicar na Cloudflare
+
+on:
+  push:
+    branches: [main]
+  pull_request:          # em PR só testa e monta; nunca publica
+  workflow_dispatch:
+    inputs:
+      ambiente:
+        description: "producao (TSE oficial) ou ensaio (TSE simulado)"
+        type: choice
+        options: [ensaio, producao]
+        default: ensaio
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-${{ github.event_name == 'pull_request' && github.ref || github.event.inputs.ambiente || 'producao' }}
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Testes (fontes, coletor, página, ensaio)
+        run: |
+          python3 -m unittest discover -s tests
+          npm test
+          node --test tests/interface/*.test.js
+          node --test tests/publicacao/*.test.mjs
+      - name: Montar o site
+        run: node publicacao/montar-site.mjs
+      - name: Publicar
+        if: github.event_name != 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AMBIENTE: ${{ github.event.inputs.ambiente || 'producao' }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::warning::Segredos da Cloudflare ausentes: publicação pulada (testes e montagem ok)."
+            exit 0
+          fi
+          if [ "$AMBIENTE" = "ensaio" ]; then
+            npx --yes wrangler@4 deploy --env ensaio
+          else
+            npx --yes wrangler@4 deploy --env=""
+          fi
+      - name: Conferir no ar
+        if: github.event_name != 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          URL_PAINEL: ${{ vars.URL_PAINEL }}
+          URL_ENSAIO: ${{ vars.URL_ENSAIO }}
+          AMBIENTE: ${{ github.event.inputs.ambiente || 'producao' }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then exit 0; fi
+          URL=$([ "$AMBIENTE" = "ensaio" ] && echo "$URL_ENSAIO" || echo "$URL_PAINEL")
+          if [ -z "$URL" ]; then echo "::notice::Defina as variáveis URL_PAINEL e URL_ENSAIO para conferir automaticamente."; exit 0; fi
+          node publicacao/conferir-no-ar.mjs "$URL" --esperar 90

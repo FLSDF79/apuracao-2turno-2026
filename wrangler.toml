@@ -1,0 +1,53 @@
+# Publicação do painel na Cloudflare (frente 4): um Worker serve a página (arquivos estáticos de dist/site)
+# e /dados/v1/* a partir do coletor único (Durable Object com alarme, coletor/cloudflare/worker.js).
+# Página e dados na mesma origem: sem CORS e sem configuração extra na página.
+#
+#   node publicacao/montar-site.mjs && npx wrangler deploy                 # produção (TSE oficial)
+#   node publicacao/montar-site.mjs && npx wrangler deploy --env ensaio    # ensaio com TSE simulado
+#
+# Roteiro de operação: docs/publicacao/ROTEIRO-25-10.md
+name = "apuracao-2turno-2026"
+main = "coletor/cloudflare/worker.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[assets]
+directory = "dist/site"
+
+[vars]
+MODO = "oficial"
+INTERVALO_S = "15"    # mínimo 10 (o coletor força)
+PAUSADO = "nao"       # "sim" para o coletor parar de consultar o TSE (exige novo deploy)
+
+[[durable_objects.bindings]]
+name = "COLETOR"
+class_name = "Coletor"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Coletor"]
+
+[triggers]
+crons = ["* * * * *"]   # vigia: rearma o alarme do coletor se ele parar
+
+[observability]
+enabled = true
+
+# Ensaio: mesma página e mesmo coletor, lendo a noite simulada que roda dentro do próprio Worker.
+[env.ensaio]
+name = "apuracao-2turno-2026-ensaio"
+main = "publicacao/worker-ensaio.js"
+
+[env.ensaio.vars]
+MODO = "oficial"                          # descobre o 2º turno pela configuração (simulada), como no dia 25
+BASE = "https://tse-simulado.ensaio.invalid"
+INTERVALO_S = "15"
+PAUSADO = "nao"
+ENSAIO_INICIO = "2026-10-01T00:00:00Z"    # âncora do ciclo de 30 min
+
+[[env.ensaio.durable_objects.bindings]]
+name = "COLETOR"
+class_name = "Coletor"
+
+[env.ensaio.triggers]
+crons = ["* * * * *"]
