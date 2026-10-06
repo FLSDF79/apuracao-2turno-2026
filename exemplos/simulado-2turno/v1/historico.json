@@ -19,9 +19,10 @@
  },
  "serie_brasil": [
   {
-   "coletado_em": "2026-10-25T20:20:32.000Z",
+   "coletado_em": "2026-10-25T20:20:30.000Z",
    "totalizacao": "2026-10-25T17:20:00-03:00",
    "idg": "1792948800",
+   "sha256": "a00943ef0498d7d057df0c368a83e9f20481a523d385e979c7e568b9d68c822c",
    "pct_totalizadas": 9.997235842707433,
    "votos": {
     "13": 5387941,
@@ -41,9 +42,10 @@
    "correcao": false
   },
   {
-   "coletado_em": "2026-10-25T20:40:32.000Z",
+   "coletado_em": "2026-10-25T20:40:30.000Z",
    "totalizacao": "2026-10-25T17:40:00-03:00",
    "idg": "1792950000",
+   "sha256": "270c14f18ba8b3ef22dca0a3a801eae727b0bf702ea9c9abb69140c1d64640b2",
    "pct_totalizadas": 25.020430727814635,
    "votos": {
     "13": 13476611,
@@ -63,9 +65,10 @@
    "correcao": false
   },
   {
-   "coletado_em": "2026-10-25T21:00:32.000Z",
+   "coletado_em": "2026-10-25T21:00:30.000Z",
    "totalizacao": "2026-10-25T18:00:00-03:00",
    "idg": "1792951200",
+   "sha256": "9ace792e665df91ff94368011469a0c4f1abb3989b8ec69c4083a3a870763d63",
    "pct_totalizadas": 39.942874082620264,
    "votos": {
     "13": 21535631,
@@ -85,9 +88,10 @@
    "correcao": false
   },
   {
-   "coletado_em": "2026-10-25T21:10:32.000Z",
+   "coletado_em": "2026-10-25T21:10:30.000Z",
    "totalizacao": "2026-10-25T18:10:00-03:00",
    "idg": "1792951800",
+   "sha256": "adc7e4a76c85fa1b73731684e2ac145545edb34ccad1c928559745fcb302aed2",
    "pct_totalizadas": 40.98103547735795,
    "votos": {
     "13": 22010901,
@@ -137,7 +141,9 @@
      "antes": 137044,
      "depois": 127907
     }
-   ]
+   ],
+   "de_sha256": "060795e16e7c90482d5f51a939612df801ca328f24076c5ac0bdf709fd3a9336",
+   "para_sha256": "7f40289002d1c4b975dfe616aef139c9a4ed537b1e9a2b89459742eb780a9be4"
   },
   {
    "recorte": "ac",
@@ -168,7 +174,9 @@
      "antes": 122681,
      "depois": 114502
     }
-   ]
+   ],
+   "de_sha256": "b7b8e1522ef45c63ff4d91c14dee498cf639d02af4394dada0bf761f43c9688a",
+   "para_sha256": "8104d125ae493a08c3cfba5576a1b64a389389cce52c6b0f548b3dcd794dd450"
   }
  ],
  "eventos": [

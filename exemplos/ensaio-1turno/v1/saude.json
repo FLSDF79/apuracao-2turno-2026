@@ -64,6 +64,22 @@
  },
  "recortes": [
   {
+   "id": "presidente:6257:br",
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
+   "ultima_tentativa": "2026-10-06T13:00:00.000Z",
+   "ultimo_sucesso": "2026-10-06T13:00:00.000Z",
+   "ultima_mudanca": "2026-10-06T13:00:00.000Z",
+   "status_http": 200,
+   "ultimo_erro": null,
+   "alertas": [],
+   "sha256": "2866703eb4fc0ad6f17f0e081a00ab1175490b0786325e700cff1d8b40d25bca",
+   "situacao": "atualizado",
+   "sem_alteracao": false,
+   "fora_de_ordem": null,
+   "nova_versao": false,
+   "correcao": false
+  },
+  {
    "id": "presidente:6257:ac",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/ac/ac-c0001-e006257-u.json",
    "ultima_tentativa": "2026-10-06T13:00:00.000Z",
@@ -194,9 +210,9 @@
   {
    "id": "presidente:6257:go",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/go/go-c0001-e006257-u.json",
-   "ultima_tentativa": "2026-10-06T13:00:00.000Z",
-   "ultimo_sucesso": "2026-10-06T13:00:00.000Z",
-   "ultima_mudanca": "2026-10-06T13:00:00.000Z",
+   "ultima_tentativa": "2026-10-06T13:00:01.000Z",
+   "ultimo_sucesso": "2026-10-06T13:00:01.000Z",
+   "ultima_mudanca": "2026-10-06T13:00:01.000Z",
    "status_http": 200,
    "ultimo_erro": null,
    "alertas": [],
@@ -354,9 +370,9 @@
   {
    "id": "presidente:6257:rj",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/rj/rj-c0001-e006257-u.json",
-   "ultima_tentativa": "2026-10-06T13:00:01.000Z",
-   "ultimo_sucesso": "2026-10-06T13:00:01.000Z",
-   "ultima_mudanca": "2026-10-06T13:00:01.000Z",
+   "ultima_tentativa": "2026-10-06T13:00:02.000Z",
+   "ultimo_sucesso": "2026-10-06T13:00:02.000Z",
+   "ultima_mudanca": "2026-10-06T13:00:02.000Z",
    "status_http": 200,
    "ultimo_erro": null,
    "alertas": [],
@@ -509,22 +525,6 @@
    "sem_alteracao": false,
    "fora_de_ordem": null,
    "nova_versao": true,
-   "correcao": false
-  },
-  {
-   "id": "presidente:6257:br",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
-   "ultima_tentativa": "2026-10-06T13:00:02.000Z",
-   "ultimo_sucesso": "2026-10-06T13:00:02.000Z",
-   "ultima_mudanca": "2026-10-06T13:00:02.000Z",
-   "status_http": 200,
-   "ultimo_erro": null,
-   "alertas": [],
-   "sha256": "2866703eb4fc0ad6f17f0e081a00ab1175490b0786325e700cff1d8b40d25bca",
-   "situacao": "atualizado",
-   "sem_alteracao": false,
-   "fora_de_ordem": null,
-   "nova_versao": false,
    "correcao": false
   },
   {

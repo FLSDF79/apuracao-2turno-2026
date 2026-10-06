@@ -46,11 +46,12 @@ export function registrarVersao(historico, resultado, coletadoEm) {
 }
 
 /** Ponto da série que a página usa no gráfico de evolução. */
-export function pontoSerie(r, coletadoEm, correcao) {
+export function pontoSerie(r, coletadoEm, correcao, sha256 = null) {
   return {
     coletado_em: coletadoEm,
     totalizacao: r.horario.totalizacao,
     idg: r.idg,
+    sha256,
     pct_totalizadas: r.indicadores.pct_totalizadas,
     votos: Object.fromEntries(r.candidatos.map((c) => [c.numero, c.votos])),
     pct_validos: Object.fromEntries(r.candidatos.map((c) => [c.numero, c.pct_validos])),
