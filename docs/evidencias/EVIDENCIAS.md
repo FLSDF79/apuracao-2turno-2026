@@ -44,12 +44,12 @@ Legenda: ✅ comprovado · ⚠️ parcial · ❌ lacuna
 
 ## Latência e carga: como ler os números
 
-- **Latência medida** na noite simulada (relógio real, [execucao.md](execucao.md)): do arquivo novo no TSE simulado até o arquivo do coletor, mediana ~4 s; até a tela, mediana ~13 s, máximo 14 s, sem nenhuma versão perdida. O coletor desse ensaio começou alinhado com os blocos de 30 s do roteiro, o que favorece o número do coletor.
+- **Latência medida** na noite simulada (relógio real, [execucao.md](execucao.md)): do arquivo novo no TSE simulado até o arquivo do coletor, mediana ~4 s; até a tela, mediana ~12 s, máximo 14 s, sem nenhuma versão perdida. O coletor desse ensaio começou alinhado com os blocos de 30 s do roteiro, o que favorece o número do coletor.
 - **Pior caso esperado em 25/10**, sem esse alinhamento: até 15 s do coletor (intervalo) + até 10 s da página (releitura) + tempo de rede, ou seja **até ~25 s**, média em torno de 12 s. É o "tempo real" da seção 7: baixa latência sobre a publicação oficial.
-- **Carga por visitante** no Worker: 1.008 pedidos por hora. No plano gratuito, a cota de 100 mil por dia dá ~99 visitantes-hora (detalhes em [OPERACAO.md](../publicacao/OPERACAO.md#custos)).
+- **Carga por visitante** no Worker: 871 pedidos por hora (era 1.008 antes do ajuste da frente 3 no `historico.json`). No plano gratuito, a cota de 100 mil por dia dá ~115 visitantes-hora (detalhes em [OPERACAO.md](../publicacao/OPERACAO.md#custos)).
 - **Carga no TSE**: independe de visitantes; na noite simulada, pico de 146 requisições por minuto (2,4/s), quase metade respondidas com 304.
 
 ## Observações enviadas aos donos
 
 - **Frente 2 (resolvido em 06/10, commit 55d8f58):** recorte defasado com conferência "compatível" passou a dar "cobertura incompleta"; a pausa de 2 min na publicação da configuração virou sentinela de 404. O verificador do ensaio agora trata a combinação antiga como falha.
-- **Frente 3 (em aberto):** com os dados do 1º turno, o sobretítulo ainda diz "2º turno · 25/10" (a faixa de ensaio aparece logo abaixo); e o placar mostra "À frente na apuração parcial" com a totalização concluída.
+- **Frente 3 (resolvido em 06/10, commit b535e47):** o sobretítulo passou a vir da eleição lida (no ensaio: "1º turno · 04/10"); com 100% totalizado e sem declaração do TSE, o placar diz "Mais votado · 100% totalizado, sem declaração de eleito"; `historico.json` passou a ser relido só quando o placar muda ou a cada ~60 s, reduzindo os pedidos por visitante.

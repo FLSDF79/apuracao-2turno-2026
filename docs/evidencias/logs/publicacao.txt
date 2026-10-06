@@ -4,55 +4,55 @@ TAP version 13
 # Subtest: horário publicado sai em Brasília, no formato do TSE
 ok 1 - horário publicado sai em Brasília, no formato do TSE
   ---
-  duration_ms: 19.962816
+  duration_ms: 13.253185
   type: 'test'
   ...
 # Subtest: roteiro: sem 2º turno antes do minuto 2; eleito só no fim; frações nunca passam de 1
 ok 2 - roteiro: sem 2º turno antes do minuto 2; eleito só no fim; frações nunca passam de 1
   ---
-  duration_ms: 23.079263
+  duration_ms: 13.954404
   type: 'test'
   ...
 # Subtest: roteiro: SP atrasado deixa o nacional mais novo que a UF; correção faz o AC recuar
 ok 3 - roteiro: SP atrasado deixa o nacional mais novo que a UF; correção faz o AC recuar
   ---
-  duration_ms: 1.262336
+  duration_ms: 1.227809
   type: 'test'
   ...
 # Subtest: TSE simulado: ETag/304 e falhas injetadas com Retry-After
 ok 4 - TSE simulado: ETag/304 e falhas injetadas com Retry-After
   ---
-  duration_ms: 73.183705
+  duration_ms: 55.997833
   type: 'test'
   ...
 # Subtest: TSE simulado cíclico recomeça a noite
 ok 5 - TSE simulado cíclico recomeça a noite
   ---
-  duration_ms: 2.748228
+  duration_ms: 2.864812
   type: 'test'
   ...
 # Subtest: noite inteira pelo coletor de verdade: regras do prompt valem em todas as rodadas
 ok 6 - noite inteira pelo coletor de verdade: regras do prompt valem em todas as rodadas
   ---
-  duration_ms: 2822.13765
+  duration_ms: 2158.012939
   type: 'test'
   ...
 # Subtest: site montado só com a página e os exemplos (sem fixtures, testes ou coletor)
 ok 7 - site montado só com a página e os exemplos (sem fixtures, testes ou coletor)
   ---
-  duration_ms: 34.941462
+  duration_ms: 38.866717
   type: 'test'
   ...
 # Subtest: toda referência local da página existe no site montado
 ok 8 - toda referência local da página existe no site montado
   ---
-  duration_ms: 33.685728
+  duration_ms: 27.072431
   type: 'test'
   ...
 # Subtest: wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera
 ok 9 - wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera
   ---
-  duration_ms: 1.687851
+  duration_ms: 1.84128
   type: 'test'
   ...
 1..9
@@ -63,5 +63,5 @@ ok 9 - wrangler.toml aponta para arquivos que existem e para a pasta que o monta
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 3151.168073
+# duration_ms 2422.362836
 

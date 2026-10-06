@@ -47,7 +47,7 @@ Pausa de emergência sem token (exige deploy): `npx wrangler deploy --env="" --v
 | Recurso | Limite gratuito | Consumo medido no ensaio | Margem |
 |---|---|---|---|
 | Página (HTML, JS, mapa) | Ilimitado: arquivos estáticos não contam | — | — |
-| Requisições ao Worker (`/dados/v1/*`) | 100 mil por dia (zera 0h UTC, 21h de Brasília) | **1.008 por visitante por hora** (16,8/min: `presidente` e `historico` a cada 10 s, `governador` e `saude` a cada ~30 s) | **~99 visitantes-hora por dia**. Ex.: 15 pessoas acompanhando 6 h = 90 |
+| Requisições ao Worker (`/dados/v1/*`) | 100 mil por dia (zera 0h UTC, 21h de Brasília) | **871 por visitante por hora** (14,5/min, medido no ensaio de 06/10: `presidente` a cada 10 s, `historico` quando o placar muda ou a cada ~60 s, `governador` e `saude` a cada ~30 s) | **~115 visitantes-hora por dia**. Ex.: 19 pessoas acompanhando 6 h = 114 |
 | Requisições ao Durable Object | 100 mil por dia | Alarme a cada 15 s = 5.760/dia, mais no máximo 4 leituras a cada 5 s (cache do Worker) enquanto houver visitantes | Folgado |
 | CPU por invocação | 10 ms | Rodada do coletor: mediana 10 a 15 ms, p90 ~22 ms (medido em Node, sem o TSE simulado) | **Risco**: ver abaixo |
 

@@ -1,24 +1,24 @@
 # Execução das baterias de teste
 
-Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:04:47.353Z (commit 03d30d5).
+Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:32:19.525Z (commit f0f2ed5).
 
 | Frente | Bateria | Resultado | Tempo | Saída |
 |---|---|---|---|---|
 | 1 · fontes | Consistência dos arquivos oficiais guardados | ✅ 11 testes, todos ok | 0.1 s | [log](logs/fontes.txt) |
-| 2 · coletor e cálculo | Coletor, normalização, agregação, conferência, histórico | ✅ 52 ok, 0 falha(s) | 1.5 s | [log](logs/coletor.txt) |
-| 3 · painel | Leitura do contrato pela página, estados, cores, horários, exportação | ✅ 20 ok, 0 falha(s) | 0.3 s | [log](logs/interface.txt) |
-| 3 · painel | Página no navegador (Chromium): estados, mapa, acessibilidade | ✅ 44 ok, 0 falha(s) | 10.7 s | [log](logs/navegador.txt) |
-| 4 · publicação | Noite simulada inteira pelo coletor, TSE simulado, site e deploy | ✅ 9 ok, 0 falha(s) | 3.2 s | [log](logs/publicacao.txt) |
-| 2 · coletor e cálculo | Exemplos do contrato regenerados sem diferença | ✅ ok | 0.4 s | [log](logs/exemplos.txt) |
+| 2 · coletor e cálculo | Coletor, normalização, agregação, conferência, histórico | ✅ 52 ok, 0 falha(s) | 1.4 s | [log](logs/coletor.txt) |
+| 3 · painel | Leitura do contrato pela página, estados, cores, horários, exportação | ✅ 20 ok, 0 falha(s) | 0.2 s | [log](logs/interface.txt) |
+| 3 · painel | Página no navegador (Chromium): estados, mapa, acessibilidade | ✅ 46 ok, 0 falha(s) | 10.0 s | [log](logs/navegador.txt) |
+| 4 · publicação | Noite simulada inteira pelo coletor, TSE simulado, site e deploy | ✅ 9 ok, 0 falha(s) | 2.5 s | [log](logs/publicacao.txt) |
+| 2 · coletor e cálculo | Exemplos do contrato regenerados sem diferença | ✅ ok | 0.3 s | [log](logs/exemplos.txt) |
 
 ## Ponta a ponta com dados oficiais reais (1º turno)
 
-2026-10-06T15:04:19.615Z · `node publicacao/ponta-a-ponta.mjs`
+2026-10-06T15:08:02.404Z · `node publicacao/ponta-a-ponta.mjs`
 
 | | Verificação | Detalhe |
 |---|---|---|
 | ✅ | arquivos oficiais íntegros (sha256) | 68 arquivos |
-| ✅ | coletor rodou sobre os arquivos oficiais | 2026-10-06T15:04:07.154Z concluida ok req=38 http={"200":38} conferência=compativel |
+| ✅ | coletor rodou sobre os arquivos oficiais | 2026-10-06T15:07:50.950Z concluida ok req=38 http={"200":38} conferência=compativel |
 | ✅ | placar com dois candidatos | 22 × 13 |
 | ✅ | votos de 22 na tela = contrato | 56.104.503 votos · contrato 56104503 |
 | ✅ | % de 22 na tela = contrato | 47,03% · contrato 47,03% |
@@ -30,7 +30,7 @@ Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:04:47.353Z (commit 
 | ✅ | % de 13 na tela = arquivo do TSE (pvap) | 45,16% · TSE 45,16% |
 | ✅ | % totalizado na tela = contrato | 100,00% |
 | ✅ | % totalizado na tela = arquivo do TSE (pst) | 100,00% · TSE 100,00% |
-| ✅ | faixa de teste "ensaio" visível | ENSAIO COM O 1º TURNO Dados oficiais do 1º turno de 04/10, usados só para testar o painel. Não é a apuração do 2º turno. |
+| ✅ | faixa de teste "ensaio" visível | ENSAIO COM O 1º TURNO ENSAIO com os arquivos reais do 1º turno de 04/10/2026. Não é a apuração do 2º turno. |
 | ✅ | crédito do autor |  |
 | ✅ | selo NFLS.AI Arena |  |
 | ✅ | mapa desenhado com SP |  |
@@ -48,26 +48,26 @@ Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:04:47.353Z (commit 
 
 ## Noite simulada completa, relógio real (`node ensaio/rodar.mjs`)
 
-Início 2026-10-06T14:38:01.015Z · escala 1× · 101 conferências · **0 falha(s)**
+Início 2026-10-06T15:08:11.295Z · escala 1× · 101 conferências · **0 falha(s)**
 
 | min | Marco | Estado | % tot. | Conferência | Coleta | Eleito | Página |
 |---|---|---|---|---|---|---|---|
-| 1.28 | TSE ainda sem o 2º turno na configuração (como em 06/10) | aguardando_configuracao | — | — | ok | não | dados de teste |
+| 1.29 | TSE ainda sem o 2º turno na configuração (como em 06/10) | aguardando_configuracao | — | — | ok | não | dados de teste |
 | 3.36 | Configuração publica o 2º turno, arquivos de resultado ainda 404 | aguardando_resultados | — | cobertura_incompleta | pausada | não | dados de teste |
-| 5.43 | Arquivos no ar com 0% totalizado | aguardando_resultados | 0 | compativel | ok | não | dados de teste |
-| 7.26 | Primeiros boletins, Norte e exterior mais lentos | em_apuracao | 22.36 | compativel | ok | não | dados de teste |
-| 10.33 | SP atrasado: nacional mais novo que o arquivo da UF | em_apuracao | 50.68 | horarios_diferentes | ok | não | dados de teste |
+| 5.44 | Arquivos no ar com 0% totalizado | aguardando_resultados | 0 | compativel | ok | não | dados de teste |
+| 7.27 | Primeiros boletins, Norte e exterior mais lentos | em_apuracao | 22.36 | compativel | ok | não | dados de teste |
+| 10.34 | SP atrasado: nacional mais novo que o arquivo da UF | em_apuracao | 50.68 | horarios_diferentes | ok | não | dados de teste |
 | 12.42 | Correção oficial no AC (votos diminuem) | em_apuracao | 66.01 | compativel | ok | não | dados de teste |
-| 14.26 | TSE responde 503 com Retry-After por 40 s | em_apuracao | 78.59 | compativel | ok | não | dados de teste |
-| 16.34 | Arquivo de RR com erro 500 por 2 min | em_apuracao | 88.34 | cobertura_incompleta | atrasada | não | dados de teste |
-| 19.42 | TSE responde 429 com Retry-After 60 uma vez | em_apuracao | 96.33 | compativel | ok | não | dados de teste |
-| 23.5 | 100% totalizado, situação Eleito publicada | concluida | 100 | compativel | ok | sim | dados de teste |
+| 14.25 | TSE responde 503 com Retry-After por 40 s | em_apuracao | 78.59 | compativel | ok | não | dados de teste |
+| 16.33 | Arquivo de RR com erro 500 por 2 min | em_apuracao | 88.34 | cobertura_incompleta | atrasada | não | dados de teste |
+| 19.41 | TSE responde 429 com Retry-After 60 uma vez | em_apuracao | 96.33 | compativel | ok | não | dados de teste |
+| 23.48 | 100% totalizado, situação Eleito publicada | concluida | 100 | compativel | ok | sim | dados de teste |
 
-**Latência de atualização** (do arquivo novo no TSE simulado até aparecer): coletor {"n":30,"mediana":3.972,"p90":4.119,"max":4.131} s; tela {"n":30,"mediana":12.862,"p90":13.962,"max":13.993} s.
+**Latência de atualização** (do arquivo novo no TSE simulado até aparecer): coletor {"n":30,"mediana":4.407,"p90":4.515,"max":4.532} s; tela {"n":30,"mediana":12.231,"p90":13.385,"max":13.435} s.
 
-**Carga no TSE simulado:** 2545 requisições, pico 146/min, status {"200":1143,"304":1391,"404":3,"429":1,"500":5,"503":2}.
+**Carga no TSE simulado:** 2539 requisições, pico 146/min, status {"200":1143,"304":1385,"404":3,"429":1,"500":5,"503":2}.
 
-**Carga por visitante no Worker:** {"pedidos_por_minuto":16.8,"pedidos_por_hora":1008,"por_arquivo":{"/dados/v1/presidente.json":292,"/dados/v1/historico.json":292,"/dados/v1/governador.json":104,"/dados/v1/saude.json":104}}.
+**Carga por visitante no Worker:** {"pedidos_por_minuto":14.5,"pedidos_por_hora":871,"por_arquivo":{"/dados/v1/presidente.json":292,"/dados/v1/historico.json":184,"/dados/v1/governador.json":104,"/dados/v1/saude.json":104}}.
 
 ## Teste de carga
 
