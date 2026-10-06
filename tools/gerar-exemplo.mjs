@@ -16,8 +16,14 @@ const FIX = join(RAIZ, "tests/fixtures/tse-2026-10-06");
 
 function relogio(iso) {
   let t = Date.parse(iso);
-  return { agora: () => t, avancar: (ms) => (t += ms), esperar: async (ms) => { t += ms; } };
+  return { agora: () => t, avancar: (ms) => (t += ms), ajustar: (iso2) => (t = Date.parse(iso2)), esperar: async (ms) => { t += ms; } };
 }
+
+// "25/10/2026 18:10:00" (Brasília) → ISO UTC, para o relógio do coletor andar junto com o do TSE simulado
+const brasiliaParaIso = (s) => {
+  const [d, h] = s.split(" ");
+  return `${d.split("/").reverse().join("-")}T${h}-03:00`;
+};
 
 async function gravar(pasta, saidas) {
   for (const [caminho, conteudo] of Object.entries(saidas)) {
@@ -47,7 +53,8 @@ async function gravar(pasta, saidas) {
   let r;
   for (const p of passos) {
     site = montarSite(base, p);
-    rel.avancar(10 * 60 * 1000);
+    rel.ajustar(brasiliaParaIso(p.hora)); // coleta 30 s depois da totalização simulada
+    rel.avancar(30 * 1000);
     r = await rodada(fonte, estado, { modo: "simulacao" });
     estado = r.estado;
   }
