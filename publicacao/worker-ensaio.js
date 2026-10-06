@@ -45,7 +45,7 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     // o "TSE simulado" também fica visível, para quem quiser ver o que o coletor está lendo
-    if (req.method !== "GET" && req.method !== "HEAD") return comSeguranca(new Response("método não permitido", { status: 405 }));
+    if (!["GET", "HEAD"].includes(req.method) && !(req.method === "POST" && url.pathname.startsWith("/admin/"))) return comSeguranca(new Response("método não permitido", { status: 405 }));
     if (url.pathname.startsWith("/oficial/") || url.pathname === "/_ensaio") return comSeguranca(await simulador(env)(req));
     return comSeguranca(await producao.fetch(req, env, ctx));
   },

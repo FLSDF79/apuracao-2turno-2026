@@ -34,16 +34,18 @@ Marcos do plano: primeira versão ponta a ponta até 09/10, no ar até 14/10, en
 - [ ] 24/10: `conferir-no-ar` tudo ok; congelamento de código (só correção crítica)
 - [ ] 25/10, 7h: bateria final (`node publicacao/evidencias.mjs` + `conferir-no-ar`)
 - [ ] 25/10, 16h30: `conferir-no-ar`; monitor em modo TV
+- [ ] `ADMIN_TOKEN` criado e guardado
 - [ ] 26/10: coletor pausado
 
 ## Antes de 18/10 (uma vez)
 
 1. **Conta Cloudflare.** Em *My Profile > API Tokens > Create Token*, modelo **Edit Cloudflare Workers**. Copie também o **Account ID** (página *Workers & Pages*, barra lateral).
-2. **Segredos no GitHub.** Em *Settings > Secrets and variables > Actions* do repositório, crie `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
-3. **Merge na ordem** #1 (fontes), #3 (coletor), #2 (página) e por último o PR desta frente.
-4. **Publicar o ensaio.** Em *Actions > Publicar na Cloudflare > Run workflow*, escolha `ensaio`. O fluxo roda todos os testes, publica e confere o site no ar.
-5. **Publicar a produção.** Acontece sozinho a cada push na `main`, ou pelo mesmo botão com `producao`.
-6. **Variáveis do GitHub** (*Settings > Secrets and variables > Actions > Variables*): `URL_PAINEL` e `URL_ENSAIO`, com os endereços que o deploy mostrar (`https://<nome>.<sua-conta>.workers.dev`). Com elas, todo deploy confere o site sozinho.
+2. **Segredo de administração.** `npx wrangler secret put ADMIN_TOKEN` (valor de `openssl rand -hex 32`, guardado num gerenciador de senhas).
+3. **Segredos no GitHub.** Em *Settings > Secrets and variables > Actions* do repositório, crie `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
+4. **Merge na ordem** #1 (fontes), #3 (coletor), #2 (página) e por último o PR desta frente.
+5. **Publicar o ensaio.** Em *Actions > Publicar na Cloudflare > Run workflow*, escolha `ensaio`. O fluxo roda todos os testes, publica e confere o site no ar.
+6. **Publicar a produção.** Acontece sozinho a cada push na `main`, ou pelo mesmo botão com `producao`.
+7. **Variáveis do GitHub** (*Settings > Secrets and variables > Actions > Variables*): `URL_PAINEL` e `URL_ENSAIO`, com os endereços que o deploy mostrar (`https://<nome>.<sua-conta>.workers.dev`). Com elas, todo deploy confere o site sozinho.
 
 Pelo terminal, o mesmo:
 
@@ -87,18 +89,15 @@ Votação de 8h às 17h (Brasília). A divulgação começa depois das 17h.
 | 25/10, 16h30 | `conferir-no-ar` de novo. Abrir a página em modo TV (`?tv=1`) no monitor. |
 | A partir de 17h | Acompanhar. O painel segue sozinho; não é preciso reiniciar nada. |
 | Fim da apuração | "Eleito" só aparece quando o arquivo nacional do TSE trouxer essa situação. |
-| 26/10 | Pausar o coletor (abaixo) para parar de consultar o TSE. A página continua mostrando o último dado. |
+| 26/10 | Pausar o coletor (`/admin/pausar`) para parar de consultar o TSE. A página continua mostrando o último dado. |
 
 ### Se algo falhar
 
 Tabela completa (sinal na tela, o que o sistema faz sozinho, o que fazer e o que não fazer): [CONTINGENCIA.md](CONTINGENCIA.md).
 
-### Pausar ou mudar o intervalo sem mexer no código
+### Pausar, retomar ou forçar uma rodada
 
-```bash
-npx wrangler deploy --env="" --var PAUSADO:sim      # para de consultar o TSE
-npx wrangler deploy --env="" --var INTERVALO_S:30   # intervalo maior (mínimo 10)
-```
+Pela administração (precisa do `ADMIN_TOKEN`): `POST /admin/pausar`, `/admin/retomar`, `/admin/rodada`; comandos em [OPERACAO.md](OPERACAO.md#configuração). Sem o token: `npx wrangler deploy --env="" --var PAUSADO:sim`. Intervalo maior: `--var INTERVALO_S:30` (mínimo 10).
 
 ## Ensaio geral
 

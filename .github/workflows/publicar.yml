@@ -39,8 +39,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Testes (fontes, coletor, página, ensaio)
+      - name: Dependências de desenvolvimento (só verificação de tipos)
+        run: npm ci
+      - name: Testes (tipos, fontes, coletor, página, ensaio)
         run: |
+          npm run tipos
+          npm run tipos:interface
           python3 -m unittest discover -s tests
           npm test
           node --test tests/interface/*.test.js

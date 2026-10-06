@@ -28,12 +28,14 @@ export async function conferir() {
   if (r.status !== 200) return itens;
   const p = JSON.parse(r.texto);
   ok("contrato v1", p.schema === "apuracao-2t-2026/v1", p.schema);
-  const idade = (Date.now() - Date.parse(p.gerado_em)) / 1000;
-  ok("coletor rodando (gerado há menos de 60 s)", idade < 60, `${Math.round(idade)} s`);
   ok("coleta", ["ok", "atrasada"].includes(p.coleta_geral?.estado), `${p.coleta_geral?.estado}${p.coleta_geral?.mensagem ? `: ${p.coleta_geral.mensagem}` : ""}`);
   const s = await obter("/dados/v1/saude.json");
   if (s.status === 200) {
     const sd = JSON.parse(s.texto);
+    // gerado_em só muda quando o dado muda; "rodando" é a hora da última rodada do coletor
+    const idade = (Date.now() - Date.parse(sd.coletor?.rodada_em ?? 0)) / 1000;
+    ok("coletor rodando (última rodada há menos de 60 s)", idade < 60, `${Math.round(idade)} s`);
+    if (p.tempos) itens.push({ nome: "tempos", ok: true, detalhe: `consulta ok ${p.tempos.ultima_consulta_ok ?? "-"} · fonte ${p.tempos.publicacao_fonte ?? "-"} · última mudança ${p.tempos.ultima_mudanca ?? "-"}` });
     ok("configuração do TSE lida", sd.configuracao?.coletada_em, `${sd.configuracao?.coletada_em ?? "nunca"}${sd.configuracao?.ultimo_erro ? ` (erro: ${JSON.stringify(sd.configuracao.ultimo_erro)})` : ""}`);
     itens.push({ nome: "HTTP do TSE nesta execução", ok: true, detalhe: JSON.stringify(sd.coletor?.status_http) });
   }
