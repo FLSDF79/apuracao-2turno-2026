@@ -1,0 +1,1139 @@
+{
+ "schema": "apuracao-2t-2026/v1",
+ "tipo": "governador",
+ "gerado_em": "2026-10-25T20:40:12.000Z",
+ "modo": "simulacao",
+ "aviso": "Painel independente com dados oficiais. Nenhum TRE publica arquivo estruturado próprio: os resultados de cada UF são o recorte daquela UF na base de totalização do TSE (resultados.tse.jus.br).",
+ "fonte": {
+  "base": "https://resultados.tse.jus.br",
+  "ambiente": "oficial",
+  "portal": "https://resultados.tse.jus.br/oficial/app/index.html"
+ },
+ "eleicao": {
+  "estado": "publicada",
+  "eleicao": "6260",
+  "pleito": "3221",
+  "data": "25/10/2026",
+  "nome": "Eleição Ordinária Estadual - 2026 2º Turno (SIMULADA)",
+  "turno": 2,
+  "cargo": 3,
+  "cargo_nome": "Governador",
+  "abrangencias": [
+   "ac",
+   "am",
+   "df",
+   "es",
+   "rj",
+   "rn",
+   "to"
+  ]
+ },
+ "ufs": {
+  "ac": {
+   "codigo": "ac",
+   "tipo": "uf",
+   "nome": "Acre",
+   "regiao": "N",
+   "ibge_uf": "12",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/ac/ac-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "10",
+     "sqcand": "10002532492",
+     "nome": "ALAN RICK MIRANDA",
+     "nome_urna": "ALAN RICK",
+     "partido": {
+      "numero": "10",
+      "sigla": "REPUBLICANOS",
+      "nome": "REPUBLICANOS"
+     },
+     "federacao": null,
+     "coligacao": "REPUBLICANOS / NOVO / PSD / AVANTE",
+     "vice": {
+      "sqcand": "10002532493",
+      "nome": "FABIO RICARDO LEITE",
+      "nome_urna": "RICARDO LEITE",
+      "partido": "REPUBLICANOS"
+     }
+    },
+    {
+     "numero": "11",
+     "sqcand": "10002544107",
+     "nome": "MAILZA ASSIS CAMELI",
+     "nome_urna": "MAILZA ASSIS",
+     "partido": {
+      "numero": "11",
+      "sigla": "PP",
+      "nome": "PROGRESSISTAS"
+     },
+     "federacao": {
+      "numero": "104",
+      "sigla": "UNIÃO/PP",
+      "nome": "FEDERAÇÃO UNIÃO PROGRESSISTA"
+     },
+     "coligacao": "PDT / MDB / PL / DEMOCRATA / PP / UNIÃO",
+     "vice": {
+      "sqcand": "10002544108",
+      "nome": "JESSICA ROJAS SALES",
+      "nome_urna": "JESSICA SALES",
+      "partido": "MDB"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 2270,
+     "totalizadas": 635,
+     "nao_totalizadas": 1635,
+     "instaladas": 2270,
+     "nao_instaladas": 0,
+     "apuradas": 635,
+     "nao_apuradas": 1635
+    },
+    "eleitorado": {
+     "total": 613316,
+     "secoes_totalizadas": 171728,
+     "secoes_nao_totalizadas": 441588,
+     "secoes_instaladas": 613316,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 171728,
+     "secoes_nao_apuradas": 441588,
+     "comparecimento": 114502,
+     "abstencao": 57226
+    },
+    "votos": {
+     "total": 114502,
+     "validos_computados": 100972,
+     "validos": 100972,
+     "nominais": 100972,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 2499,
+     "nulos_total": 11031,
+     "nulos": 11031,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 27.973568281938327,
+     "pct_comparecimento": 66.67637193701668,
+     "pct_abstencao": 33.323628062983325,
+     "base_comparecimento": 171728,
+     "pct_validos": 88.18361251331855,
+     "pct_brancos": 2.1824946289147786,
+     "pct_nulos": 9.633892857766677
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 27.973568282,
+     "pct_comparecimento": 66.676371937,
+     "pct_abstencao": 33.323628063,
+     "pct_validos": 88.183612513,
+     "pct_brancos": 2.182494629,
+     "pct_nulos": 9.633892858
+    },
+    "candidatos": [
+     {
+      "numero": "11",
+      "votos": 61252,
+      "pct_validos": 60.66236184288714,
+      "pct_validos_tse": 60.662361843,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "10",
+      "votos": 39720,
+      "pct_validos": 39.33763815711286,
+      "pct_validos_tse": 39.337638157,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "11",
+     "segundo": "10",
+     "diferenca_votos": 21532,
+     "diferenca_pontos": 21.324723685774273
+    }
+   }
+  },
+  "am": {
+   "codigo": "am",
+   "tipo": "uf",
+   "nome": "Amazonas",
+   "regiao": "N",
+   "ibge_uf": "13",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/am/am-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "22",
+     "sqcand": "40002541626",
+     "nome": "MARIA DO CARMO SEFFAIR LINS DE ALBUQUERQUE",
+     "nome_urna": "PROFESSORA MARIA DO CARMO",
+     "partido": {
+      "numero": "22",
+      "sigla": "PL",
+      "nome": "PARTIDO LIBERAL"
+     },
+     "federacao": null,
+     "coligacao": "PL / NOVO",
+     "vice": {
+      "sqcand": "40002541627",
+      "nome": "MARIO ANIBAL GOMES DA COSTA JUNIOR",
+      "nome_urna": "CORONEL ANIBAL",
+      "partido": "PL"
+     }
+    },
+    {
+     "numero": "55",
+     "sqcand": "40002532272",
+     "nome": "OMAR JOSE ABDELAZIZ",
+     "nome_urna": "OMAR AZIZ",
+     "partido": {
+      "numero": "55",
+      "sigla": "PSD",
+      "nome": "PARTIDO SOCIAL DEMOCRÁTICO"
+     },
+     "federacao": null,
+     "coligacao": "REPUBLICANOS / MDB / PSD / PCDOB / PT / PV",
+     "vice": {
+      "sqcand": "40002532271",
+      "nome": "ALESSANDRA CAMPELO DA SILVA",
+      "nome_urna": "ALESSANDRA CAMPELO",
+      "partido": "PSD"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 8157,
+     "totalizadas": 3262,
+     "nao_totalizadas": 4895,
+     "instaladas": 8157,
+     "nao_instaladas": 0,
+     "apuradas": 3262,
+     "nao_apuradas": 4895
+    },
+    "eleitorado": {
+     "total": 2796053,
+     "secoes_totalizadas": 1118421,
+     "secoes_nao_totalizadas": 1677632,
+     "secoes_instaladas": 2796053,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1118421,
+     "secoes_nao_apuradas": 1677632,
+     "comparecimento": 603786,
+     "abstencao": 514635
+    },
+    "votos": {
+     "total": 603786,
+     "validos_computados": 539672,
+     "validos": 539672,
+     "nominais": 539672,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 20136,
+     "nulos_total": 43978,
+     "nulos": 43978,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99019247272282,
+     "pct_comparecimento": 53.9855743052035,
+     "pct_abstencao": 46.0144256947965,
+     "base_comparecimento": 1118421,
+     "pct_validos": 89.38133709625596,
+     "pct_brancos": 3.334956424958512,
+     "pct_nulos": 7.28370647878553
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.990192473,
+     "pct_comparecimento": 53.985574305,
+     "pct_abstencao": 46.014425695,
+     "pct_validos": 89.381337096,
+     "pct_brancos": 3.334956425,
+     "pct_nulos": 7.283706479
+    },
+    "candidatos": [
+     {
+      "numero": "55",
+      "votos": 336738,
+      "pct_validos": 62.39678916082361,
+      "pct_validos_tse": 62.396789161,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "22",
+      "votos": 202934,
+      "pct_validos": 37.60321083917639,
+      "pct_validos_tse": 37.603210839,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "55",
+     "segundo": "22",
+     "diferenca_votos": 133804,
+     "diferenca_pontos": 24.793578321647217
+    }
+   }
+  },
+  "df": {
+   "codigo": "df",
+   "tipo": "uf",
+   "nome": "Distrito Federal",
+   "regiao": "CO",
+   "ibge_uf": "53",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/df/df-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "11",
+     "sqcand": "70002553055",
+     "nome": "CELINA LEAO HIZIM FERREIRA",
+     "nome_urna": "CELINA LEÃO",
+     "partido": {
+      "numero": "11",
+      "sigla": "PP",
+      "nome": "PROGRESSISTAS"
+     },
+     "federacao": {
+      "numero": "104",
+      "sigla": "UNIÃO/PP",
+      "nome": "FEDERAÇÃO UNIÃO PROGRESSISTA"
+     },
+     "coligacao": "REPUBLICANOS / MDB / PODE / PL / DC / MOBILIZA / DEMOCRATA / PRD / SOLIDARIEDADE / PP / UNIÃO",
+     "vice": {
+      "sqcand": "70002553056",
+      "nome": "GUSTAVO DO VALE ROCHA",
+      "nome_urna": "GUSTAVO ROCHA",
+      "partido": "REPUBLICANOS"
+     }
+    },
+    {
+     "numero": "13",
+     "sqcand": "70002552496",
+     "nome": "LEANDRO ANTÔNIO GRASS PEIXOTO",
+     "nome_urna": "LEANDRO GRASS",
+     "partido": {
+      "numero": "13",
+      "sigla": "PT",
+      "nome": "PARTIDO DOS TRABALHADORES"
+     },
+     "federacao": {
+      "numero": "101",
+      "sigla": "PT/PC do B/PV",
+      "nome": "FEDERAÇÃO BRASIL DA ESPERANÇA - FE BRASIL"
+     },
+     "coligacao": "PDT / PCDOB / PT / PV / PSOL / REDE",
+     "vice": {
+      "sqcand": "70002552497",
+      "nome": "MARIA DAS DORES GOMES DA SILVA SANTOS",
+      "nome_urna": "DORA GOMES",
+      "partido": "PV"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 6969,
+     "totalizadas": 2787,
+     "nao_totalizadas": 4182,
+     "instaladas": 6969,
+     "nao_instaladas": 0,
+     "apuradas": 2787,
+     "nao_apuradas": 4182
+    },
+    "eleitorado": {
+     "total": 2243988,
+     "secoes_totalizadas": 897595,
+     "secoes_nao_totalizadas": 1346393,
+     "secoes_instaladas": 2243988,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 897595,
+     "secoes_nao_apuradas": 1346393,
+     "comparecimento": 620674,
+     "abstencao": 276921
+    },
+    "votos": {
+     "total": 620674,
+     "validos_computados": 558184,
+     "validos": 558184,
+     "nominais": 558184,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 29909,
+     "nulos_total": 32581,
+     "nulos": 32581,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99139044339216,
+     "pct_comparecimento": 69.14855809134409,
+     "pct_abstencao": 30.851441908655907,
+     "base_comparecimento": 897595,
+     "pct_validos": 89.93191272713212,
+     "pct_brancos": 4.818793762909354,
+     "pct_nulos": 5.249293509958529
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.991390443,
+     "pct_comparecimento": 69.148558091,
+     "pct_abstencao": 30.851441909,
+     "pct_validos": 89.931912727,
+     "pct_brancos": 4.818793763,
+     "pct_nulos": 5.24929351
+    },
+    "candidatos": [
+     {
+      "numero": "11",
+      "votos": 330212,
+      "pct_validos": 59.158270391125505,
+      "pct_validos_tse": 59.158270391,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 227972,
+      "pct_validos": 40.841729608874495,
+      "pct_validos_tse": 40.841729609,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "11",
+     "segundo": "13",
+     "diferenca_votos": 102240,
+     "diferenca_pontos": 18.31654078225101
+    }
+   }
+  },
+  "es": {
+   "codigo": "es",
+   "tipo": "uf",
+   "nome": "Espírito Santo",
+   "regiao": "SE",
+   "ibge_uf": "32",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/es/es-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "10",
+     "sqcand": "80002552682",
+     "nome": "LORENZO SILVA DE PAZOLINI",
+     "nome_urna": "LORENZO PAZOLINI",
+     "partido": {
+      "numero": "10",
+      "sigla": "REPUBLICANOS",
+      "nome": "REPUBLICANOS"
+     },
+     "federacao": null,
+     "coligacao": "REPUBLICANOS / PL / DEMOCRATA",
+     "vice": {
+      "sqcand": "80002553263",
+      "nome": "ELIANE LEAL VIEIRA",
+      "nome_urna": "ELIANE LEAL",
+      "partido": "PL"
+     }
+    },
+    {
+     "numero": "15",
+     "sqcand": "80002552172",
+     "nome": "RICARDO DE REZENDE FERRAÇO",
+     "nome_urna": "RICARDO FERRAÇO",
+     "partido": {
+      "numero": "15",
+      "sigla": "MDB",
+      "nome": "MOVIMENTO DEMOCRÁTICO BRASILEIRO"
+     },
+     "federacao": null,
+     "coligacao": "PODE / MDB / AGIR / PSB / PDT / CIDADANIA / PSDB / PP / UNIÃO",
+     "vice": {
+      "sqcand": "80002552171",
+      "nome": "CAMILLO AUGUSTO MARCHEZI DE OLIVEIRA NEVES",
+      "nome_urna": "CAMILLO NEVES",
+      "partido": "PP"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 9844,
+     "totalizadas": 3937,
+     "nao_totalizadas": 5907,
+     "instaladas": 9844,
+     "nao_instaladas": 0,
+     "apuradas": 3937,
+     "nao_apuradas": 5907
+    },
+    "eleitorado": {
+     "total": 2987584,
+     "secoes_totalizadas": 1195033,
+     "secoes_nao_totalizadas": 1792551,
+     "secoes_instaladas": 2987584,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1195033,
+     "secoes_nao_apuradas": 1792551,
+     "comparecimento": 801787,
+     "abstencao": 393246
+    },
+    "votos": {
+     "total": 801787,
+     "validos_computados": 707211,
+     "validos": 707211,
+     "nominais": 707211,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 44016,
+     "nulos_total": 50560,
+     "nulos": 50560,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99390491670053,
+     "pct_comparecimento": 67.0932936579994,
+     "pct_abstencao": 32.9067063420006,
+     "base_comparecimento": 1195033,
+     "pct_validos": 88.20434853645669,
+     "pct_brancos": 5.489737299307672,
+     "pct_nulos": 6.305914164235639
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.993904917,
+     "pct_comparecimento": 67.093293658,
+     "pct_abstencao": 32.906706342,
+     "pct_validos": 88.204348536,
+     "pct_brancos": 5.489737299,
+     "pct_nulos": 6.305914164
+    },
+    "candidatos": [
+     {
+      "numero": "10",
+      "votos": 419453,
+      "pct_validos": 59.31087044743365,
+      "pct_validos_tse": 59.310870447,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "15",
+      "votos": 287758,
+      "pct_validos": 40.68912955256635,
+      "pct_validos_tse": 40.689129553,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "10",
+     "segundo": "15",
+     "diferenca_votos": 131695,
+     "diferenca_pontos": 18.6217408948673
+    }
+   }
+  },
+  "rj": {
+   "codigo": "rj",
+   "tipo": "uf",
+   "nome": "Rio de Janeiro",
+   "regiao": "SE",
+   "ibge_uf": "33",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/rj/rj-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "22",
+     "sqcand": "190002542887",
+     "nome": "DOUGLAS RUAS DOS SANTOS",
+     "nome_urna": "DOUGLAS RUAS",
+     "partido": {
+      "numero": "22",
+      "sigla": "PL",
+      "nome": "PARTIDO LIBERAL"
+     },
+     "federacao": null,
+     "coligacao": "PL / MOBILIZA / AGIR / AVANTE",
+     "vice": {
+      "sqcand": "190002542886",
+      "nome": "FERNANDA ANCHIETA LOUBACK",
+      "nome_urna": "FERNANDA LOUBACK",
+      "partido": "PL"
+     }
+    },
+    {
+     "numero": "55",
+     "sqcand": "190002543380",
+     "nome": "EDUARDO DA COSTA PAES",
+     "nome_urna": "EDUARDO PAES",
+     "partido": {
+      "numero": "55",
+      "sigla": "PSD",
+      "nome": "PARTIDO SOCIAL DEMOCRÁTICO"
+     },
+     "federacao": null,
+     "coligacao": "PDT / MDB / DC / PSB / PSD / CIDADANIA / PSDB / PCDOB / PT / PV / PRD / SOLIDARIEDADE",
+     "vice": {
+      "sqcand": "190002543379",
+      "nome": "JEANNIE MAYR REIS DE OLIVEIRA",
+      "nome_urna": "JANE REIS",
+      "partido": "MDB"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 37675,
+     "totalizadas": 15070,
+     "nao_totalizadas": 22605,
+     "instaladas": 37675,
+     "nao_instaladas": 0,
+     "apuradas": 15070,
+     "nao_apuradas": 22605
+    },
+    "eleitorado": {
+     "total": 12842517,
+     "secoes_totalizadas": 5137006,
+     "secoes_nao_totalizadas": 7705511,
+     "secoes_instaladas": 12842517,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 5137006,
+     "secoes_nao_apuradas": 7705511,
+     "comparecimento": 3662002,
+     "abstencao": 1475004
+    },
+    "votos": {
+     "total": 3662002,
+     "validos_computados": 3191272,
+     "validos": 3191272,
+     "nominais": 3191272,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 200614,
+     "nulos_total": 270116,
+     "nulos": 270116,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 71.2866989059386,
+     "pct_abstencao": 28.713301094061404,
+     "base_comparecimento": 5137006,
+     "pct_validos": 87.1455559008433,
+     "pct_brancos": 5.478260252178999,
+     "pct_nulos": 7.376183846977692
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 71.286698906,
+     "pct_abstencao": 28.713301094,
+     "pct_validos": 87.145555901,
+     "pct_brancos": 5.478260252,
+     "pct_nulos": 7.376183847
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 1708479,
+      "pct_validos": 53.535988157700125,
+      "pct_validos_tse": 53.535988158,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "55",
+      "votos": 1482793,
+      "pct_validos": 46.464011842299875,
+      "pct_validos_tse": 46.464011842,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "55",
+     "diferenca_votos": 225686,
+     "diferenca_pontos": 7.071976315400249
+    }
+   }
+  },
+  "rn": {
+   "codigo": "rn",
+   "tipo": "uf",
+   "nome": "Rio Grande do Norte",
+   "regiao": "NE",
+   "ibge_uf": "24",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/rn/rn-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "13",
+     "sqcand": "200002534001",
+     "nome": "CARLOS EDUARDO XAVIER",
+     "nome_urna": "CADU DE LULA",
+     "partido": {
+      "numero": "13",
+      "sigla": "PT",
+      "nome": "PARTIDO DOS TRABALHADORES"
+     },
+     "federacao": {
+      "numero": "101",
+      "sigla": "PT/PC do B/PV",
+      "nome": "FEDERAÇÃO BRASIL DA ESPERANÇA - FE BRASIL"
+     },
+     "coligacao": "PDT / PSB / PCDOB / PT / PV",
+     "vice": {
+      "sqcand": "200002534002",
+      "nome": "LARISSA DANIELA ESCOSSIA ROSADO",
+      "nome_urna": "LARISSA",
+      "partido": "PSB"
+     }
+    },
+    {
+     "numero": "44",
+     "sqcand": "200002535255",
+     "nome": "ALLYSON LEANDRO BEZERRA SILVA",
+     "nome_urna": "ALLYSON",
+     "partido": {
+      "numero": "44",
+      "sigla": "UNIÃO",
+      "nome": "UNIÃO BRASIL"
+     },
+     "federacao": {
+      "numero": "104",
+      "sigla": "UNIÃO/PP",
+      "nome": "FEDERAÇÃO UNIÃO PROGRESSISTA"
+     },
+     "coligacao": "REPUBLICANOS / MDB / PSD / AVANTE / PRD / SOLIDARIEDADE / PP / UNIÃO",
+     "vice": {
+      "sqcand": "200002535256",
+      "nome": "HERMANO DA COSTA MORAES",
+      "nome_urna": "HERMANO",
+      "partido": "MDB"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 8115,
+     "totalizadas": 3246,
+     "nao_totalizadas": 4869,
+     "instaladas": 8115,
+     "nao_instaladas": 0,
+     "apuradas": 3246,
+     "nao_apuradas": 4869
+    },
+    "eleitorado": {
+     "total": 2656207,
+     "secoes_totalizadas": 1062482,
+     "secoes_nao_totalizadas": 1593725,
+     "secoes_instaladas": 2656207,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1062482,
+     "secoes_nao_apuradas": 1593725,
+     "comparecimento": 652400,
+     "abstencao": 410082
+    },
+    "votos": {
+     "total": 652400,
+     "validos_computados": 580843,
+     "validos": 580843,
+     "nominais": 580843,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 30609,
+     "nulos_total": 40948,
+     "nulos": 40948,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 61.403393186896345,
+     "pct_abstencao": 38.596606813103655,
+     "base_comparecimento": 1062482,
+     "pct_validos": 89.03172900061313,
+     "pct_brancos": 4.691753525444512,
+     "pct_nulos": 6.276517473942366
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 61.403393187,
+     "pct_abstencao": 38.596606813,
+     "pct_validos": 89.031729001,
+     "pct_brancos": 4.691753525,
+     "pct_nulos": 6.276517474
+    },
+    "candidatos": [
+     {
+      "numero": "13",
+      "votos": 287320,
+      "pct_validos": 49.466034711617425,
+      "pct_validos_tse": 49.466034712,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "44",
+      "votos": 293523,
+      "pct_validos": 50.533965288382575,
+      "pct_validos_tse": 50.533965288,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "44",
+     "segundo": "13",
+     "diferenca_votos": 6203,
+     "diferenca_pontos": 1.06793057676515
+    }
+   }
+  },
+  "to": {
+   "codigo": "to",
+   "tipo": "uf",
+   "nome": "Tocantins",
+   "regiao": "N",
+   "ibge_uf": "17",
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/to/to-c0003-e006260-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:12.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:12.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "estado_publicacao": "em_apuracao",
+   "candidatos": [
+    {
+     "numero": "44",
+     "sqcand": "270002544599",
+     "nome": "MARIA AUXILIADORA SEABRA REZENDE",
+     "nome_urna": "PROFESSORA DORINHA",
+     "partido": {
+      "numero": "44",
+      "sigla": "UNIÃO",
+      "nome": "UNIÃO BRASIL"
+     },
+     "federacao": {
+      "numero": "104",
+      "sigla": "UNIÃO/PP",
+      "nome": "FEDERAÇÃO UNIÃO PROGRESSISTA"
+     },
+     "coligacao": "REPUBLICANOS / PODE / AVANTE / PL / PRD / SOLIDARIEDADE / PP / UNIÃO",
+     "vice": {
+      "sqcand": "270002544600",
+      "nome": "ATOS GOMES DE ARAÚJO",
+      "nome_urna": "ATOS GOMES",
+      "partido": "REPUBLICANOS"
+     }
+    },
+    {
+     "numero": "45",
+     "sqcand": "270002544544",
+     "nome": "VICENTE ALVES DE OLIVEIRA JÚNIOR",
+     "nome_urna": "VICENTINHO JÚNIOR",
+     "partido": {
+      "numero": "45",
+      "sigla": "PSDB",
+      "nome": "PARTIDO DA SOCIAL DEMOCRACIA BRASILEIRA"
+     },
+     "federacao": {
+      "numero": "100",
+      "sigla": "PSDB/CIDADANIA",
+      "nome": "FEDERAÇÃO PSDB CIDADANIA"
+     },
+     "coligacao": "MDB / CIDADANIA / PSDB",
+     "vice": {
+      "sqcand": "270002544545",
+      "nome": "AMELIO CAYRES DE ALMEIDA",
+      "nome_urna": "AMÉLIO CAYRES",
+      "partido": "MDB"
+     }
+    }
+   ],
+   "eleito": {
+    "publicado": false,
+    "candidatos": []
+   },
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 4384,
+     "totalizadas": 1753,
+     "nao_totalizadas": 2631,
+     "instaladas": 4384,
+     "nao_instaladas": 0,
+     "apuradas": 1753,
+     "nao_apuradas": 2631
+    },
+    "eleitorado": {
+     "total": 1180433,
+     "secoes_totalizadas": 472173,
+     "secoes_nao_totalizadas": 708260,
+     "secoes_instaladas": 1180433,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 472173,
+     "secoes_nao_apuradas": 708260,
+     "comparecimento": 349304,
+     "abstencao": 122869
+    },
+    "votos": {
+     "total": 349304,
+     "validos_computados": 303643,
+     "validos": 303643,
+     "nominais": 303643,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 10834,
+     "nulos_total": 34827,
+     "nulos": 34827,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.98631386861314,
+     "pct_comparecimento": 73.97796993898423,
+     "pct_abstencao": 26.022030061015773,
+     "base_comparecimento": 472173,
+     "pct_validos": 86.92800540503401,
+     "pct_brancos": 3.101596317248013,
+     "pct_nulos": 9.970398277717976
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.986313869,
+     "pct_comparecimento": 73.977969939,
+     "pct_abstencao": 26.022030061,
+     "pct_validos": 86.928005405,
+     "pct_brancos": 3.101596317,
+     "pct_nulos": 9.970398278
+    },
+    "candidatos": [
+     {
+      "numero": "45",
+      "votos": 149139,
+      "pct_validos": 49.11656122485946,
+      "pct_validos_tse": 49.116561225,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "44",
+      "votos": 154504,
+      "pct_validos": 50.88343877514054,
+      "pct_validos_tse": 50.883438775,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "44",
+     "segundo": "45",
+     "diferenca_votos": 5365,
+     "diferenca_pontos": 1.7668775502810803
+    }
+   }
+  }
+ },
+ "coleta_geral": {
+  "estado": "ok",
+  "mensagem": null,
+  "rodada_em": "2026-10-25T20:40:12.000Z",
+  "proxima_em": "2026-10-25T20:40:27.000Z",
+  "intervalo_s": 15
+ }
+}

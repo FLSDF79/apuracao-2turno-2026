@@ -1,0 +1,4148 @@
+{
+ "schema": "apuracao-2t-2026/v1",
+ "tipo": "presidente",
+ "gerado_em": "2026-10-25T20:40:12.000Z",
+ "modo": "simulacao",
+ "aviso": "Painel independente com dados oficiais. Nenhum TRE publica arquivo estruturado próprio: os resultados de cada UF são o recorte daquela UF na base de totalização do TSE (resultados.tse.jus.br).",
+ "fonte": {
+  "base": "https://resultados.tse.jus.br",
+  "ambiente": "oficial",
+  "portal": "https://resultados.tse.jus.br/oficial/app/index.html"
+ },
+ "eleicao": {
+  "estado": "publicada",
+  "eleicao": "6258",
+  "pleito": "3221",
+  "data": "25/10/2026",
+  "nome": "Eleição Ordinária Federal - 2026 2º Turno (SIMULADA)",
+  "turno": 2,
+  "cargo": 1,
+  "cargo_nome": "Presidente",
+  "abrangencias": [
+   "br"
+  ]
+ },
+ "estado_publicacao": "em_apuracao",
+ "eleito": {
+  "publicado": false,
+  "candidatos": [],
+  "fonte": null
+ },
+ "candidatos": [
+  {
+   "numero": "13",
+   "sqcand": "280002542548",
+   "nome": "LUIZ INÁCIO LULA DA SILVA",
+   "nome_urna": "LULA",
+   "partido": {
+    "numero": "13",
+    "sigla": "PT",
+    "nome": "PARTIDO DOS TRABALHADORES"
+   },
+   "federacao": {
+    "numero": "101",
+    "sigla": "PT/PC do B/PV",
+    "nome": "FEDERAÇÃO BRASIL DA ESPERANÇA - FE BRASIL"
+   },
+   "coligacao": "PSB / PDT / PCDOB / PT / PV / PSOL / REDE",
+   "vice": {
+    "sqcand": "280002542549",
+    "nome": "GERALDO JOSE RODRIGUES ALCKMIN FILHO",
+    "nome_urna": "GERALDO ALCKMIN",
+    "partido": "PSB"
+   }
+  },
+  {
+   "numero": "22",
+   "sqcand": "280002551544",
+   "nome": "FLAVIO NANTES BOLSONARO",
+   "nome_urna": "FLAVIO BOLSONARO",
+   "partido": {
+    "numero": "22",
+    "sigla": "PL",
+    "nome": "PARTIDO LIBERAL"
+   },
+   "federacao": null,
+   "coligacao": null,
+   "vice": {
+    "sqcand": "280002551543",
+    "nome": "ALFREDO GASPAR DE MENDONÇA NETO",
+    "nome_urna": "ALFREDO GASPAR",
+    "partido": "PL"
+   }
+  }
+ ],
+ "brasil": {
+  "oficial": {
+   "origem": "tse",
+   "idg": "1792951800",
+   "andamento": {
+    "codigo": "p",
+    "final_publicado": false
+   },
+   "horario": {
+    "geracao": "2026-10-25T18:10:00-03:00",
+    "totalizacao": "2026-10-25T18:10:00-03:00"
+   },
+   "secoes": {
+    "total": 499248,
+    "totalizadas": 204597,
+    "nao_totalizadas": 294651,
+    "instaladas": 499248,
+    "nao_instaladas": 0,
+    "apuradas": 204597,
+    "nao_apuradas": 294651
+   },
+   "eleitorado": {
+    "total": 158745502,
+    "secoes_totalizadas": 65130688,
+    "secoes_nao_totalizadas": 93614814,
+    "secoes_instaladas": 158745502,
+    "secoes_nao_instaladas": 0,
+    "secoes_apuradas": 65130688,
+    "secoes_nao_apuradas": 93614814,
+    "comparecimento": 47525428,
+    "abstencao": 17605260
+   },
+   "votos": {
+    "total": 47525428,
+    "validos_computados": 45062457,
+    "validos": 45062457,
+    "nominais": 45062457,
+    "anulados": 0,
+    "anulados_sub_judice": 0,
+    "brancos": 951277,
+    "nulos_total": 1511694,
+    "nulos": 1511694,
+    "nulos_tecnicos": 0,
+    "vsan": 0,
+    "vscv": 0
+   },
+   "indicadores": {
+    "pct_totalizadas": 40.98103547735795,
+    "pct_comparecimento": 72.96933206048737,
+    "pct_abstencao": 27.03066793951263,
+    "base_comparecimento": 65130688,
+    "pct_validos": 94.81757218472603,
+    "pct_brancos": 2.0016169028504067,
+    "pct_nulos": 3.1808109124235555
+   },
+   "oficial_tse": {
+    "pct_totalizadas": 40.981035477,
+    "pct_comparecimento": 72.96933206,
+    "pct_abstencao": 27.03066794,
+    "pct_validos": 94.817572185,
+    "pct_brancos": 2.001616903,
+    "pct_nulos": 3.180810912
+   },
+   "candidatos": [
+    {
+     "numero": "22",
+     "votos": 23051556,
+     "pct_validos": 51.15468071348173,
+     "pct_validos_tse": 51.154680713,
+     "situacao": "",
+     "eleito_publicado": false,
+     "destinacao": "Válido"
+    },
+    {
+     "numero": "13",
+     "votos": 22010901,
+     "pct_validos": 48.84531928651827,
+     "pct_validos_tse": 48.845319287,
+     "situacao": "",
+     "eleito_publicado": false,
+     "destinacao": "Válido"
+    }
+   ],
+   "disputa": {
+    "situacao": "lideranca",
+    "lider": "22",
+    "segundo": "13",
+    "diferenca_votos": 1040655,
+    "diferenca_pontos": 2.309361426963463
+   }
+  },
+  "coleta": {
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
+   "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+   "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+   "status_http": 200,
+   "ultimo_erro": null,
+   "situacao": "atualizado",
+   "sem_alteracao": false,
+   "nova_versao": false,
+   "correcao": false
+  },
+  "calculado": {
+   "origem": "calculado",
+   "idg": null,
+   "andamento": {
+    "codigo": null,
+    "final_publicado": false
+   },
+   "horario": {
+    "totalizacao": {
+     "min": "2026-10-25T18:00:00-03:00",
+     "max": "2026-10-25T18:10:00-03:00"
+    },
+    "geracao": {
+     "min": "2026-10-25T18:00:00-03:00",
+     "max": "2026-10-25T18:10:00-03:00"
+    }
+   },
+   "componentes": [
+    "ac",
+    "al",
+    "am",
+    "ap",
+    "ba",
+    "ce",
+    "df",
+    "es",
+    "go",
+    "ma",
+    "mg",
+    "ms",
+    "mt",
+    "pa",
+    "pb",
+    "pe",
+    "pi",
+    "pr",
+    "rj",
+    "rn",
+    "ro",
+    "rr",
+    "rs",
+    "sc",
+    "se",
+    "sp",
+    "to",
+    "zz"
+   ],
+   "faltando": [],
+   "inconsistencias": [],
+   "secoes": {
+    "total": 499248,
+    "totalizadas": 199414,
+    "nao_totalizadas": 299834,
+    "instaladas": 499248,
+    "nao_instaladas": 0,
+    "apuradas": 199414,
+    "nao_apuradas": 299834
+   },
+   "eleitorado": {
+    "total": 158745502,
+    "secoes_totalizadas": 63424543,
+    "secoes_nao_totalizadas": 95320959,
+    "secoes_instaladas": 158745502,
+    "secoes_nao_instaladas": 0,
+    "secoes_apuradas": 63424543,
+    "secoes_nao_apuradas": 95320959,
+    "comparecimento": 46326673,
+    "abstencao": 17097870
+   },
+   "votos": {
+    "total": 46326673,
+    "validos_computados": 43941086,
+    "validos": 43941086,
+    "nominais": 43941086,
+    "anulados": 0,
+    "anulados_sub_judice": 0,
+    "brancos": 919637,
+    "nulos_total": 1465950,
+    "nulos": 1465950,
+    "nulos_tecnicos": 0,
+    "vsan": 0,
+    "vscv": 0
+   },
+   "indicadores": {
+    "pct_totalizadas": 39.942874082620264,
+    "pct_comparecimento": 73.04218652391394,
+    "pct_abstencao": 26.957813476086063,
+    "base_comparecimento": 63424543,
+    "pct_validos": 94.85051084933295,
+    "pct_brancos": 1.9851134140368767,
+    "pct_nulos": 3.16437573663017
+   },
+   "candidatos": [
+    {
+     "numero": "22",
+     "votos": 22405455,
+     "pct_validos": 50.98976160944224,
+     "destinacao": "Válido"
+    },
+    {
+     "numero": "13",
+     "votos": 21535631,
+     "pct_validos": 49.01023839055776,
+     "destinacao": "Válido"
+    }
+   ],
+   "disputa": {
+    "situacao": "lideranca",
+    "lider": "22",
+    "segundo": "13",
+    "diferenca_votos": 869824,
+    "diferenca_pontos": 1.9795232188844807
+   }
+  }
+ },
+ "exterior": {
+  "codigo": "zz",
+  "tipo": "exterior",
+  "nome": "Exterior",
+  "esperado": true,
+  "coleta": {
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/zz/zz-c0001-e006258-u.json",
+   "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+   "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+   "status_http": 200,
+   "ultimo_erro": null,
+   "situacao": "atualizado",
+   "sem_alteracao": false,
+   "nova_versao": true,
+   "correcao": false
+  },
+  "atraso_vs_nacional_min": 0,
+  "resultado": {
+   "origem": "tse",
+   "idg": "1792951800",
+   "andamento": {
+    "codigo": "p",
+    "final_publicado": false
+   },
+   "horario": {
+    "geracao": "2026-10-25T18:10:00-03:00",
+    "totalizacao": "2026-10-25T18:10:00-03:00"
+   },
+   "secoes": {
+    "total": 1351,
+    "totalizadas": 540,
+    "nao_totalizadas": 811,
+    "instaladas": 1351,
+    "nao_instaladas": 0,
+    "apuradas": 540,
+    "nao_apuradas": 811
+   },
+   "eleitorado": {
+    "total": 916534,
+    "secoes_totalizadas": 366613,
+    "secoes_nao_totalizadas": 549921,
+    "secoes_instaladas": 916534,
+    "secoes_nao_instaladas": 0,
+    "secoes_apuradas": 366613,
+    "secoes_nao_apuradas": 549921,
+    "comparecimento": 124818,
+    "abstencao": 241795
+   },
+   "votos": {
+    "total": 124818,
+    "validos_computados": 120514,
+    "validos": 120514,
+    "nominais": 120514,
+    "anulados": 0,
+    "anulados_sub_judice": 0,
+    "brancos": 2326,
+    "nulos_total": 1978,
+    "nulos": 1978,
+    "nulos_tecnicos": 0,
+    "vsan": 0,
+    "vscv": 0
+   },
+   "indicadores": {
+    "pct_totalizadas": 39.97039230199852,
+    "pct_comparecimento": 34.04625586108512,
+    "pct_abstencao": 65.95374413891487,
+    "base_comparecimento": 366613,
+    "pct_validos": 96.551779390793,
+    "pct_brancos": 1.8635132753288788,
+    "pct_nulos": 1.5847073338781266
+   },
+   "oficial_tse": {
+    "pct_totalizadas": 39.970392302,
+    "pct_comparecimento": 34.046255861,
+    "pct_abstencao": 65.953744139,
+    "pct_validos": 96.551779391,
+    "pct_brancos": 1.863513275,
+    "pct_nulos": 1.584707334
+   },
+   "candidatos": [
+    {
+     "numero": "22",
+     "votos": 57560,
+     "pct_validos": 47.76208573277793,
+     "pct_validos_tse": 47.762085733,
+     "situacao": "",
+     "eleito_publicado": false,
+     "destinacao": "Válido"
+    },
+    {
+     "numero": "13",
+     "votos": 62954,
+     "pct_validos": 52.23791426722207,
+     "pct_validos_tse": 52.237914267,
+     "situacao": "",
+     "eleito_publicado": false,
+     "destinacao": "Válido"
+    }
+   ],
+   "disputa": {
+    "situacao": "lideranca",
+    "lider": "13",
+    "segundo": "22",
+    "diferenca_votos": 5394,
+    "diferenca_pontos": 4.475828534444133
+   }
+  }
+ },
+ "territorios": {
+  "ac": {
+   "codigo": "ac",
+   "tipo": "uf",
+   "nome": "Acre",
+   "regiao": "N",
+   "ibge_uf": "12",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ac/ac-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 2270,
+     "totalizadas": 635,
+     "nao_totalizadas": 1635,
+     "instaladas": 2270,
+     "nao_instaladas": 0,
+     "apuradas": 635,
+     "nao_apuradas": 1635
+    },
+    "eleitorado": {
+     "total": 613742,
+     "secoes_totalizadas": 171847,
+     "secoes_nao_totalizadas": 441895,
+     "secoes_instaladas": 613742,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 171847,
+     "secoes_nao_apuradas": 441895,
+     "comparecimento": 127907,
+     "abstencao": 43940
+    },
+    "votos": {
+     "total": 127907,
+     "validos_computados": 122520,
+     "validos": 122520,
+     "nominais": 122520,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 1562,
+     "nulos_total": 3825,
+     "nulos": 3825,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 27.973568281938327,
+     "pct_comparecimento": 74.43074362659807,
+     "pct_abstencao": 25.56925637340192,
+     "base_comparecimento": 171847,
+     "pct_validos": 95.78834622030068,
+     "pct_brancos": 1.2211997779636767,
+     "pct_nulos": 2.9904540017356362
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 27.973568282,
+     "pct_comparecimento": 74.430743627,
+     "pct_abstencao": 25.569256373,
+     "pct_validos": 95.78834622,
+     "pct_brancos": 1.221199778,
+     "pct_nulos": 2.990454002
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 84785,
+      "pct_validos": 69.20094678419849,
+      "pct_validos_tse": 69.200946784,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 37735,
+      "pct_validos": 30.799053215801504,
+      "pct_validos_tse": 30.799053216,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 47050,
+     "diferenca_pontos": 38.401893568396986
+    }
+   }
+  },
+  "al": {
+   "codigo": "al",
+   "tipo": "uf",
+   "nome": "Alagoas",
+   "regiao": "NE",
+   "ibge_uf": "27",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/al/al-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 7101,
+     "totalizadas": 2840,
+     "nao_totalizadas": 4261,
+     "instaladas": 7101,
+     "nao_instaladas": 0,
+     "apuradas": 2840,
+     "nao_apuradas": 4261
+    },
+    "eleitorado": {
+     "total": 2442126,
+     "secoes_totalizadas": 976850,
+     "secoes_nao_totalizadas": 1465276,
+     "secoes_instaladas": 2442126,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 976850,
+     "secoes_nao_apuradas": 1465276,
+     "comparecimento": 740268,
+     "abstencao": 236582
+    },
+    "votos": {
+     "total": 740268,
+     "validos_computados": 692470,
+     "validos": 692470,
+     "nominais": 692470,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 13484,
+     "nulos_total": 34314,
+     "nulos": 34314,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99436699056471,
+     "pct_comparecimento": 75.7811332343758,
+     "pct_abstencao": 24.2188667656242,
+     "base_comparecimento": 976850,
+     "pct_validos": 93.5431492378436,
+     "pct_brancos": 1.821502482884577,
+     "pct_nulos": 4.635348279271831
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.994366991,
+     "pct_comparecimento": 75.781133234,
+     "pct_abstencao": 24.218866766,
+     "pct_validos": 93.543149238,
+     "pct_brancos": 1.821502483,
+     "pct_nulos": 4.635348279
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 294287,
+      "pct_validos": 42.49815876500065,
+      "pct_validos_tse": 42.498158765,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 398183,
+      "pct_validos": 57.50184123499935,
+      "pct_validos_tse": 57.501841235,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 103896,
+     "diferenca_pontos": 15.003682469998694
+    }
+   }
+  },
+  "am": {
+   "codigo": "am",
+   "tipo": "uf",
+   "nome": "Amazonas",
+   "regiao": "N",
+   "ibge_uf": "13",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/am/am-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 8157,
+     "totalizadas": 3262,
+     "nao_totalizadas": 4895,
+     "instaladas": 8157,
+     "nao_instaladas": 0,
+     "apuradas": 3262,
+     "nao_apuradas": 4895
+    },
+    "eleitorado": {
+     "total": 2798611,
+     "secoes_totalizadas": 1119444,
+     "secoes_nao_totalizadas": 1679167,
+     "secoes_instaladas": 2798611,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1119444,
+     "secoes_nao_apuradas": 1679167,
+     "comparecimento": 834983,
+     "abstencao": 284461
+    },
+    "votos": {
+     "total": 834983,
+     "validos_computados": 809503,
+     "validos": 809503,
+     "nominais": 809503,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 9760,
+     "nulos_total": 15720,
+     "nulos": 15720,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99019247272282,
+     "pct_comparecimento": 74.58908172271235,
+     "pct_abstencao": 25.410918277287653,
+     "base_comparecimento": 1119444,
+     "pct_validos": 96.94844086646076,
+     "pct_brancos": 1.1688860731296327,
+     "pct_nulos": 1.8826730604096131
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.990192473,
+     "pct_comparecimento": 74.589081723,
+     "pct_abstencao": 25.410918277,
+     "pct_validos": 96.948440866,
+     "pct_brancos": 1.168886073,
+     "pct_nulos": 1.88267306
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 390705,
+      "pct_validos": 48.26479951278748,
+      "pct_validos_tse": 48.264799513,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 418798,
+      "pct_validos": 51.73520048721252,
+      "pct_validos_tse": 51.735200487,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 28093,
+     "diferenca_pontos": 3.470400974425047
+    }
+   }
+  },
+  "ap": {
+   "codigo": "ap",
+   "tipo": "uf",
+   "nome": "Amapá",
+   "regiao": "N",
+   "ibge_uf": "16",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ap/ap-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 1914,
+     "totalizadas": 765,
+     "nao_totalizadas": 1149,
+     "instaladas": 1914,
+     "nao_instaladas": 0,
+     "apuradas": 765,
+     "nao_apuradas": 1149
+    },
+    "eleitorado": {
+     "total": 576988,
+     "secoes_totalizadas": 230795,
+     "secoes_nao_totalizadas": 346193,
+     "secoes_instaladas": 576988,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 230795,
+     "secoes_nao_apuradas": 346193,
+     "comparecimento": 174586,
+     "abstencao": 56209
+    },
+    "votos": {
+     "total": 174586,
+     "validos_computados": 169912,
+     "validos": 169912,
+     "nominais": 169912,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 1766,
+     "nulos_total": 2908,
+     "nulos": 2908,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.96865203761755,
+     "pct_comparecimento": 75.64548625403496,
+     "pct_abstencao": 24.354513745965033,
+     "base_comparecimento": 230795,
+     "pct_validos": 97.322809389069,
+     "pct_brancos": 1.0115358619820605,
+     "pct_nulos": 1.6656547489489422
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.968652038,
+     "pct_comparecimento": 75.645486254,
+     "pct_abstencao": 24.354513746,
+     "pct_validos": 97.322809389,
+     "pct_brancos": 1.011535862,
+     "pct_nulos": 1.665654749
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 84911,
+      "pct_validos": 49.97351570224587,
+      "pct_validos_tse": 49.973515702,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 85001,
+      "pct_validos": 50.02648429775413,
+      "pct_validos_tse": 50.026484298,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 90,
+     "diferenca_pontos": 0.052968595508261274
+    }
+   }
+  },
+  "ba": {
+   "codigo": "ba",
+   "tipo": "uf",
+   "nome": "Bahia",
+   "regiao": "NE",
+   "ibge_uf": "29",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ba/ba-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 35476,
+     "totalizadas": 14190,
+     "nao_totalizadas": 21286,
+     "instaladas": 35476,
+     "nao_instaladas": 0,
+     "apuradas": 14190,
+     "nao_apuradas": 21286
+    },
+    "eleitorado": {
+     "total": 11312752,
+     "secoes_totalizadas": 4525100,
+     "secoes_nao_totalizadas": 6787652,
+     "secoes_instaladas": 11312752,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 4525100,
+     "secoes_nao_apuradas": 6787652,
+     "comparecimento": 3440165,
+     "abstencao": 1084935
+    },
+    "votos": {
+     "total": 3440165,
+     "validos_computados": 3242942,
+     "validos": 3242942,
+     "nominais": 3242942,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 61974,
+     "nulos_total": 135249,
+     "nulos": 135249,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.998872477167666,
+     "pct_comparecimento": 76.0240657665024,
+     "pct_abstencao": 23.975934233497604,
+     "base_comparecimento": 4525100,
+     "pct_validos": 94.26704823751186,
+     "pct_brancos": 1.8014833590830672,
+     "pct_nulos": 3.931468403405069
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.998872477,
+     "pct_comparecimento": 76.024065767,
+     "pct_abstencao": 23.975934233,
+     "pct_validos": 94.267048238,
+     "pct_brancos": 1.801483359,
+     "pct_nulos": 3.931468403
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 977034,
+      "pct_validos": 30.128013390310404,
+      "pct_validos_tse": 30.12801339,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 2265908,
+      "pct_validos": 69.8719866096896,
+      "pct_validos_tse": 69.87198661,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 1288874,
+     "diferenca_pontos": 39.7439732193792
+    }
+   }
+  },
+  "ce": {
+   "codigo": "ce",
+   "tipo": "uf",
+   "nome": "Ceará",
+   "regiao": "NE",
+   "ibge_uf": "23",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ce/ce-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 23765,
+     "totalizadas": 9506,
+     "nao_totalizadas": 14259,
+     "instaladas": 23765,
+     "nao_instaladas": 0,
+     "apuradas": 9506,
+     "nao_apuradas": 14259
+    },
+    "eleitorado": {
+     "total": 6996545,
+     "secoes_totalizadas": 2798618,
+     "secoes_nao_totalizadas": 4197927,
+     "secoes_instaladas": 6996545,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 2798618,
+     "secoes_nao_apuradas": 4197927,
+     "comparecimento": 2241837,
+     "abstencao": 556781
+    },
+    "votos": {
+     "total": 2241837,
+     "validos_computados": 2124845,
+     "validos": 2124845,
+     "nominais": 2124845,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 41318,
+     "nulos_total": 75674,
+     "nulos": 75674,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 80.10514475358909,
+     "pct_abstencao": 19.894855246410906,
+     "base_comparecimento": 2798618,
+     "pct_validos": 94.78142255659087,
+     "pct_brancos": 1.8430421123391219,
+     "pct_nulos": 3.3755353310700107
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 80.105144754,
+     "pct_abstencao": 19.894855246,
+     "pct_validos": 94.781422557,
+     "pct_brancos": 1.843042112,
+     "pct_nulos": 3.375535331
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 702740,
+      "pct_validos": 33.07252999630561,
+      "pct_validos_tse": 33.072529996,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 1422105,
+      "pct_validos": 66.92747000369438,
+      "pct_validos_tse": 66.927470004,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 719365,
+     "diferenca_pontos": 33.85494000738877
+    }
+   }
+  },
+  "df": {
+   "codigo": "df",
+   "tipo": "uf",
+   "nome": "Distrito Federal",
+   "regiao": "CO",
+   "ibge_uf": "53",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/df/df-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 6969,
+     "totalizadas": 2787,
+     "nao_totalizadas": 4182,
+     "instaladas": 6969,
+     "nao_instaladas": 0,
+     "apuradas": 2787,
+     "nao_apuradas": 4182
+    },
+    "eleitorado": {
+     "total": 2258320,
+     "secoes_totalizadas": 903328,
+     "secoes_nao_totalizadas": 1354992,
+     "secoes_instaladas": 2258320,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 903328,
+     "secoes_nao_apuradas": 1354992,
+     "comparecimento": 657507,
+     "abstencao": 245821
+    },
+    "votos": {
+     "total": 657507,
+     "validos_computados": 634096,
+     "validos": 634096,
+     "nominais": 634096,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 10144,
+     "nulos_total": 13267,
+     "nulos": 13267,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99139044339216,
+     "pct_comparecimento": 72.7871825073506,
+     "pct_abstencao": 27.212817492649403,
+     "base_comparecimento": 903328,
+     "pct_validos": 96.43942954219499,
+     "pct_brancos": 1.5427972629949187,
+     "pct_nulos": 2.0177731948100934
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.991390443,
+     "pct_comparecimento": 72.787182507,
+     "pct_abstencao": 27.212817493,
+     "pct_validos": 96.439429542,
+     "pct_brancos": 1.542797263,
+     "pct_nulos": 2.017773195
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 363846,
+      "pct_validos": 57.38027049531932,
+      "pct_validos_tse": 57.380270495,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 270250,
+      "pct_validos": 42.61972950468068,
+      "pct_validos_tse": 42.619729505,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 93596,
+     "diferenca_pontos": 14.760540990638646
+    }
+   }
+  },
+  "es": {
+   "codigo": "es",
+   "tipo": "uf",
+   "nome": "Espírito Santo",
+   "regiao": "SE",
+   "ibge_uf": "32",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/es/es-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 9844,
+     "totalizadas": 3937,
+     "nao_totalizadas": 5907,
+     "instaladas": 9844,
+     "nao_instaladas": 0,
+     "apuradas": 3937,
+     "nao_apuradas": 5907
+    },
+    "eleitorado": {
+     "total": 2991650,
+     "secoes_totalizadas": 1196660,
+     "secoes_nao_totalizadas": 1794990,
+     "secoes_instaladas": 2991650,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1196660,
+     "secoes_nao_apuradas": 1794990,
+     "comparecimento": 873720,
+     "abstencao": 322940
+    },
+    "votos": {
+     "total": 873720,
+     "validos_computados": 833288,
+     "validos": 833288,
+     "nominais": 833288,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 17284,
+     "nulos_total": 23148,
+     "nulos": 23148,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99390491670053,
+     "pct_comparecimento": 73.01322012936005,
+     "pct_abstencao": 26.986779870639946,
+     "base_comparecimento": 1196660,
+     "pct_validos": 95.37243052694227,
+     "pct_brancos": 1.978208121595019,
+     "pct_nulos": 2.6493613514627112
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.993904917,
+     "pct_comparecimento": 73.013220129,
+     "pct_abstencao": 26.986779871,
+     "pct_validos": 95.372430527,
+     "pct_brancos": 1.978208122,
+     "pct_nulos": 2.649361351
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 493277,
+      "pct_validos": 59.196460287439635,
+      "pct_validos_tse": 59.196460287,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 340011,
+      "pct_validos": 40.803539712560365,
+      "pct_validos_tse": 40.803539713,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 153266,
+     "diferenca_pontos": 18.39292057487927
+    }
+   }
+  },
+  "go": {
+   "codigo": "go",
+   "tipo": "uf",
+   "nome": "Goiás",
+   "regiao": "CO",
+   "ibge_uf": "52",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/go/go-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:09.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:09.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 15686,
+     "totalizadas": 6274,
+     "nao_totalizadas": 9412,
+     "instaladas": 15686,
+     "nao_instaladas": 0,
+     "apuradas": 6274,
+     "nao_apuradas": 9412
+    },
+    "eleitorado": {
+     "total": 5080590,
+     "secoes_totalizadas": 2032236,
+     "secoes_nao_totalizadas": 3048354,
+     "secoes_instaladas": 5080590,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 2032236,
+     "secoes_nao_apuradas": 3048354,
+     "comparecimento": 1353769,
+     "abstencao": 678467
+    },
+    "votos": {
+     "total": 1353769,
+     "validos_computados": 1296307,
+     "validos": 1296307,
+     "nominais": 1296307,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 18257,
+     "nulos_total": 39205,
+     "nulos": 39205,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99744995537422,
+     "pct_comparecimento": 66.61475340462427,
+     "pct_abstencao": 33.38524659537573,
+     "base_comparecimento": 2032236,
+     "pct_validos": 95.75540583363927,
+     "pct_brancos": 1.3486052642659123,
+     "pct_nulos": 2.8959889020948184
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.997449955,
+     "pct_comparecimento": 66.614753405,
+     "pct_abstencao": 33.385246595,
+     "pct_validos": 95.755405834,
+     "pct_brancos": 1.348605264,
+     "pct_nulos": 2.895988902
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 820755,
+      "pct_validos": 63.31486291441765,
+      "pct_validos_tse": 63.314862914,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 475552,
+      "pct_validos": 36.68513708558235,
+      "pct_validos_tse": 36.685137086,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 345203,
+     "diferenca_pontos": 26.629725828835305
+    }
+   }
+  },
+  "ma": {
+   "codigo": "ma",
+   "tipo": "uf",
+   "nome": "Maranhão",
+   "regiao": "NE",
+   "ibge_uf": "21",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ma/ma-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 18093,
+     "totalizadas": 7237,
+     "nao_totalizadas": 10856,
+     "instaladas": 18093,
+     "nao_instaladas": 0,
+     "apuradas": 7237,
+     "nao_apuradas": 10856
+    },
+    "eleitorado": {
+     "total": 5183115,
+     "secoes_totalizadas": 2073246,
+     "secoes_nao_totalizadas": 3109869,
+     "secoes_instaladas": 5183115,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 2073246,
+     "secoes_nao_apuradas": 3109869,
+     "comparecimento": 1581959,
+     "abstencao": 491287
+    },
+    "votos": {
+     "total": 1581959,
+     "validos_computados": 1522136,
+     "validos": 1522136,
+     "nominais": 1522136,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 18526,
+     "nulos_total": 41297,
+     "nulos": 41297,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.998894600121595,
+     "pct_comparecimento": 76.30348738162283,
+     "pct_abstencao": 23.696512618377174,
+     "base_comparecimento": 2073246,
+     "pct_validos": 96.21842285419534,
+     "pct_brancos": 1.1710796550353075,
+     "pct_nulos": 2.6104974907693563
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.9988946,
+     "pct_comparecimento": 76.303487382,
+     "pct_abstencao": 23.696512618,
+     "pct_validos": 96.218422854,
+     "pct_brancos": 1.171079655,
+     "pct_nulos": 2.610497491
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 495616,
+      "pct_validos": 32.56055963461872,
+      "pct_validos_tse": 32.560559635,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 1026520,
+      "pct_validos": 67.43944036538127,
+      "pct_validos_tse": 67.439440365,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 530904,
+     "diferenca_pontos": 34.87888073076255
+    }
+   }
+  },
+  "mg": {
+   "codigo": "mg",
+   "tipo": "uf",
+   "nome": "Minas Gerais",
+   "regiao": "SE",
+   "ibge_uf": "31",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/mg/mg-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 52062,
+     "totalizadas": 20824,
+     "nao_totalizadas": 31238,
+     "instaladas": 52062,
+     "nao_instaladas": 0,
+     "apuradas": 20824,
+     "nao_apuradas": 31238
+    },
+    "eleitorado": {
+     "total": 16372372,
+     "secoes_totalizadas": 6548948,
+     "secoes_nao_totalizadas": 9823424,
+     "secoes_instaladas": 16372372,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 6548948,
+     "secoes_nao_apuradas": 9823424,
+     "comparecimento": 4650783,
+     "abstencao": 1898165
+    },
+    "votos": {
+     "total": 4650783,
+     "validos_computados": 4386593,
+     "validos": 4386593,
+     "nominais": 4386593,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 107320,
+     "nulos_total": 156870,
+     "nulos": 156870,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.998463370596596,
+     "pct_comparecimento": 71.01572649530887,
+     "pct_abstencao": 28.984273504691135,
+     "base_comparecimento": 6548948,
+     "pct_validos": 94.31945115478405,
+     "pct_brancos": 2.3075684244997023,
+     "pct_nulos": 3.3729804207162535
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.998463371,
+     "pct_comparecimento": 71.015726495,
+     "pct_abstencao": 28.984273505,
+     "pct_validos": 94.319451155,
+     "pct_brancos": 2.307568424,
+     "pct_nulos": 3.372980421
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 2311019,
+      "pct_validos": 52.683688685045546,
+      "pct_validos_tse": 52.683688685,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 2075574,
+      "pct_validos": 47.316311314954454,
+      "pct_validos_tse": 47.316311315,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 235445,
+     "diferenca_pontos": 5.367377370091091
+    }
+   }
+  },
+  "ms": {
+   "codigo": "ms",
+   "tipo": "uf",
+   "nome": "Mato Grosso do Sul",
+   "regiao": "CO",
+   "ibge_uf": "50",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ms/ms-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 7106,
+     "totalizadas": 2842,
+     "nao_totalizadas": 4264,
+     "instaladas": 7106,
+     "nao_instaladas": 0,
+     "apuradas": 2842,
+     "nao_apuradas": 4264
+    },
+    "eleitorado": {
+     "total": 2024430,
+     "secoes_totalizadas": 809772,
+     "secoes_nao_totalizadas": 1214658,
+     "secoes_instaladas": 2024430,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 809772,
+     "secoes_nao_apuradas": 1214658,
+     "comparecimento": 576428,
+     "abstencao": 233344
+    },
+    "votos": {
+     "total": 576428,
+     "validos_computados": 556082,
+     "validos": 556082,
+     "nominais": 556082,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 8508,
+     "nulos_total": 11838,
+     "nulos": 11838,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.994370954123276,
+     "pct_comparecimento": 71.18398759156898,
+     "pct_abstencao": 28.816012408431014,
+     "base_comparecimento": 809772,
+     "pct_validos": 96.47033107343849,
+     "pct_brancos": 1.4759865932952598,
+     "pct_nulos": 2.0536823332662535
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.994370954,
+     "pct_comparecimento": 71.183987592,
+     "pct_abstencao": 28.816012408,
+     "pct_validos": 96.470331073,
+     "pct_brancos": 1.475986593,
+     "pct_nulos": 2.053682333
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 349340,
+      "pct_validos": 62.82167018533238,
+      "pct_validos_tse": 62.821670185,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 206742,
+      "pct_validos": 37.17832981466762,
+      "pct_validos_tse": 37.178329815,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 142598,
+     "diferenca_pontos": 25.64334037066476
+    }
+   }
+  },
+  "mt": {
+   "codigo": "mt",
+   "tipo": "uf",
+   "nome": "Mato Grosso",
+   "regiao": "CO",
+   "ibge_uf": "51",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/mt/mt-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 8287,
+     "totalizadas": 3314,
+     "nao_totalizadas": 4973,
+     "instaladas": 8287,
+     "nao_instaladas": 0,
+     "apuradas": 3314,
+     "nao_apuradas": 4973
+    },
+    "eleitorado": {
+     "total": 2637801,
+     "secoes_totalizadas": 1055120,
+     "secoes_nao_totalizadas": 1582681,
+     "secoes_instaladas": 2637801,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1055120,
+     "secoes_nao_apuradas": 1582681,
+     "comparecimento": 775603,
+     "abstencao": 279517
+    },
+    "votos": {
+     "total": 775603,
+     "validos_computados": 752104,
+     "validos": 752104,
+     "nominais": 752104,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 8302,
+     "nulos_total": 15197,
+     "nulos": 15197,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99034632557017,
+     "pct_comparecimento": 73.50851088027902,
+     "pct_abstencao": 26.49148911972098,
+     "base_comparecimento": 1055120,
+     "pct_validos": 96.97022832557379,
+     "pct_brancos": 1.0703929716620488,
+     "pct_nulos": 1.9593787027641718
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.990346326,
+     "pct_comparecimento": 73.50851088,
+     "pct_abstencao": 26.49148912,
+     "pct_validos": 96.970228326,
+     "pct_brancos": 1.070392972,
+     "pct_nulos": 1.959378703
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 519432,
+      "pct_validos": 69.0638528714114,
+      "pct_validos_tse": 69.063852871,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 232672,
+      "pct_validos": 30.9361471285886,
+      "pct_validos_tse": 30.936147129,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 286760,
+     "diferenca_pontos": 38.1277057428228
+    }
+   }
+  },
+  "pa": {
+   "codigo": "pa",
+   "tipo": "uf",
+   "nome": "Pará",
+   "regiao": "N",
+   "ibge_uf": "15",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pa/pa-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 20827,
+     "totalizadas": 8330,
+     "nao_totalizadas": 12497,
+     "instaladas": 20827,
+     "nao_instaladas": 0,
+     "apuradas": 8330,
+     "nao_apuradas": 12497
+    },
+    "eleitorado": {
+     "total": 6262397,
+     "secoes_totalizadas": 2504958,
+     "secoes_nao_totalizadas": 3757439,
+     "secoes_instaladas": 6262397,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 2504958,
+     "secoes_nao_apuradas": 3757439,
+     "comparecimento": 1917735,
+     "abstencao": 587223
+    },
+    "votos": {
+     "total": 1917735,
+     "validos_computados": 1836476,
+     "validos": 1836476,
+     "nominais": 1836476,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 21681,
+     "nulos_total": 59578,
+     "nulos": 59578,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99615883228501,
+     "pct_comparecimento": 76.55757102514293,
+     "pct_abstencao": 23.442428974857062,
+     "base_comparecimento": 2504958,
+     "pct_validos": 95.76276179972729,
+     "pct_brancos": 1.130552448591698,
+     "pct_nulos": 3.1066857516810193
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.996158832,
+     "pct_comparecimento": 76.557571025,
+     "pct_abstencao": 23.442428975,
+     "pct_validos": 95.7627618,
+     "pct_brancos": 1.130552449,
+     "pct_nulos": 3.106685752
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 865582,
+      "pct_validos": 47.13276949984645,
+      "pct_validos_tse": 47.1327695,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 970894,
+      "pct_validos": 52.86723050015355,
+      "pct_validos_tse": 52.8672305,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 105312,
+     "diferenca_pontos": 5.734461000307107
+    }
+   }
+  },
+  "pb": {
+   "codigo": "pb",
+   "tipo": "uf",
+   "nome": "Paraíba",
+   "regiao": "NE",
+   "ibge_uf": "25",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pb/pb-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 10712,
+     "totalizadas": 4284,
+     "nao_totalizadas": 6428,
+     "instaladas": 10712,
+     "nao_instaladas": 0,
+     "apuradas": 4284,
+     "nao_apuradas": 6428
+    },
+    "eleitorado": {
+     "total": 3248531,
+     "secoes_totalizadas": 1299412,
+     "secoes_nao_totalizadas": 1949119,
+     "secoes_instaladas": 3248531,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1299412,
+     "secoes_nao_apuradas": 1949119,
+     "comparecimento": 1017059,
+     "abstencao": 282353
+    },
+    "votos": {
+     "total": 1017059,
+     "validos_computados": 949000,
+     "validos": 949000,
+     "nominais": 949000,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 20918,
+     "nulos_total": 47141,
+     "nulos": 47141,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99253174010455,
+     "pct_comparecimento": 78.27071013658485,
+     "pct_abstencao": 21.729289863415143,
+     "base_comparecimento": 1299412,
+     "pct_validos": 93.30825448671119,
+     "pct_brancos": 2.0567145072213115,
+     "pct_nulos": 4.635031006067495
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.99253174,
+     "pct_comparecimento": 78.270710137,
+     "pct_abstencao": 21.729289863,
+     "pct_validos": 93.308254487,
+     "pct_brancos": 2.056714507,
+     "pct_nulos": 4.635031006
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 332550,
+      "pct_validos": 35.042149631190725,
+      "pct_validos_tse": 35.042149631,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 616450,
+      "pct_validos": 64.95785036880928,
+      "pct_validos_tse": 64.957850369,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 283900,
+     "diferenca_pontos": 29.91570073761855
+    }
+   }
+  },
+  "pe": {
+   "codigo": "pe",
+   "tipo": "uf",
+   "nome": "Pernambuco",
+   "regiao": "NE",
+   "ibge_uf": "26",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pe/pe-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 21418,
+     "totalizadas": 8567,
+     "nao_totalizadas": 12851,
+     "instaladas": 21418,
+     "nao_instaladas": 0,
+     "apuradas": 8567,
+     "nao_apuradas": 12851
+    },
+    "eleitorado": {
+     "total": 7223450,
+     "secoes_totalizadas": 2889380,
+     "secoes_nao_totalizadas": 4334070,
+     "secoes_instaladas": 7223450,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 2889380,
+     "secoes_nao_apuradas": 4334070,
+     "comparecimento": 2240767,
+     "abstencao": 648613
+    },
+    "votos": {
+     "total": 2240767,
+     "validos_computados": 2116805,
+     "validos": 2116805,
+     "nominais": 2116805,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 43796,
+     "nulos_total": 80166,
+     "nulos": 80166,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99906620599496,
+     "pct_comparecimento": 77.55182772774782,
+     "pct_abstencao": 22.44817227225218,
+     "base_comparecimento": 2889380,
+     "pct_validos": 94.46787640125011,
+     "pct_brancos": 1.9545093264940085,
+     "pct_nulos": 3.5776142722558837
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.999066206,
+     "pct_comparecimento": 77.551827728,
+     "pct_abstencao": 22.448172272,
+     "pct_validos": 94.467876401,
+     "pct_brancos": 1.954509326,
+     "pct_nulos": 3.577614272
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 695217,
+      "pct_validos": 32.84275122177055,
+      "pct_validos_tse": 32.842751222,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 1421588,
+      "pct_validos": 67.15724877822946,
+      "pct_validos_tse": 67.157248778,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 726371,
+     "diferenca_pontos": 34.31449755645891
+    }
+   }
+  },
+  "pi": {
+   "codigo": "pi",
+   "tipo": "uf",
+   "nome": "Piauí",
+   "regiao": "NE",
+   "ibge_uf": "22",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pi/pi-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 10225,
+     "totalizadas": 4090,
+     "nao_totalizadas": 6135,
+     "instaladas": 10225,
+     "nao_instaladas": 0,
+     "apuradas": 4090,
+     "nao_apuradas": 6135
+    },
+    "eleitorado": {
+     "total": 2704758,
+     "secoes_totalizadas": 1081903,
+     "secoes_nao_totalizadas": 1622855,
+     "secoes_instaladas": 2704758,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1081903,
+     "secoes_nao_apuradas": 1622855,
+     "comparecimento": 854069,
+     "abstencao": 227834
+    },
+    "votos": {
+     "total": 854069,
+     "validos_computados": 816295,
+     "validos": 816295,
+     "nominais": 816295,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 11331,
+     "nulos_total": 26443,
+     "nulos": 26443,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 78.94136535345591,
+     "pct_abstencao": 21.0586346465441,
+     "base_comparecimento": 1081903,
+     "pct_validos": 95.57717233619297,
+     "pct_brancos": 1.3267077952718105,
+     "pct_nulos": 3.096119868535212
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 78.941365353,
+     "pct_abstencao": 21.058634647,
+     "pct_validos": 95.577172336,
+     "pct_brancos": 1.326707795,
+     "pct_nulos": 3.096119869
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 206811,
+      "pct_validos": 25.33532607696972,
+      "pct_validos_tse": 25.335326077,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 609484,
+      "pct_validos": 74.66467392303028,
+      "pct_validos_tse": 74.664673923,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 402673,
+     "diferenca_pontos": 49.32934784606056
+    }
+   }
+  },
+  "pr": {
+   "codigo": "pr",
+   "tipo": "uf",
+   "nome": "Paraná",
+   "regiao": "S",
+   "ibge_uf": "41",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/pr/pr-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 27142,
+     "totalizadas": 10856,
+     "nao_totalizadas": 16286,
+     "instaladas": 27142,
+     "nao_instaladas": 0,
+     "apuradas": 10856,
+     "nao_apuradas": 16286
+    },
+    "eleitorado": {
+     "total": 8613657,
+     "secoes_totalizadas": 3445462,
+     "secoes_nao_totalizadas": 5168195,
+     "secoes_instaladas": 8613657,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 3445462,
+     "secoes_nao_apuradas": 5168195,
+     "comparecimento": 2502353,
+     "abstencao": 943109
+    },
+    "votos": {
+     "total": 2502353,
+     "validos_computados": 2399976,
+     "validos": 2399976,
+     "nominais": 2399976,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 48999,
+     "nulos_total": 53378,
+     "nulos": 53378,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.997052538501215,
+     "pct_comparecimento": 72.62750249458563,
+     "pct_abstencao": 27.37249750541437,
+     "base_comparecimento": 3445462,
+     "pct_validos": 95.90877066505006,
+     "pct_brancos": 1.9581170202605307,
+     "pct_nulos": 2.133112314689414
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.997052539,
+     "pct_comparecimento": 72.627502495,
+     "pct_abstencao": 27.372497505,
+     "pct_validos": 95.908770665,
+     "pct_brancos": 1.95811702,
+     "pct_nulos": 2.133112315
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 1578138,
+      "pct_validos": 65.75640756407564,
+      "pct_validos_tse": 65.756407564,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 821838,
+      "pct_validos": 34.243592435924356,
+      "pct_validos_tse": 34.243592436,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 756300,
+     "diferenca_pontos": 31.51281512815129
+    }
+   }
+  },
+  "rj": {
+   "codigo": "rj",
+   "tipo": "uf",
+   "nome": "Rio de Janeiro",
+   "regiao": "SE",
+   "ibge_uf": "33",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rj/rj-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:10.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:10.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 37675,
+     "totalizadas": 15070,
+     "nao_totalizadas": 22605,
+     "instaladas": 37675,
+     "nao_instaladas": 0,
+     "apuradas": 15070,
+     "nao_apuradas": 22605
+    },
+    "eleitorado": {
+     "total": 12857648,
+     "secoes_totalizadas": 5143059,
+     "secoes_nao_totalizadas": 7714589,
+     "secoes_instaladas": 12857648,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 5143059,
+     "secoes_nao_apuradas": 7714589,
+     "comparecimento": 3659830,
+     "abstencao": 1483229
+    },
+    "votos": {
+     "total": 3659830,
+     "validos_computados": 3463945,
+     "validos": 3463945,
+     "nominais": 3463945,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 80791,
+     "nulos_total": 115094,
+     "nulos": 115094,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 71.1605680588148,
+     "pct_abstencao": 28.839431941185197,
+     "base_comparecimento": 5143059,
+     "pct_validos": 94.64770221567669,
+     "pct_brancos": 2.207506906058478,
+     "pct_nulos": 3.1447908782648373
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 71.160568059,
+     "pct_abstencao": 28.839431941,
+     "pct_validos": 94.647702216,
+     "pct_brancos": 2.207506906,
+     "pct_nulos": 3.144790878
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 1986737,
+      "pct_validos": 57.35475014759184,
+      "pct_validos_tse": 57.354750148,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 1477208,
+      "pct_validos": 42.64524985240816,
+      "pct_validos_tse": 42.645249852,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 509529,
+     "diferenca_pontos": 14.709500295183673
+    }
+   }
+  },
+  "rn": {
+   "codigo": "rn",
+   "tipo": "uf",
+   "nome": "Rio Grande do Norte",
+   "regiao": "NE",
+   "ibge_uf": "24",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rn/rn-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 8115,
+     "totalizadas": 3246,
+     "nao_totalizadas": 4869,
+     "instaladas": 8115,
+     "nao_instaladas": 0,
+     "apuradas": 3246,
+     "nao_apuradas": 4869
+    },
+    "eleitorado": {
+     "total": 2659825,
+     "secoes_totalizadas": 1063930,
+     "secoes_nao_totalizadas": 1595895,
+     "secoes_instaladas": 2659825,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 1063930,
+     "secoes_nao_apuradas": 1595895,
+     "comparecimento": 823002,
+     "abstencao": 240928
+    },
+    "votos": {
+     "total": 823002,
+     "validos_computados": 783382,
+     "validos": 783382,
+     "nominais": 783382,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 13268,
+     "nulos_total": 26352,
+     "nulos": 26352,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 77.35490116830995,
+     "pct_abstencao": 22.645098831690056,
+     "base_comparecimento": 1063930,
+     "pct_validos": 95.18591692365267,
+     "pct_brancos": 1.6121467505546767,
+     "pct_nulos": 3.201936325792647
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 40,
+     "pct_comparecimento": 77.354901168,
+     "pct_abstencao": 22.645098832,
+     "pct_validos": 95.185916924,
+     "pct_brancos": 1.612146751,
+     "pct_nulos": 3.201936326
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 288197,
+      "pct_validos": 36.78882077964518,
+      "pct_validos_tse": 36.78882078,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 495185,
+      "pct_validos": 63.21117922035482,
+      "pct_validos_tse": 63.21117922,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 206988,
+     "diferenca_pontos": 26.422358440709644
+    }
+   }
+  },
+  "ro": {
+   "codigo": "ro",
+   "tipo": "uf",
+   "nome": "Rondônia",
+   "regiao": "N",
+   "ibge_uf": "11",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/ro/ro-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 4698,
+     "totalizadas": 1879,
+     "nao_totalizadas": 2819,
+     "instaladas": 4698,
+     "nao_instaladas": 0,
+     "apuradas": 1879,
+     "nao_apuradas": 2819
+    },
+    "eleitorado": {
+     "total": 1265893,
+     "secoes_totalizadas": 506357,
+     "secoes_nao_totalizadas": 759536,
+     "secoes_instaladas": 1265893,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 506357,
+     "secoes_nao_apuradas": 759536,
+     "comparecimento": 370642,
+     "abstencao": 135715
+    },
+    "votos": {
+     "total": 370642,
+     "validos_computados": 361461,
+     "validos": 361461,
+     "nominais": 361461,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 3938,
+     "nulos_total": 5243,
+     "nulos": 5243,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.995742869306085,
+     "pct_comparecimento": 73.19776363316791,
+     "pct_abstencao": 26.802236366832098,
+     "base_comparecimento": 506357,
+     "pct_validos": 97.52294667091155,
+     "pct_brancos": 1.0624807765984428,
+     "pct_nulos": 1.414572552490004
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.995742869,
+     "pct_comparecimento": 73.197763633,
+     "pct_abstencao": 26.802236367,
+     "pct_validos": 97.522946671,
+     "pct_brancos": 1.062480777,
+     "pct_nulos": 1.414572552
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 261195,
+      "pct_validos": 72.26090781578095,
+      "pct_validos_tse": 72.260907816,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 100266,
+      "pct_validos": 27.739092184219043,
+      "pct_validos_tse": 27.739092184,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 160929,
+     "diferenca_pontos": 44.52181563156191
+    }
+   }
+  },
+  "rr": {
+   "codigo": "rr",
+   "tipo": "uf",
+   "nome": "Roraima",
+   "regiao": "N",
+   "ibge_uf": "14",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rr/rr-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 1519,
+     "totalizadas": 607,
+     "nao_totalizadas": 912,
+     "instaladas": 1519,
+     "nao_instaladas": 0,
+     "apuradas": 607,
+     "nao_apuradas": 912
+    },
+    "eleitorado": {
+     "total": 401521,
+     "secoes_totalizadas": 160608,
+     "secoes_nao_totalizadas": 240913,
+     "secoes_instaladas": 401521,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 160608,
+     "secoes_nao_apuradas": 240913,
+     "comparecimento": 125181,
+     "abstencao": 35427
+    },
+    "votos": {
+     "total": 125181,
+     "validos_computados": 122296,
+     "validos": 122296,
+     "nominais": 122296,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 1047,
+     "nulos_total": 1838,
+     "nulos": 1838,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.96050032916392,
+     "pct_comparecimento": 77.94194560669456,
+     "pct_abstencao": 22.05805439330544,
+     "base_comparecimento": 160608,
+     "pct_validos": 97.69533715180418,
+     "pct_brancos": 0.8363889088599707,
+     "pct_nulos": 1.4682739393358417
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.960500329,
+     "pct_comparecimento": 77.941945607,
+     "pct_abstencao": 22.058054393,
+     "pct_validos": 97.695337152,
+     "pct_brancos": 0.836388909,
+     "pct_nulos": 1.468273939
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 92528,
+      "pct_validos": 75.65905671485577,
+      "pct_validos_tse": 75.659056715,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 29768,
+      "pct_validos": 24.34094328514424,
+      "pct_validos_tse": 24.340943285,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 62760,
+     "diferenca_pontos": 51.318113429711524
+    }
+   }
+  },
+  "rs": {
+   "codigo": "rs",
+   "tipo": "uf",
+   "nome": "Rio Grande do Sul",
+   "regiao": "S",
+   "ibge_uf": "43",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rs/rs-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 27547,
+     "totalizadas": 11018,
+     "nao_totalizadas": 16529,
+     "instaladas": 27547,
+     "nao_instaladas": 0,
+     "apuradas": 11018,
+     "nao_apuradas": 16529
+    },
+    "eleitorado": {
+     "total": 8522545,
+     "secoes_totalizadas": 3409018,
+     "secoes_nao_totalizadas": 5113527,
+     "secoes_instaladas": 8522545,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 3409018,
+     "secoes_nao_apuradas": 5113527,
+     "comparecimento": 2459257,
+     "abstencao": 949761
+    },
+    "votos": {
+     "total": 2459257,
+     "validos_computados": 2347416,
+     "validos": 2347416,
+     "nominais": 2347416,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 59335,
+     "nulos_total": 52506,
+     "nulos": 52506,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.9970958725088,
+     "pct_comparecimento": 72.13974816208069,
+     "pct_abstencao": 27.860251837919307,
+     "base_comparecimento": 3409018,
+     "pct_validos": 95.45224431606782,
+     "pct_brancos": 2.412720589999337,
+     "pct_nulos": 2.135035093932842
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.997095873,
+     "pct_comparecimento": 72.139748162,
+     "pct_abstencao": 27.860251838,
+     "pct_validos": 95.452244316,
+     "pct_brancos": 2.41272059,
+     "pct_nulos": 2.135035094
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 1429513,
+      "pct_validos": 60.89730154348441,
+      "pct_validos_tse": 60.897301543,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 917903,
+      "pct_validos": 39.10269845651559,
+      "pct_validos_tse": 39.102698457,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 511610,
+     "diferenca_pontos": 21.79460308696882
+    }
+   }
+  },
+  "sc": {
+   "codigo": "sc",
+   "tipo": "uf",
+   "nome": "Santa Catarina",
+   "regiao": "S",
+   "ibge_uf": "42",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/sc/sc-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 17326,
+     "totalizadas": 6930,
+     "nao_totalizadas": 10396,
+     "instaladas": 17326,
+     "nao_instaladas": 0,
+     "apuradas": 6930,
+     "nao_apuradas": 10396
+    },
+    "eleitorado": {
+     "total": 5734651,
+     "secoes_totalizadas": 2293860,
+     "secoes_nao_totalizadas": 3440791,
+     "secoes_instaladas": 5734651,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 2293860,
+     "secoes_nao_apuradas": 3440791,
+     "comparecimento": 1709705,
+     "abstencao": 584155
+    },
+    "votos": {
+     "total": 1709705,
+     "validos_computados": 1650875,
+     "validos": 1650875,
+     "nominais": 1650875,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 27602,
+     "nulos_total": 31228,
+     "nulos": 31228,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99769133094771,
+     "pct_comparecimento": 74.5339733026427,
+     "pct_abstencao": 25.466026697357293,
+     "base_comparecimento": 2293860,
+     "pct_validos": 96.55905550957621,
+     "pct_brancos": 1.6144305596579527,
+     "pct_nulos": 1.8265139307658338
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.997691331,
+     "pct_comparecimento": 74.533973303,
+     "pct_abstencao": 25.466026697,
+     "pct_validos": 96.55905551,
+     "pct_brancos": 1.61443056,
+     "pct_nulos": 1.826513931
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 1200008,
+      "pct_validos": 72.6892102672825,
+      "pct_validos_tse": 72.689210267,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 450867,
+      "pct_validos": 27.3107897327175,
+      "pct_validos_tse": 27.310789733,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 749141,
+     "diferenca_pontos": 45.37842053456501
+    }
+   }
+  },
+  "se": {
+   "codigo": "se",
+   "tipo": "uf",
+   "nome": "Sergipe",
+   "regiao": "NE",
+   "ibge_uf": "28",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/se/se-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 5923,
+     "totalizadas": 2369,
+     "nao_totalizadas": 3554,
+     "instaladas": 5923,
+     "nao_instaladas": 0,
+     "apuradas": 2369,
+     "nao_apuradas": 3554
+    },
+    "eleitorado": {
+     "total": 1740135,
+     "secoes_totalizadas": 696054,
+     "secoes_nao_totalizadas": 1044081,
+     "secoes_instaladas": 1740135,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 696054,
+     "secoes_nao_apuradas": 1044081,
+     "comparecimento": 539473,
+     "abstencao": 156581
+    },
+    "votos": {
+     "total": 539473,
+     "validos_computados": 509542,
+     "validos": 509542,
+     "nominais": 509542,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 9943,
+     "nulos_total": 19988,
+     "nulos": 19988,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.996623332770554,
+     "pct_comparecimento": 77.50447522749671,
+     "pct_abstencao": 22.495524772503284,
+     "base_comparecimento": 696054,
+     "pct_validos": 94.45180759741451,
+     "pct_brancos": 1.8430950205107577,
+     "pct_nulos": 3.7050973820747286
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.996623333,
+     "pct_comparecimento": 77.504475227,
+     "pct_abstencao": 22.495524773,
+     "pct_validos": 94.451807597,
+     "pct_brancos": 1.843095021,
+     "pct_nulos": 3.705097382
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 167135,
+      "pct_validos": 32.80102523442621,
+      "pct_validos_tse": 32.801025234,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 342407,
+      "pct_validos": 67.1989747655738,
+      "pct_validos_tse": 67.198974766,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 175272,
+     "diferenca_pontos": 34.39794953114758
+    }
+   }
+  },
+  "sp": {
+   "codigo": "sp",
+   "tipo": "uf",
+   "nome": "São Paulo",
+   "regiao": "SE",
+   "ibge_uf": "35",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/sp/sp-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 304,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": true,
+    "nova_versao": false,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 10,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951200",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:00:00-03:00",
+     "totalizacao": "2026-10-25T18:00:00-03:00"
+    },
+    "secoes": {
+     "total": 103656,
+     "totalizadas": 41462,
+     "nao_totalizadas": 62194,
+     "instaladas": 103656,
+     "nao_instaladas": 0,
+     "apuradas": 41462,
+     "nao_apuradas": 62194
+    },
+    "eleitorado": {
+     "total": 34122892,
+     "secoes_totalizadas": 13649156,
+     "secoes_nao_totalizadas": 20473736,
+     "secoes_instaladas": 34122892,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 13649156,
+     "secoes_nao_apuradas": 20473736,
+     "comparecimento": 9590049,
+     "abstencao": 4059107
+    },
+    "votos": {
+     "total": 9590049,
+     "validos_computados": 8970974,
+     "validos": 8970974,
+     "nominais": 8970974,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 253120,
+     "nulos_total": 365955,
+     "nulos": 365955,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99961410820406,
+     "pct_comparecimento": 70.2611135809423,
+     "pct_abstencao": 29.738886419057707,
+     "base_comparecimento": 13649156,
+     "pct_validos": 93.54461066882975,
+     "pct_brancos": 2.6394025723956154,
+     "pct_nulos": 3.8159867587746423
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.999614108,
+     "pct_comparecimento": 70.261113581,
+     "pct_abstencao": 29.738886419,
+     "pct_validos": 93.544610669,
+     "pct_brancos": 2.639402572,
+     "pct_nulos": 3.815986759
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 5168809,
+      "pct_validos": 57.61703244263109,
+      "pct_validos_tse": 57.617032443,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 3802165,
+      "pct_validos": 42.38296755736891,
+      "pct_validos_tse": 42.382967557,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 1366644,
+     "diferenca_pontos": 15.234064885262185
+    }
+   }
+  },
+  "to": {
+   "codigo": "to",
+   "tipo": "uf",
+   "nome": "Tocantins",
+   "regiao": "N",
+   "ibge_uf": "17",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/to/to-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 4384,
+     "totalizadas": 1753,
+     "nao_totalizadas": 2631,
+     "instaladas": 4384,
+     "nao_instaladas": 0,
+     "apuradas": 1753,
+     "nao_apuradas": 2631
+    },
+    "eleitorado": {
+     "total": 1182023,
+     "secoes_totalizadas": 472809,
+     "secoes_nao_totalizadas": 709214,
+     "secoes_instaladas": 1182023,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 472809,
+     "secoes_nao_apuradas": 709214,
+     "comparecimento": 363218,
+     "abstencao": 109591
+    },
+    "votos": {
+     "total": 363218,
+     "validos_computados": 349331,
+     "validos": 349331,
+     "nominais": 349331,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 3337,
+     "nulos_total": 10550,
+     "nulos": 10550,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.98631386861314,
+     "pct_comparecimento": 76.82129570291598,
+     "pct_abstencao": 23.178704297084025,
+     "base_comparecimento": 472809,
+     "pct_validos": 96.17667626604408,
+     "pct_brancos": 0.918732001167343,
+     "pct_nulos": 2.9045917327885733
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.986313869,
+     "pct_comparecimento": 76.821295703,
+     "pct_abstencao": 23.178704297,
+     "pct_validos": 96.176676266,
+     "pct_brancos": 0.918732001,
+     "pct_nulos": 2.904591733
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 187728,
+      "pct_validos": 53.739290243350865,
+      "pct_validos_tse": 53.739290243,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 161603,
+      "pct_validos": 46.260709756649135,
+      "pct_validos_tse": 46.260709757,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 26125,
+     "diferenca_pontos": 7.4785804867017305
+    }
+   }
+  },
+  "zz": {
+   "codigo": "zz",
+   "tipo": "exterior",
+   "nome": "Exterior",
+   "esperado": true,
+   "coleta": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/zz/zz-c0001-e006258-u.json",
+    "ultima_tentativa": "2026-10-25T20:40:11.000Z",
+    "ultimo_sucesso": "2026-10-25T20:40:11.000Z",
+    "status_http": 200,
+    "ultimo_erro": null,
+    "situacao": "atualizado",
+    "sem_alteracao": false,
+    "nova_versao": true,
+    "correcao": false
+   },
+   "atraso_vs_nacional_min": 0,
+   "resultado": {
+    "origem": "tse",
+    "idg": "1792951800",
+    "andamento": {
+     "codigo": "p",
+     "final_publicado": false
+    },
+    "horario": {
+     "geracao": "2026-10-25T18:10:00-03:00",
+     "totalizacao": "2026-10-25T18:10:00-03:00"
+    },
+    "secoes": {
+     "total": 1351,
+     "totalizadas": 540,
+     "nao_totalizadas": 811,
+     "instaladas": 1351,
+     "nao_instaladas": 0,
+     "apuradas": 540,
+     "nao_apuradas": 811
+    },
+    "eleitorado": {
+     "total": 916534,
+     "secoes_totalizadas": 366613,
+     "secoes_nao_totalizadas": 549921,
+     "secoes_instaladas": 916534,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 366613,
+     "secoes_nao_apuradas": 549921,
+     "comparecimento": 124818,
+     "abstencao": 241795
+    },
+    "votos": {
+     "total": 124818,
+     "validos_computados": 120514,
+     "validos": 120514,
+     "nominais": 120514,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 2326,
+     "nulos_total": 1978,
+     "nulos": 1978,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.97039230199852,
+     "pct_comparecimento": 34.04625586108512,
+     "pct_abstencao": 65.95374413891487,
+     "base_comparecimento": 366613,
+     "pct_validos": 96.551779390793,
+     "pct_brancos": 1.8635132753288788,
+     "pct_nulos": 1.5847073338781266
+    },
+    "oficial_tse": {
+     "pct_totalizadas": 39.970392302,
+     "pct_comparecimento": 34.046255861,
+     "pct_abstencao": 65.953744139,
+     "pct_validos": 96.551779391,
+     "pct_brancos": 1.863513275,
+     "pct_nulos": 1.584707334
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 57560,
+      "pct_validos": 47.76208573277793,
+      "pct_validos_tse": 47.762085733,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 62954,
+      "pct_validos": 52.23791426722207,
+      "pct_validos_tse": 52.237914267,
+      "situacao": "",
+      "eleito_publicado": false,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 5394,
+     "diferenca_pontos": 4.475828534444133
+    }
+   }
+  }
+ },
+ "regioes": {
+  "N": {
+   "codigo": "N",
+   "nome": "Norte",
+   "ufs": [
+    "ac",
+    "am",
+    "ap",
+    "pa",
+    "ro",
+    "rr",
+    "to"
+   ],
+   "resultado": {
+    "origem": "calculado",
+    "idg": null,
+    "andamento": {
+     "codigo": null,
+     "final_publicado": false
+    },
+    "horario": {
+     "totalizacao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     },
+     "geracao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     }
+    },
+    "componentes": [
+     "ac",
+     "am",
+     "ap",
+     "pa",
+     "ro",
+     "rr",
+     "to"
+    ],
+    "faltando": [],
+    "inconsistencias": [],
+    "secoes": {
+     "total": 43769,
+     "totalizadas": 17231,
+     "nao_totalizadas": 26538,
+     "instaladas": 43769,
+     "nao_instaladas": 0,
+     "apuradas": 17231,
+     "nao_apuradas": 26538
+    },
+    "eleitorado": {
+     "total": 13101175,
+     "secoes_totalizadas": 5166818,
+     "secoes_nao_totalizadas": 7934357,
+     "secoes_instaladas": 13101175,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 5166818,
+     "secoes_nao_apuradas": 7934357,
+     "comparecimento": 3914252,
+     "abstencao": 1252566
+    },
+    "votos": {
+     "total": 3914252,
+     "validos_computados": 3771499,
+     "validos": 3771499,
+     "nominais": 3771499,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 43091,
+     "nulos_total": 99662,
+     "nulos": 99662,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.36804587721904,
+     "pct_comparecimento": 75.75749716750232,
+     "pct_abstencao": 24.24250283249768,
+     "base_comparecimento": 5166818,
+     "pct_validos": 96.35299413527795,
+     "pct_brancos": 1.1008744454879247,
+     "pct_nulos": 2.546131419234122
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 1967434,
+      "pct_validos": 52.1658364485845,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 1804065,
+      "pct_validos": 47.8341635514155,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 163369,
+     "diferenca_pontos": 4.331672897169
+    }
+   }
+  },
+  "NE": {
+   "codigo": "NE",
+   "nome": "Nordeste",
+   "ufs": [
+    "al",
+    "ba",
+    "ce",
+    "ma",
+    "pb",
+    "pe",
+    "pi",
+    "rn",
+    "se"
+   ],
+   "resultado": {
+    "origem": "calculado",
+    "idg": null,
+    "andamento": {
+     "codigo": null,
+     "final_publicado": false
+    },
+    "horario": {
+     "totalizacao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     },
+     "geracao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     }
+    },
+    "componentes": [
+     "al",
+     "ba",
+     "ce",
+     "ma",
+     "pb",
+     "pe",
+     "pi",
+     "rn",
+     "se"
+    ],
+    "faltando": [],
+    "inconsistencias": [],
+    "secoes": {
+     "total": 140828,
+     "totalizadas": 56329,
+     "nao_totalizadas": 84499,
+     "instaladas": 140828,
+     "nao_instaladas": 0,
+     "apuradas": 56329,
+     "nao_apuradas": 84499
+    },
+    "eleitorado": {
+     "total": 43511237,
+     "secoes_totalizadas": 17404493,
+     "secoes_nao_totalizadas": 26106744,
+     "secoes_instaladas": 43511237,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 17404493,
+     "secoes_nao_apuradas": 26106744,
+     "comparecimento": 13478599,
+     "abstencao": 3925894
+    },
+    "votos": {
+     "total": 13478599,
+     "validos_computados": 12757417,
+     "validos": 12757417,
+     "nominais": 12757417,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 234558,
+     "nulos_total": 486624,
+     "nulos": 486624,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99843781066265,
+     "pct_comparecimento": 77.44321538122368,
+     "pct_abstencao": 22.556784618776312,
+     "base_comparecimento": 17404493,
+     "pct_validos": 94.64942906900042,
+     "pct_brancos": 1.7402253750556715,
+     "pct_nulos": 3.610345555943908
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 4159587,
+      "pct_validos": 32.60524446288775,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 8597830,
+      "pct_validos": 67.39475553711226,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "13",
+     "segundo": "22",
+     "diferenca_votos": 4438243,
+     "diferenca_pontos": 34.789511074224514
+    }
+   }
+  },
+  "CO": {
+   "codigo": "CO",
+   "nome": "Centro-Oeste",
+   "ufs": [
+    "df",
+    "go",
+    "ms",
+    "mt"
+   ],
+   "resultado": {
+    "origem": "calculado",
+    "idg": null,
+    "andamento": {
+     "codigo": null,
+     "final_publicado": false
+    },
+    "horario": {
+     "totalizacao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     },
+     "geracao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     }
+    },
+    "componentes": [
+     "df",
+     "go",
+     "ms",
+     "mt"
+    ],
+    "faltando": [],
+    "inconsistencias": [],
+    "secoes": {
+     "total": 38048,
+     "totalizadas": 15217,
+     "nao_totalizadas": 22831,
+     "instaladas": 38048,
+     "nao_instaladas": 0,
+     "apuradas": 15217,
+     "nao_apuradas": 22831
+    },
+    "eleitorado": {
+     "total": 12001141,
+     "secoes_totalizadas": 4800456,
+     "secoes_nao_totalizadas": 7200685,
+     "secoes_instaladas": 12001141,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 4800456,
+     "secoes_nao_apuradas": 7200685,
+     "comparecimento": 3363307,
+     "abstencao": 1437149
+    },
+    "votos": {
+     "total": 3363307,
+     "validos_computados": 3238589,
+     "validos": 3238589,
+     "nominais": 3238589,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 45211,
+     "nulos_total": 79507,
+     "nulos": 79507,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.994217830109335,
+     "pct_comparecimento": 70.06223992054088,
+     "pct_abstencao": 29.937760079459117,
+     "base_comparecimento": 4800456,
+     "pct_validos": 96.29180446506965,
+     "pct_brancos": 1.3442424375770632,
+     "pct_nulos": 2.3639530973532894
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 2053373,
+      "pct_validos": 63.4033216317353,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 1185216,
+      "pct_validos": 36.5966783682647,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 868157,
+     "diferenca_pontos": 26.806643263470605
+    }
+   }
+  },
+  "SE": {
+   "codigo": "SE",
+   "nome": "Sudeste",
+   "ufs": [
+    "es",
+    "mg",
+    "rj",
+    "sp"
+   ],
+   "resultado": {
+    "origem": "calculado",
+    "idg": null,
+    "andamento": {
+     "codigo": null,
+     "final_publicado": false
+    },
+    "horario": {
+     "totalizacao": {
+      "min": "2026-10-25T18:00:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     },
+     "geracao": {
+      "min": "2026-10-25T18:00:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     }
+    },
+    "componentes": [
+     "es",
+     "mg",
+     "rj",
+     "sp"
+    ],
+    "faltando": [],
+    "inconsistencias": [],
+    "secoes": {
+     "total": 203237,
+     "totalizadas": 81293,
+     "nao_totalizadas": 121944,
+     "instaladas": 203237,
+     "nao_instaladas": 0,
+     "apuradas": 81293,
+     "nao_apuradas": 121944
+    },
+    "eleitorado": {
+     "total": 66344562,
+     "secoes_totalizadas": 26537823,
+     "secoes_nao_totalizadas": 39806739,
+     "secoes_instaladas": 66344562,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 26537823,
+     "secoes_nao_apuradas": 39806739,
+     "comparecimento": 18774382,
+     "abstencao": 7763441
+    },
+    "votos": {
+     "total": 18774382,
+     "validos_computados": 17654800,
+     "validos": 17654800,
+     "nominais": 17654800,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 458515,
+     "nulos_total": 661067,
+     "nulos": 661067,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99911433449618,
+     "pct_comparecimento": 70.74575032021278,
+     "pct_abstencao": 29.254249679787222,
+     "base_comparecimento": 26537823,
+     "pct_validos": 94.03665058056238,
+     "pct_brancos": 2.4422375127980245,
+     "pct_nulos": 3.52111190663959
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 9959842,
+      "pct_validos": 56.41435756847996,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 7694958,
+      "pct_validos": 43.58564243152004,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 2264884,
+     "diferenca_pontos": 12.828715136959914
+    }
+   }
+  },
+  "S": {
+   "codigo": "S",
+   "nome": "Sul",
+   "ufs": [
+    "pr",
+    "rs",
+    "sc"
+   ],
+   "resultado": {
+    "origem": "calculado",
+    "idg": null,
+    "andamento": {
+     "codigo": null,
+     "final_publicado": false
+    },
+    "horario": {
+     "totalizacao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     },
+     "geracao": {
+      "min": "2026-10-25T18:10:00-03:00",
+      "max": "2026-10-25T18:10:00-03:00"
+     }
+    },
+    "componentes": [
+     "pr",
+     "rs",
+     "sc"
+    ],
+    "faltando": [],
+    "inconsistencias": [],
+    "secoes": {
+     "total": 72015,
+     "totalizadas": 28804,
+     "nao_totalizadas": 43211,
+     "instaladas": 72015,
+     "nao_instaladas": 0,
+     "apuradas": 28804,
+     "nao_apuradas": 43211
+    },
+    "eleitorado": {
+     "total": 22870853,
+     "secoes_totalizadas": 9148340,
+     "secoes_nao_totalizadas": 13722513,
+     "secoes_instaladas": 22870853,
+     "secoes_nao_instaladas": 0,
+     "secoes_apuradas": 9148340,
+     "secoes_nao_apuradas": 13722513,
+     "comparecimento": 6671315,
+     "abstencao": 2477025
+    },
+    "votos": {
+     "total": 6671315,
+     "validos_computados": 6398267,
+     "validos": 6398267,
+     "nominais": 6398267,
+     "anulados": 0,
+     "anulados_sub_judice": 0,
+     "brancos": 135936,
+     "nulos_total": 137112,
+     "nulos": 137112,
+     "nulos_tecnicos": 0,
+     "vsan": 0,
+     "vscv": 0
+    },
+    "indicadores": {
+     "pct_totalizadas": 39.99722280080539,
+     "pct_comparecimento": 72.92377633537888,
+     "pct_abstencao": 27.07622366462112,
+     "base_comparecimento": 9148340,
+     "pct_validos": 95.90713375099212,
+     "pct_brancos": 2.0376192699640177,
+     "pct_nulos": 2.055246979043862
+    },
+    "candidatos": [
+     {
+      "numero": "22",
+      "votos": 4207659,
+      "pct_validos": 65.76247912129956,
+      "destinacao": "Válido"
+     },
+     {
+      "numero": "13",
+      "votos": 2190608,
+      "pct_validos": 34.23752087870044,
+      "destinacao": "Válido"
+     }
+    ],
+    "disputa": {
+     "situacao": "lideranca",
+     "lider": "22",
+     "segundo": "13",
+     "diferenca_votos": 2017051,
+     "diferenca_pontos": 31.524958242599126
+    }
+   }
+  }
+ },
+ "conferencia": {
+  "mesma_base": true,
+  "aviso": "As duas colunas vêm da mesma base de totalização do TSE. A conferência verifica a consistência entre os arquivos publicados; não é auditoria independente das urnas. Diferenças temporárias costumam vir de arquivos gerados em horários diferentes.",
+  "colunas": {
+   "a": {
+    "rotulo": "Soma calculada pelo painel (27 UFs + exterior)",
+    "componentes": [
+     "ac",
+     "al",
+     "am",
+     "ap",
+     "ba",
+     "ce",
+     "df",
+     "es",
+     "go",
+     "ma",
+     "mg",
+     "ms",
+     "mt",
+     "pa",
+     "pb",
+     "pe",
+     "pi",
+     "pr",
+     "rj",
+     "rn",
+     "ro",
+     "rr",
+     "rs",
+     "sc",
+     "se",
+     "sp",
+     "to",
+     "zz"
+    ],
+    "faltando": [],
+    "defasados": [],
+    "horario_totalizacao": {
+     "min": "2026-10-25T18:00:00-03:00",
+     "max": "2026-10-25T18:10:00-03:00"
+    },
+    "pct_totalizadas": 39.942874082620264
+   },
+   "b": {
+    "rotulo": "Total nacional publicado pelo TSE",
+    "horario_totalizacao": "2026-10-25T18:10:00-03:00",
+    "idg": "1792951800",
+    "pct_totalizadas": 40.98103547735795
+   }
+  },
+  "linhas": [
+   {
+    "chave": "candidato.22",
+    "rotulo": "22 FLAVIO BOLSONARO",
+    "a": 22405455,
+    "b": 23051556,
+    "diferenca": -646101
+   },
+   {
+    "chave": "candidato.13",
+    "rotulo": "13 LULA",
+    "a": 21535631,
+    "b": 22010901,
+    "diferenca": -475270
+   },
+   {
+    "chave": "secoes.total",
+    "rotulo": "Seções previstas",
+    "a": 499248,
+    "b": 499248,
+    "diferenca": 0
+   },
+   {
+    "chave": "secoes.totalizadas",
+    "rotulo": "Seções totalizadas",
+    "a": 199414,
+    "b": 204597,
+    "diferenca": -5183
+   },
+   {
+    "chave": "eleitorado.total",
+    "rotulo": "Eleitorado",
+    "a": 158745502,
+    "b": 158745502,
+    "diferenca": 0
+   },
+   {
+    "chave": "eleitorado.comparecimento",
+    "rotulo": "Comparecimento",
+    "a": 46326673,
+    "b": 47525428,
+    "diferenca": -1198755
+   },
+   {
+    "chave": "eleitorado.abstencao",
+    "rotulo": "Abstenção",
+    "a": 17097870,
+    "b": 17605260,
+    "diferenca": -507390
+   },
+   {
+    "chave": "votos.total",
+    "rotulo": "Total de votos",
+    "a": 46326673,
+    "b": 47525428,
+    "diferenca": -1198755
+   },
+   {
+    "chave": "votos.validos_computados",
+    "rotulo": "Válidos (base do percentual)",
+    "a": 43941086,
+    "b": 45062457,
+    "diferenca": -1121371
+   },
+   {
+    "chave": "votos.brancos",
+    "rotulo": "Brancos",
+    "a": 919637,
+    "b": 951277,
+    "diferenca": -31640
+   },
+   {
+    "chave": "votos.nulos_total",
+    "rotulo": "Nulos",
+    "a": 1465950,
+    "b": 1511694,
+    "diferenca": -45744
+   },
+   {
+    "chave": "votos.anulados_sub_judice",
+    "rotulo": "Anulados sub judice",
+    "a": 0,
+    "b": 0,
+    "diferenca": 0
+   }
+  ],
+  "assinatura": "candidato.22:-646101|candidato.13:-475270|secoes.totalizadas:-5183|eleitorado.comparecimento:-1198755|eleitorado.abstencao:-507390|votos.total:-1198755|votos.validos_computados:-1121371|votos.brancos:-31640|votos.nulos_total:-45744",
+  "classificacao": {
+   "codigo": "horarios_diferentes",
+   "texto": "Atualizações em horários diferentes",
+   "motivo": "UFs totalizadas entre 2026-10-25T18:00:00-03:00 e 2026-10-25T18:10:00-03:00; total nacional às 2026-10-25T18:10:00-03:00.",
+   "desde": "2026-10-25T20:40:12.000Z"
+  }
+ },
+ "coleta_geral": {
+  "estado": "ok",
+  "mensagem": null,
+  "rodada_em": "2026-10-25T20:40:12.000Z",
+  "proxima_em": "2026-10-25T20:40:27.000Z",
+  "intervalo_s": 15
+ }
+}
