@@ -4,7 +4,26 @@ Painel independente (pt-BR, modo escuro, mobile) da apuração do **2º turno de
 
 **Dados: TSE – Divulgação de Resultados. Painel independente, sem vínculo oficial.**
 
-## Como funciona
+## Coletor e motor de cálculo
+
+Um coletor único consulta o TSE para todos os visitantes e publica JSON prontos para a página: placar, UFs, regiões, exterior, conferência soma × TSE, histórico com correções e exportação CSV. A página não recalcula nada.
+
+- Contrato de dados: [docs/contrato/CONTRATO-DADOS.md](docs/contrato/CONTRATO-DADOS.md), com exemplos em `exemplos/` (1º turno real e 2º turno simulado).
+- `backend/`, em camadas: `conectores/` (HTTP com ETag/304, backoff, pausa diante de bloqueio, só hosts do TSE; descoberta pela configuração oficial; simulador), `normalizacao/` (validação de esquema, inteiros, tabela TSE × IBGE), `agregacao/` (regiões, Brasil calculado, conferência, histórico), `armazenamento/` (snapshots com SHA-256, Durable Object ou pasta), `api/` (JSON e CSV do contrato), `coletor/rodada.js` e `execucao/` (Node e Cloudflare Worker com Durable Object, alarme e administração protegida).
+- Arquitetura, segurança e orçamento do plano gratuito: [docs/arquitetura/DADOS.md](docs/arquitetura/DADOS.md). Critérios × testes: [docs/testes/CRITERIOS.md](docs/testes/CRITERIOS.md).
+- Sem LLM em nenhuma etapa de consulta, soma ou interpretação dos números.
+- Descoberta só pela configuração oficial (`ele-c.json` e lista de abrangência). Enquanto o 2º turno não estiver na configuração, o coletor só consulta o `ele-c.json`.
+
+```bash
+npm ci && npm test                                           # testes do coletor (Node 22)
+npm run tipos                                                # checagem de tipos (TypeScript sobre JSDoc)
+python3 -m unittest discover -s tests                        # testes das fontes
+node backend/execucao/node.js --saida public/dados                    # 2º turno, a cada 15 s
+node backend/execucao/node.js --modo ensaio --fixtures tests/fixtures/tse-2026-10-06 --uma-vez   # 1º turno offline
+node tools/gerar-exemplo.mjs                                 # regenera exemplos/
+```
+
+## Como funciona (v0, consulta direta pelo navegador)
 
 - **Site 100% estático** (HTML + CSS + JS puro, sem bibliotecas, sem servidor, grátis no GitHub Pages).
 - O navegador de cada visitante busca direto os JSON oficiais em `resultados.tse.jus.br`.
