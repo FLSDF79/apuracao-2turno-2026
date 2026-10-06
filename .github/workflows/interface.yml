@@ -1,4 +1,4 @@
-# Testes da interface do painel (JavaScript puro, sem dependências).
+# Testes da interface do painel: unidade (JavaScript puro), tipos (TypeScript checkJs) e navegador (Chromium).
 name: Interface
 
 on:
@@ -17,5 +17,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Testes da interface
+      - name: Testes de unidade da interface
         run: node --test tests/interface/*.test.js
+      - name: Checagem de tipos (JSDoc + checkJs)
+        run: npx --yes -p typescript@5.9 tsc -p js/tsconfig.json
+
+  navegador:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Instala Playwright e axe-core (só para o teste, sem lockfile)
+        run: |
+          npm i --no-save --no-package-lock playwright@1.56.1 axe-core@4.10
+          npx playwright install --with-deps chromium
+      - name: Testes no navegador (valores, mapa, celular, falhas, acessibilidade, console)
+        run: EVIDENCIAS=1 node --test tests/navegador/*.test.mjs
+      - name: Guarda as evidências
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-painel
+          path: docs/evidencias/painel/

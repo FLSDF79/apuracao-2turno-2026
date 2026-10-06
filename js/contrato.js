@@ -46,6 +46,14 @@ export const MODOS = {
   simulacao: "SIMULAÇÃO · noite de apuração com números fictícios, só para testar o painel. Não é resultado."
 };
 
+// Faixa e marca d'água para qualquer dado que não seja a apuração oficial do 2º turno.
+export const MARCAS = {
+  ensaio: { faixa: "ENSAIO COM O 1º TURNO", detalhe: "Dados oficiais do 1º turno de 04/10, usados só para testar o painel. Não é a apuração do 2º turno.", marca: "ENSAIO · 1º TURNO" },
+  simulacao: { faixa: "SIMULAÇÃO", detalhe: "Números fictícios gerados pelo coletor para testar o painel. Não é resultado de eleição.", marca: "SIMULAÇÃO" },
+  desconhecido: { faixa: "DADOS NÃO IDENTIFICADOS", detalhe: "O arquivo não diz se é apuração oficial. O painel o trata como teste.", marca: "NÃO OFICIAL" },
+  outro_turno: { faixa: "NÃO É O 2º TURNO", detalhe: "O arquivo lido é de outro turno. O painel não o apresenta como apuração do 2º turno.", marca: "OUTRO TURNO" }
+};
+
 export const PUBLICACAO = {
   aguardando_configuracao: "O TSE ainda não publicou a configuração do 2º turno. O painel começa a mostrar números assim que ela aparecer.",
   aguardando_resultados: "Eleição configurada pelo TSE, ainda sem resultados divulgados. A divulgação começa após o encerramento da votação.",
@@ -55,6 +63,15 @@ export const PUBLICACAO = {
 };
 
 const num = (x) => (typeof x === "number" && Number.isFinite(x) ? x : null);
+
+// Votos e contagens: inteiros não negativos. Qualquer outra coisa vira ausente (null) e é registrada
+// como problema do snapshot, em vez de aparecer na tela como número.
+function contagem(x, onde, problemas) {
+  if (x === null || x === undefined) return null;
+  if (typeof x === "number" && Number.isInteger(x) && x >= 0) return x;
+  problemas?.push(`Contagem inválida em ${onde}: ${JSON.stringify(x)} (esperado inteiro ≥ 0).`);
+  return null;
+}
 
 // Contrato v1 do coletor (frente 2): docs/contrato/CONTRATO-DADOS.md
 export const SCHEMA = "apuracao-2t-2026/v1";
@@ -80,12 +97,20 @@ function disputa(d) {
 }
 
 // Resultado (+ coleta) do contrato → território da tela.
-function territorio(id, { nome, tipo, regiao, coleta, resultado, atrasoMin, eleito } = {}) {
-  const r = resultado || null;
+/**
+ * @typedef {object} OpcoesTerritorio
+ * @property {string} [nome] @property {string} [tipo] @property {string} [regiao]
+ * @property {any} [coleta] @property {any} [resultado] @property {number} [atrasoMin] @property {string | null} [eleito]
+ */
+/** @param {string} id @param {OpcoesTerritorio} [opcoes] @param {string[] | null} [problemas] */
+function territorio(id, { nome, tipo, regiao, coleta, resultado, atrasoMin, eleito } = {}, problemas = null) {
+  const r = resultado && typeof resultado === "object" ? resultado : null;
   const cand = {};
-  for (const c of r?.candidatos || []) {
+  const n = (x, campo) => contagem(x, `${id}.${campo}`, problemas);
+  if (r && r.candidatos !== undefined && !Array.isArray(r.candidatos)) problemas?.push(`${id}: lista de candidatos em formato inesperado.`);
+  for (const c of Array.isArray(r?.candidatos) ? r.candidatos : []) {
     // "Eleito" só quando o texto oficial diz "Eleito"; qualquer outro valor é "não definido".
-    cand[String(c.numero)] = { votos: num(c.votos), pct: num(c.pct_validos), situacao: c.situacao || null };
+    cand[String(c.numero)] = { votos: n(c.votos, `candidato ${c.numero}`), pct: num(c.pct_validos), situacao: c.situacao || null };
   }
   const d = disputa(r?.disputa);
   const v = r?.votos || {}, e = r?.eleitorado || {}, i = r?.indicadores || {};
@@ -104,18 +129,19 @@ function territorio(id, { nome, tipo, regiao, coleta, resultado, atrasoMin, elei
       ultimoSucesso: coleta.ultimo_sucesso || null, erro: coleta.ultimo_erro?.mensagem || null, correcao: !!coleta.correcao
     } : null,
     faltando: r?.faltando || [],
-    secoes: { previstas: num(r?.secoes?.total), totalizadas: num(r?.secoes?.totalizadas), pct: num(i.pct_totalizadas) },
-    eleitorado: { total: num(e.total), aptoTotalizado: num(e.secoes_totalizadas) },
-    comparecimento: { votos: num(e.comparecimento), pct: num(i.pct_comparecimento) },
-    abstencao: { votos: num(e.abstencao), pct: num(i.pct_abstencao) },
+    secoes: { previstas: n(r?.secoes?.total, "secoes.total"), totalizadas: n(r?.secoes?.totalizadas, "secoes.totalizadas"), pct: num(i.pct_totalizadas) },
+    eleitorado: { total: n(e.total, "eleitorado.total"), aptoTotalizado: n(e.secoes_totalizadas, "eleitorado.secoes_totalizadas") },
+    comparecimento: { votos: n(e.comparecimento, "comparecimento"), pct: num(i.pct_comparecimento) },
+    abstencao: { votos: n(e.abstencao, "abstencao"), pct: num(i.pct_abstencao) },
     votos: {
-      validos: num(v.validos), basePct: num(v.validos_computados), brancos: num(v.brancos), nulos: num(v.nulos_total),
-      anuladosSubJudice: num(v.anulados_sub_judice), total: num(v.total),
+      validos: n(v.validos, "votos.validos"), basePct: n(v.validos_computados, "votos.validos_computados"), brancos: n(v.brancos, "votos.brancos"), nulos: n(v.nulos_total, "votos.nulos_total"),
+      anuladosSubJudice: n(v.anulados_sub_judice, "votos.anulados_sub_judice"), total: n(v.total, "votos.total"),
       pctValidos: num(i.pct_validos), pctBrancos: num(i.pct_brancos), pctNulos: num(i.pct_nulos)
     },
     candidatos: cand,
     lider: d.lider, margem: d.margem,
-    eleito: eleito || null
+    eleito: eleito || null,
+    idg: r?.idg ?? null
   };
 }
 
@@ -139,21 +165,27 @@ export function normalizar(snap, cfg) {
   const problemas = [];
   if (!snap || typeof snap !== "object") return { modelo: null, problemas: ["Arquivo vazio ou inválido."] };
   if (snap.schema !== SCHEMA) problemas.push(`Versão de contrato inesperada: ${snap.schema || "ausente"} (esperado ${SCHEMA}).`);
+  // Resposta incompleta: sem o bloco nacional e sem territórios não há o que mostrar com segurança.
+  const temBrasil = snap.brasil && typeof snap.brasil === "object";
+  const temTerr = snap.territorios && typeof snap.territorios === "object";
+  if (!temBrasil && !temTerr) return { modelo: null, problemas: [...problemas, "Arquivo sem os blocos brasil e territorios: resposta incompleta, ignorada."] };
+  if (!temBrasil) problemas.push("Bloco brasil ausente: resposta incompleta.");
+  if (snap.eleicao?.estado === "publicada" && !snap.brasil?.oficial && snap.brasil?.coleta?.situacao === "atualizado") problemas.push("Arquivo nacional marcado como lido, mas sem resultado.");
 
   const eleitoBR = snap.eleito?.publicado ? String(snap.eleito.candidatos?.[0] ?? "") || null : null;
   const terr = {};
-  terr.br = territorio("br", { nome: "Brasil", tipo: "brasil", coleta: snap.brasil?.coleta, resultado: snap.brasil?.oficial, eleito: eleitoBR });
-  terr["br-calculado"] = territorio("br-calculado", { nome: "Brasil (soma)", tipo: "brasil", resultado: snap.brasil?.calculado, coleta: { situacao: "atualizado" } });
+  terr.br = territorio("br", { nome: "Brasil", tipo: "brasil", coleta: snap.brasil?.coleta, resultado: snap.brasil?.oficial, eleito: eleitoBR }, problemas);
+  terr["br-calculado"] = territorio("br-calculado", { nome: "Brasil (soma)", tipo: "brasil", resultado: snap.brasil?.calculado, coleta: { situacao: "atualizado" } }, problemas);
   for (const id of [...UFS, "zz"]) {
     const t = snap.territorios?.[id];
     if (!t) problemas.push(`Território ${id} ausente no arquivo.`);
-    terr[id] = territorio(id, { nome: t?.nome, tipo: t?.tipo, regiao: t?.regiao, coleta: t?.coleta, resultado: t?.resultado, atrasoMin: t?.atraso_vs_nacional_min });
+    terr[id] = territorio(id, { nome: t?.nome, tipo: t?.tipo, regiao: t?.regiao, coleta: t?.coleta, resultado: t?.resultado, atrasoMin: t?.atraso_vs_nacional_min }, problemas);
   }
   for (const r of REGIOES) {
     const cod = Object.keys(COD_REGIAO).find((k) => COD_REGIAO[k] === r.sigla);
     const g = snap.regioes?.[cod];
     if (!g) problemas.push(`Região ${cod} ausente no arquivo.`);
-    terr[r.id] = territorio(r.id, { nome: g?.nome || r.nome, tipo: "regiao", resultado: g?.resultado, coleta: g ? { situacao: "atualizado" } : null });
+    terr[r.id] = territorio(r.id, { nome: g?.nome || r.nome, tipo: "regiao", resultado: g?.resultado, coleta: g ? { situacao: "atualizado" } : null }, problemas);
     if (g?.resultado?.faltando?.length) terr[r.id].situacao = "defasada";
   }
 
@@ -168,16 +200,34 @@ export function normalizar(snap, cfg) {
       origem: id === "br" || id === "zz" ? "base TSE" : `base TSE (recorte ${id.toUpperCase()}; TRE-${id.toUpperCase()} sem arquivo próprio)`
     }));
 
+  // Modo desconhecido nunca é tratado como oficial.
+  const modo = snap.modo === undefined || snap.modo === null ? "oficial" : MODOS[snap.modo] !== undefined ? snap.modo : "desconhecido";
+  if (modo === "desconhecido") problemas.push(`Modo de dados desconhecido: ${JSON.stringify(snap.modo)}. Tratado como teste.`);
+  const turno = snap.eleicao?.turno ?? null;
+  const sn = snap.snapshot && typeof snap.snapshot === "object" ? snap.snapshot : null;
   return {
     problemas,
     modelo: {
       contrato: snap.schema || null,
+      gerado: snap.gerado_em || null,
+      // Identificação do snapshot (contrato v1, campo opcional): hash só muda quando os números mudam.
+      snapshot: sn ? { id: sn.id ?? null, sha256: sn.sha256 || null, mudouEm: sn.mudou_em || null, anterior: sn.anterior_sha256 || null } : null,
+      // Os três horários que a tela mostra separados (seção 7): publicação da fonte, última consulta
+      // bem-sucedida e última mudança efetiva (esta vem do snapshot ou do histórico, ver app.js).
+      tempos: {
+        publicacaoTSE: terr.br.gerado || terr.br.totalizado,
+        totalizacaoTSE: terr.br.totalizado,
+        consultaOk: snap.brasil?.coleta?.ultimo_sucesso || null,
+        mudanca: sn?.mudou_em || null
+      },
+      // Marca de teste: tudo que não é o 2º turno oficial ganha faixa e marca d'água.
+      teste: modo !== "oficial" ? modo : turno !== null && turno !== 2 ? "outro_turno" : null,
       aviso: snap.aviso || null,
       eleicao: {
         codigo: snap.eleicao?.eleicao || null, turno: snap.eleicao?.turno ?? null, cargo: snap.eleicao?.cargo_nome || "Presidente",
         nome: snap.eleicao?.nome || null, data: snap.eleicao?.data || null,
         estado: snap.eleicao?.estado || null, esperada: snap.eleicao?.eleicao_esperada || null, motivo: snap.eleicao?.motivo || null,
-        modo: snap.modo || "oficial", publicacao: snap.estado_publicacao || null
+        modo, publicacao: snap.estado_publicacao || null
       },
       eleito: { publicado: !!snap.eleito?.publicado, candidatos: (snap.eleito?.candidatos || []).map(String) },
       coleta: { em: cg.rodada_em || snap.gerado_em || null, proxima: cg.proxima_em || null, intervaloS: num(cg.intervalo_s), saude: cg.estado || null, mensagem: cg.mensagem || null },
@@ -203,13 +253,24 @@ export function normalizar(snap, cfg) {
   };
 }
 
+// Assinatura do conteúdo de um snapshot, sem os campos que mudam a cada rodada mesmo sem número novo
+// (horários de coleta, gerado_em). Serve só para a página saber se algo mudou de fato; não é segurança.
+const VOLATEIS = new Set(["gerado_em", "coleta", "coleta_geral", "snapshot", "atraso_vs_nacional_min"]);
+export function assinaturaConteudo(snap) {
+  const txt = JSON.stringify(snap ?? null, (k, v) => (VOLATEIS.has(k) ? undefined : v));
+  let h = 0x811c9dc5; // FNV-1a 32 bits
+  for (let i = 0; i < txt.length; i++) { h ^= txt.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8, "0");
+}
+
 export function normalizarHistorico(h) {
   const pontos = h?.serie_brasil || [];
   return pontos
     .filter((p) => p && p.totalizacao)
     .map((p) => ({
       t: Date.parse(p.totalizacao), em: p.coletado_em || null, secoesPct: num(p.pct_totalizadas),
-      votos: p.votos || {}, pct: p.pct_validos || {}, margemVotos: num(p.disputa?.diferenca_votos), correcao: !!p.correcao
+      votos: p.votos || {}, pct: p.pct_validos || {}, margemVotos: num(p.disputa?.diferenca_votos), correcao: !!p.correcao,
+      idg: p.idg ?? null, sha256: p.sha256 || null, snapshotId: p.snapshot_id ?? null
     }))
     .filter((p) => Number.isFinite(p.t))
     .sort((a, b) => a.t - b.t);

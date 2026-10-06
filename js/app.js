@@ -3,15 +3,22 @@
 // Não consulta o TSE, não soma territórios e não recalcula percentuais nem a conferência.
 import * as F from "./formato.js";
 import {
-  UFS, REGIOES, REGIAO_DA_UF, NOMES, SITUACOES, CONFERENCIA, MODOS, PUBLICACAO,
-  normalizar, normalizarHistorico, correcoesHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, FAIXAS_MARGEM
+  UFS, REGIOES, REGIAO_DA_UF, NOMES, SITUACOES, CONFERENCIA, MODOS, MARCAS, PUBLICACAO,
+  normalizar, assinaturaConteudo, normalizarHistorico, correcoesHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, FAIXAS_MARGEM
 } from "./contrato.js";
 import { PALETAS, carregarCores, salvarCores, trocar } from "./cores.js";
 import { prepararGeo, svgGeo, svgGrade, defs } from "./mapa.js";
 import { csvHistorico, baixar, baixarURL } from "./exportar.js";
 
 const CFG = window.PAINEL_CONFIG;
+/** @param {string} id @returns {HTMLElement} */
 const $ = (id) => document.getElementById(id);
+/** Todos os elementos do seletor, como lista de HTMLElement. @param {string} sel @param {ParentNode} [raiz] @returns {HTMLElement[]} */
+const todos = (sel, raiz = document) => /** @type {HTMLElement[]} */ ([...raiz.querySelectorAll(sel)]);
+/** Elemento mais próximo do alvo do evento que casa com o seletor. @param {Event} ev @param {string} sel @returns {HTMLElement | null} */
+const perto = (ev, sel) => /** @type {HTMLElement | null} */ (/** @type {Element} */ (ev.target)?.closest?.(sel) ?? null);
+/** @param {Event} ev */
+const origem = (ev) => /** @type {HTMLInputElement} */ (ev.target);
 const params = new URLSearchParams(location.search);
 const FONTE = CFG.fontes[params.get("fonte")] ? params.get("fonte") : params.get("fonte") === "amostra" ? "ensaio" : CFG.fontePadrao;
 const BASE = CFG.fontes[FONTE];
@@ -24,6 +31,8 @@ const URLS = {
 const E = {
   bruto: null, modelo: null, problemas: [], historico: [], correcoes: [], gov: null, saude: null,
   ultimoOk: null, erro: null, carregou: false, ciclo: 0, timer: null,
+  // assinatura do conteúdo: muda só quando os números mudam (não a cada consulta)
+  assinatura: null, mudouLocal: null, foraDeOrdem: 0, latenciaS: null,
   cores: carregarCores(CFG.candidatos),
   op: { nivel: "uf", forma: "geo", intensidade: true, eixo: "tempo", regiao: "todas", busca: "", ordem: { col: "uf", asc: true } },
   geo: null, selecionado: null
@@ -53,7 +62,7 @@ async function buscar(url) {
   try {
     // no-cache: o navegador revalida com ETag/If-Modified-Since e recebe 304 quando nada mudou.
     const r = await fetch(url, { cache: "no-cache", signal: ctl.signal });
-    if (!r.ok) { const e = new Error("HTTP " + r.status); e.status = r.status; throw e; }
+    if (!r.ok) throw Object.assign(new Error("HTTP " + r.status), { status: r.status });
     return await r.json();
   } finally { clearTimeout(to); }
 }
@@ -65,7 +74,20 @@ async function atualizar() {
     const snap = await buscar(URLS.estado);
     const { modelo, problemas } = normalizar(snap, CFG);
     if (!modelo) throw new Error(problemas.join(" "));
-    E.bruto = snap; E.modelo = modelo; E.problemas = problemas;
+    // Resposta fora de ordem (cache antigo de CDN, por exemplo): nunca volta a tela para um snapshot mais velho.
+    const novo = Date.parse(modelo.gerado ?? ""), atual = Date.parse(E.modelo?.gerado ?? "");
+    if (Number.isFinite(novo) && Number.isFinite(atual) && novo < atual) {
+      E.foraDeOrdem++;
+    } else {
+      const assin = modelo.snapshot?.sha256 || assinaturaConteudo(snap);
+      const mudou = E.assinatura !== null && assin !== E.assinatura;
+      if (mudou) E.mudouLocal = new Date().toISOString();
+      E.assinatura = assin;
+      E.bruto = snap; E.modelo = modelo; E.problemas = problemas;
+      const pub = Date.parse(modelo.tempos.publicacaoTSE ?? "");
+      if (mudou || E.latenciaS === null) E.latenciaS = Number.isFinite(pub) ? Math.max(0, Math.round((Date.now() - pub) / 1000)) : null;
+      if (mudou) anunciar();
+    }
     E.ultimoOk = Date.now(); E.erro = null;
   } catch (err) {
     // preserva o último dado válido e mostra a defasagem
@@ -85,8 +107,10 @@ async function atualizar() {
 // ---------------------------------------------------------------- render geral
 function renderTudo() {
   aplicarCoresCSS();
+  renderMarcaTeste();
   renderAvisos();
   renderSaude();
+  renderTempos();
   document.body.classList.toggle("carregando", !E.modelo);
   if (!E.modelo) { renderVazio(); return; }
   renderBrasil();
@@ -101,6 +125,45 @@ function renderTudo() {
   $("rodContrato").textContent = `Contrato de dados ${E.modelo.contrato || "?"} · eleição ${E.modelo.eleicao.codigo || "?"} · fonte do painel: ${URLS.estado}`;
 }
 
+// Última mudança efetiva: a do snapshot (coletor); sem ela, o último ponto do histórico nacional,
+// que só entra quando o TSE publica versão nova do arquivo. Nunca o horário da consulta.
+function ultimaMudanca() {
+  const m = E.modelo;
+  if (m?.tempos.mudanca) return m.tempos.mudanca;
+  const u = E.historico[E.historico.length - 1];
+  return u?.em || null;
+}
+
+function renderTempos() {
+  const m = E.modelo;
+  $("tPub").textContent = m ? F.dh(m.tempos.publicacaoTSE) : "—";
+  $("tMud").textContent = m ? F.dh(ultimaMudanca()) : "—";
+  $("tCon").textContent = m ? F.dh(m.tempos.consultaOk || m.coleta.em) : "—";
+}
+
+// Faixa fixa e marca d'água em tudo que não for a apuração oficial do 2º turno.
+function renderMarcaTeste() {
+  const tipo = E.modelo?.teste || (FONTE !== "api" ? (FONTE === "ensaio" ? "ensaio" : "simulacao") : null);
+  const mk = tipo ? MARCAS[tipo] || MARCAS.desconhecido : null;
+  $("faixaTeste").hidden = !mk;
+  document.body.classList.toggle("modo-teste", !!mk);
+  if (mk) {
+    $("faixaTit").textContent = mk.faixa;
+    $("faixaTxt").innerHTML = `${F.esc(mk.detalhe)}${FONTE !== "api" ? ' <a href="./">Ver dados ao vivo</a>' : ""}`;
+    document.documentElement.style.setProperty("--marca", JSON.stringify(mk.marca));
+  }
+  const base = "Apuração 2º turno 2026 · Presidente";
+  document.title = mk ? `[${mk.faixa}] ${base}` : base;
+}
+
+function anunciar() {
+  const br = E.modelo?.territorios.br;
+  if (!br) return;
+  const [A, B] = principais();
+  $("anuncio").textContent = `Números atualizados pelo TSE: ${F.pct(br.secoes.pct)} das seções totalizadas. ${A.nome} ${F.pct(br.candidatos[A.numero]?.pct)}, ${B.nome} ${F.pct(br.candidatos[B.numero]?.pct)}.`;
+  document.body.classList.remove("pulso"); void document.body.offsetWidth; document.body.classList.add("pulso");
+}
+
 function renderVazio() {
   $("placar").innerHTML = `<p class="esqueleto">${E.carregou ? "Sem dados do coletor ainda." : "Carregando dados do coletor…"}</p>`;
 }
@@ -110,15 +173,15 @@ function avisoHTML(tipo, html) { return `<div class="aviso ${tipo}">${html}</div
 function renderAvisos() {
   const L = [];
   const m = E.modelo;
-  if (m && MODOS[m.eleicao.modo]) L.push(avisoHTML("alerta forte", `${MODOS[m.eleicao.modo]}${FONTE !== "api" ? ' <a href="./">Ver dados ao vivo</a>' : ""}`));
   if (E.erro && !m) {
     L.push(avisoHTML("erro", `Não foi possível ler os dados do coletor (<span class="mono">${F.esc(URLS.estado)}</span>: ${F.esc(E.erro)}). ${FONTE === "api" ? `Se o coletor ainda não foi publicado, pré-visualize com o <a href="?fonte=ensaio">ensaio com o 1º turno</a> ou a <a href="?fonte=simulacao">simulação de noite de apuração</a>.` : ""} Nova tentativa a cada ${CFG.atualizacaoSeg} s.`));
   } else if (E.erro) {
-    L.push(avisoHTML("erro", `Sem conexão com o coletor (${F.esc(E.erro)}). Exibindo o último dado válido, recebido às ${F.h(new Date(E.ultimoOk).toISOString())}.`));
+    L.push(avisoHTML("erro", `Sem conexão com o coletor (${F.esc(E.erro)}). Exibindo o último dado válido, recebido às ${F.h(new Date(E.ultimoOk).toISOString())}. A página tenta de novo sozinha.`));
   }
   if (m) {
     const idade = F.idadeSeg(m.coleta.em);
-    if (FONTE === "api" && idade !== null && idade > CFG.defasagemAvisoSeg) L.push(avisoHTML("alerta", `Dados defasados: a última coleta do TSE foi ${F.ha(m.coleta.em)} (${F.dh(m.coleta.em)}).`));
+    if (FONTE === "api" && idade !== null && idade > CFG.defasagemAvisoSeg) L.push(avisoHTML("alerta", `Dados defasados: a última coleta do TSE foi ${F.ha(m.coleta.em)} (${F.dh(m.coleta.em)}). Os números abaixo são o último dado válido.`));
+    if (E.problemas.length) L.push(avisoHTML("alerta", `O arquivo do coletor veio com ${E.problemas.length} problema(s) de formato. Campos inválidos aparecem como “—”. <a href="#fontes">Ver detalhes</a>`));
     const s = m.coleta.saude;
     if (s === "bloqueada") L.push(avisoHTML("erro", `O TSE pediu pausa ou bloqueou as consultas. O coletor aguarda antes de tentar de novo, como manda a orientação oficial. ${F.esc(m.coleta.mensagem || "")}`));
     else if (s === "indisponivel") L.push(avisoHTML("erro", `A fonte do TSE está indisponível no momento. ${F.esc(m.coleta.mensagem || "")}`));
@@ -139,8 +202,8 @@ function renderSaude() {
   else if (m) {
     const idade = F.idadeSeg(m.coleta.em);
     const parado = FONTE === "api" && idade !== null && idade > CFG.defasagemAvisoSeg;
-    cls = parado || (m.coleta.saude && m.coleta.saude !== "ok") ? "alerta" : "ok";
-    txt = FONTE !== "api" ? "dados de teste" : `coleta ${F.ha(m.coleta.em)}`;
+    cls = m.teste ? "teste" : parado || (m.coleta.saude && m.coleta.saude !== "ok") ? "alerta" : "ok";
+    txt = m.teste ? "dados de teste" : `consulta ok ${F.ha(m.tempos.consultaOk || m.coleta.em)}`;
   }
   el.className = "saude " + cls;
   $("saudeTxt").textContent = txt;
@@ -151,8 +214,9 @@ function renderBrasil() {
   const m = E.modelo, br = m.territorios.br;
   const pctSec = br.secoes.pct;
   $("totPct").textContent = F.pct(pctSec);
-  $("totBarra").firstElementChild.style.width = Math.min(100, pctSec ?? 0) + "%";
-  $("totBarra").setAttribute("aria-valuenow", pctSec ?? 0);
+  /** @type {HTMLElement} */ ($("totBarra").firstElementChild).style.width = Math.min(100, pctSec ?? 0) + "%";
+  $("totBarra").setAttribute("aria-valuenow", String(pctSec ?? 0));
+  $("totBarra").setAttribute("aria-valuetext", `${F.pct(pctSec)} das seções totalizadas`);
   $("totDet").textContent = `${F.int(br.secoes.totalizadas)} de ${F.int(br.secoes.previstas)} seções · ${SITUACOES[br.situacao]}`;
 
   const [A, B] = principais();
@@ -237,7 +301,6 @@ function renderMapa() {
   ext.classList.toggle("na-grade", E.op.forma === "grade" || !E.geo);
   ext.style.setProperty("--ext-cor", vz.estado === "lider" && pal(vz.lider) ? pal(vz.lider).base : "var(--regua-forte)");
   ext.innerHTML = `<b>Exterior</b>${zz.situacao === "indisponivel" ? "indisponível" : `${F.esc(A.nome)} ${F.pct(zz.candidatos[A.numero]?.pct, 1)} · ${F.esc(B.nome)} ${F.pct(zz.candidatos[B.numero]?.pct, 1)}<br><span class="mono">${F.pct(zz.secoes.pct, 1)} totalizado</span>`}`;
-  ext.setAttribute("aria-label", "Exterior: " + resumoTexto(zz));
   renderLegenda();
 }
 
@@ -326,7 +389,7 @@ function renderVolume() {
   $("volume").innerHTML = `<div class="vol-cab"><span></span><span>${F.esc(A.nome)} ◀</span><span>▶ ${F.esc(B.nome)}</span><span style="text-align:right">votos</span></div>` +
     linhas.filter((t) => !outro.includes(t)).map((t) => `<div class="vol-linha" data-id="${t.id}" title="${F.esc(t.nome)}: ${F.int(t.margem.votos)} votos de vantagem para ${F.esc(nomeCand(t.lider))}" style="${E.op.nivel === "regiao" ? "grid-template-columns:64px 1fr 1fr 74px" : ""}"><span class="sig">${sig(t)}</span>${barra(t, "esq")}${barra(t, "dir")}<span class="v">${F.int(t.margem.votos)}</span></div>`).join("") +
     (linhas.length ? "" : `<p class="nota">Sem votos totalizados ainda.</p>`);
-  $("volume").querySelectorAll(".vol-linha").forEach((el) => el.addEventListener("click", () => abrirDetalhe(el.dataset.id)));
+  todos(".vol-linha", $("volume")).forEach((el) => el.addEventListener("click", () => abrirDetalhe(el.dataset.id)));
 }
 
 // ---------------------------------------------------------------- Tabelas
@@ -381,7 +444,12 @@ function renderTabelas() {
 
   let ufs = [...UFS, "zz"].map((u) => linhaTabela(m.territorios[u]));
   if (E.op.regiao !== "todas") ufs = ufs.filter((r) => (r.id === "zz" ? "ex" : REGIAO_DA_UF[r.id]) === E.op.regiao);
-  if (E.op.busca) { const q = E.op.busca.toLowerCase(); ufs = ufs.filter((r) => r.nome.toLowerCase().includes(q) || r.id.includes(q)); }
+  if (E.op.busca) {
+    // busca pelo início das palavras, sem acento: "rio" acha RJ, RN e RS, mas não "Exterior"
+    const sem = (x) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const q = sem(E.op.busca);
+    ufs = ufs.filter((r) => r.id === q || sem(r.nome).startsWith(q) || sem(r.nome).split(/[\s-]+/).some((w) => w.startsWith(q)));
+  }
   const { col, asc } = E.op.ordem;
   ufs.sort((x, y) => {
     const a = x[col], b = y[col];
@@ -399,20 +467,20 @@ function renderTabelas() {
 
 function ligarTabelas() {
   $("tabUFs").addEventListener("click", (ev) => {
-    const b = ev.target.closest("button[data-col]");
+    const b = perto(ev, "button[data-col]");
     if (b) {
       const c = b.dataset.col;
       E.op.ordem = { col: c, asc: E.op.ordem.col === c ? !E.op.ordem.asc : ["nome", "reg", "sit"].includes(c) };
       renderTabelas();
       return;
     }
-    const tr = ev.target.closest("tr[data-id]");
+    const tr = perto(ev, "tr[data-id]");
     if (tr) abrirDetalhe(tr.dataset.id);
   });
-  $("tabUFs").addEventListener("keydown", (ev) => { const tr = ev.target.closest("tr[data-id]"); if (tr && ev.key === "Enter") abrirDetalhe(tr.dataset.id); });
-  $("tabRegioes").addEventListener("click", (ev) => { const tr = ev.target.closest("tr[data-id]"); if (tr) abrirDetalhe(tr.dataset.id); });
-  $("filtroRegiao").addEventListener("click", (ev) => { const b = ev.target.closest("button[data-reg]"); if (b) { E.op.regiao = b.dataset.reg; renderTabelas(); } });
-  $("busca").addEventListener("input", (ev) => { E.op.busca = ev.target.value.trim(); renderTabelas(); });
+  $("tabUFs").addEventListener("keydown", (ev) => { const tr = perto(ev, "tr[data-id]"); if (tr && ev.key === "Enter") abrirDetalhe(tr.dataset.id); });
+  $("tabRegioes").addEventListener("click", (ev) => { const tr = perto(ev, "tr[data-id]"); if (tr) abrirDetalhe(tr.dataset.id); });
+  $("filtroRegiao").addEventListener("click", (ev) => { const b = perto(ev, "button[data-reg]"); if (b) { E.op.regiao = b.dataset.reg; renderTabelas(); } });
+  $("busca").addEventListener("input", (ev) => { E.op.busca = origem(ev).value.trim(); renderTabelas(); });
 }
 
 // ---------------------------------------------------------------- Conferência
@@ -434,7 +502,7 @@ function renderConferencia() {
 }
 
 // ---------------------------------------------------------------- Histórico
-function grafico(svg, pontos, { x, series, faixaY, ticksY, fmtY, zero, correcoes }) {
+function grafico(svg, pontos, { x, series, faixaY, ticksY = null, fmtY, zero = undefined, correcoes = false }) {
   const W = 560, H = 250, L = 64, R = 12, T = 12, B = 30;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   if (pontos.length < 2) { svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle">Histórico aparece quando houver duas ou mais totalizações.</text>`; return; }
@@ -497,7 +565,14 @@ function renderFontes() {
   const saude = { ok: "operando", atrasada: "com atraso", pausada: "em pausa", bloqueada: "bloqueado pelo TSE", indisponivel: "fonte indisponível" }[m.coleta.saude] || "—";
   $("fontesResumo").innerHTML = `
     <div><b>Coletor</b><span>${saude}</span></div>
-    <div><b>Última coleta</b><span class="mono">${F.dh(m.coleta.em)}</span></div>
+    <div><b>Publicação da fonte (TSE)</b><span class="mono">${F.dh(m.tempos.publicacaoTSE)}</span></div>
+    <div><b>Última mudança nos números</b><span class="mono">${F.dh(ultimaMudanca())}</span></div>
+    <div><b>Última consulta bem-sucedida</b><span class="mono">${F.dh(m.tempos.consultaOk)}</span></div>
+    <div><b>Rodada do coletor</b><span class="mono">${F.dh(m.coleta.em)}</span></div>
+    <div><b>Esta página recebeu</b><span class="mono">${E.ultimoOk ? F.dh(new Date(E.ultimoOk).toISOString()) : "—"}</span></div>
+    <div><b>Latência observada</b><span>${m.teste ? "não medida em dados de teste" : E.latenciaS === null ? "—" : `${E.latenciaS.toLocaleString("pt-BR")} s da publicação do TSE até esta tela`}</span></div>
+    <div><b>Snapshot</b><span class="mono">${m.snapshot ? `${F.esc(String(m.snapshot.id ?? "—"))} · sha256 ${F.esc((m.snapshot.sha256 || "—").slice(0, 12))}` : `assinatura local ${F.esc(E.assinatura || "—")}`}</span></div>
+    <div><b>Respostas fora de ordem ignoradas</b><span>${E.foraDeOrdem}</span></div>
     <div><b>Intervalo</b><span>${m.coleta.intervaloS ? m.coleta.intervaloS + " s" : "—"}</span></div>
     <div><b>Arquivos respondendo</b><span>${ok} de ${m.fontes.length}</span></div>
     <div><b>Página relê o coletor</b><span>a cada ${CFG.atualizacaoSeg} s</span></div>
@@ -517,19 +592,16 @@ function renderLinksFixos() {
     <li><a href="${L.portalTSE}" target="_blank" rel="noopener">Portal de resultados do TSE</a></li>
     <li><a href="${L.docTSE}" target="_blank" rel="noopener">Informações técnicas da divulgação (TSE)</a></li>
     <li><a href="${L.inventario}" target="_blank" rel="noopener">Inventário de fontes do painel</a></li>`;
-  $("lnkInventario").href = L.inventario;
-  $("lnkAutor").href = L.autor; $("lnkAutor2").href = L.autor; $("lnkLinkedin").href = L.linkedin;
-  const selo = $("selo"); selo.href = L.nfls;
-  const img = $("seloImg");
-  img.addEventListener("error", () => img.remove(), { once: true });
-  img.src = L.nflsLogo;
+  /** @type {[string, string][]} */
+  const links = [["lnkInventario", L.inventario], ["lnkAutor", L.autor], ["lnkAutor2", L.autor], ["lnkLinkedin", L.linkedin], ["selo", L.nfls]];
+  for (const [id, url] of links) $(id).setAttribute("href", url);
 }
 
 // ---------------------------------------------------------------- Governador
 function renderGovernador() {
   const g = E.gov;
   if (!g) { $("govLista").innerHTML = `<p class="nota">Aguardando os dados de governador do coletor.</p>`; return; }
-  const aviso = g.modo !== "oficial" && MODOS[g.modo] ? `<p class="aviso alerta" style="grid-column:1/-1;margin:0">${MODOS[g.modo]}</p>` : "";
+  const aviso = g.modo !== "oficial" ? `<p class="aviso alerta forte" style="grid-column:1/-1;margin:0">${F.esc(MODOS[g.modo] || "Dados de teste, não oficiais.")}</p>` : g.turno !== null && g.turno !== 2 ? `<p class="aviso alerta forte" style="grid-column:1/-1;margin:0">Arquivo de outro turno: não é a apuração do 2º turno.</p>` : "";
   $("govLista").innerHTML = aviso + CFG.governadorUFs.map((uf) => {
     const t = g.ufs[uf];
     if (!t || t.situacao === "indisponivel") return `<article class="gov" id="gov-${uf}"><h3>${NOMES[uf]} <span>indisponível</span></h3></article>`;
@@ -580,7 +652,7 @@ function abrirDetalhe(id, foco = true) {
   g.hidden = false;
   $("mapa").querySelectorAll(".sel").forEach((e) => e.classList.remove("sel"));
   $("mapa").querySelectorAll(`[data-id="${id}"]`).forEach((e) => e.classList.add("sel"));
-  if (foco && estavaFechada) { E.voltarFoco = document.activeElement; g.querySelector(".fechar").focus(); }
+  if (foco && estavaFechada) { E.voltarFoco = document.activeElement; /** @type {HTMLElement} */ (g.querySelector(".fechar")).focus(); }
 }
 
 function fecharDetalhe() {
@@ -600,36 +672,36 @@ function renderPopCores() {
 
 function alternarPop(id) {
   const alvo = $(id);
-  for (const p of document.querySelectorAll(".pop")) if (p !== alvo) p.hidden = true;
+  for (const p of todos(".pop")) if (p !== alvo) p.hidden = true;
   if (id === "popCores") renderPopCores();
   alvo.hidden = !alvo.hidden;
   if (!alvo.hidden) alvo.querySelector("button")?.focus();
 }
 
 function ligarControles() {
-  document.querySelectorAll("[data-nivel]").forEach((b) => b.addEventListener("click", () => {
+  todos("[data-nivel]").forEach((b) => b.addEventListener("click", () => {
     E.op.nivel = b.dataset.nivel;
-    document.querySelectorAll("[data-nivel]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    todos("[data-nivel]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     if (E.modelo) { renderMapa(); renderVolume(); }
   }));
-  document.querySelectorAll("[data-forma]").forEach((b) => b.addEventListener("click", () => {
+  todos("[data-forma]").forEach((b) => b.addEventListener("click", () => {
     E.op.forma = b.dataset.forma;
-    document.querySelectorAll("[data-forma]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    todos("[data-forma]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     guardarPref("forma", E.op.forma);
     if (E.modelo) renderMapa();
   }));
-  $("chkIntensidade").addEventListener("change", (ev) => { E.op.intensidade = ev.target.checked; guardarPref("intensidade", E.op.intensidade); if (E.modelo) renderMapa(); });
-  document.querySelectorAll("[data-eixo]").forEach((b) => b.addEventListener("click", () => {
+  $("chkIntensidade").addEventListener("change", (ev) => { E.op.intensidade = origem(ev).checked; guardarPref("intensidade", E.op.intensidade); if (E.modelo) renderMapa(); });
+  todos("[data-eixo]").forEach((b) => b.addEventListener("click", () => {
     E.op.eixo = b.dataset.eixo;
-    document.querySelectorAll("[data-eixo]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    todos("[data-eixo]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     if (E.modelo) renderHistorico();
   }));
 
   $("btnCores").addEventListener("click", () => alternarPop("popCores"));
   $("popCores").addEventListener("click", (ev) => {
-    if (ev.target.id === "corTrocar") E.cores = trocar(E.cores);
-    else if (ev.target.id === "corPadrao") E.cores = Object.fromEntries(CFG.candidatos.map((c) => [c.numero, c.cor]));
-    else if (ev.target.hasAttribute("data-fecha-pop")) { $("popCores").hidden = true; return; }
+    if (origem(ev).id === "corTrocar") E.cores = trocar(E.cores);
+    else if (origem(ev).id === "corPadrao") E.cores = Object.fromEntries(CFG.candidatos.map((c) => [c.numero, c.cor]));
+    else if (origem(ev).hasAttribute("data-fecha-pop")) { $("popCores").hidden = true; return; }
     else return;
     salvarCores(E.cores);
     renderPopCores();
@@ -646,11 +718,11 @@ function ligarControles() {
     alternarPop("popExportar");
   });
   $("popExportar").addEventListener("click", (ev) => {
-    const b = ev.target.closest("button"); if (!b) return;
+    const b = perto(ev, "button"); if (!b) return;
     if (b.hasAttribute("data-fecha-pop")) { $("popExportar").hidden = true; return; }
     if (!E.modelo) return;
     const carimbo = (E.modelo.coleta.em || new Date().toISOString()).replace(/[:]/g, "-").slice(0, 19);
-    const base = `apuracao-${E.modelo.eleicao.codigo || "x"}-${carimbo}`;
+    const base = `${E.modelo.teste ? E.modelo.teste.toUpperCase() + "-" : ""}apuracao-${E.modelo.eleicao.codigo || "x"}-${carimbo}`;
     if (b.dataset.exp === "csv") baixarURL(URLS.csvPresidente, base + "-presidente.csv");
     if (b.dataset.exp === "gov") baixarURL(URLS.csvGovernador, base + "-governador.csv");
     if (b.dataset.exp === "hist") baixar(base + "-historico.csv", csvHistorico(E.historico, principais()), "text/csv;charset=utf-8");
@@ -661,18 +733,18 @@ function ligarControles() {
     const novo = claro() ? "escuro" : "claro";
     document.documentElement.dataset.tema = novo;
     guardarPref("tema", novo);
-    document.querySelector('meta[name="theme-color"]').content = novo === "claro" ? "#f5f3ee" : "#0b0d12";
+    /** @type {HTMLMetaElement} */ (document.querySelector('meta[name="theme-color"]')).content = novo === "claro" ? "#f5f3ee" : "#0b0d12";
     if (E.modelo) renderTudo();
   });
 
   $("btnTV").addEventListener("click", () => modoTV(!document.body.classList.contains("tv")));
   document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && document.body.classList.contains("tv") && !params.has("tv")) modoTV(false); });
 
-  $("gaveta").addEventListener("click", (ev) => { if (ev.target.closest("[data-fechar]")) fecharDetalhe(); });
+  $("gaveta").addEventListener("click", (ev) => { if (perto(ev, "[data-fechar]")) fecharDetalhe(); });
   document.addEventListener("keydown", (ev) => {
     if (ev.key !== "Escape") return;
     if (!$("gaveta").hidden) fecharDetalhe();
-    document.querySelectorAll(".pop").forEach((p) => (p.hidden = true));
+    todos(".pop").forEach((p) => (p.hidden = true));
   });
   document.addEventListener("visibilitychange", () => { if (!document.hidden) atualizar(); });
 }
@@ -696,16 +768,16 @@ function aplicarPreferencias() {
   const forma = lerPref("forma") || (matchMedia("(max-width: 640px)").matches ? "grade" : null);
   if (forma === "grade" || forma === "geo") {
     E.op.forma = forma;
-    document.querySelectorAll("[data-forma]").forEach((x) => x.setAttribute("aria-pressed", x.dataset.forma === forma));
+    todos("[data-forma]").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.forma === forma)));
   }
   const intens = lerPref("intensidade");
-  if (typeof intens === "boolean") { E.op.intensidade = intens; $("chkIntensidade").checked = intens; }
+  if (typeof intens === "boolean") { E.op.intensidade = intens; /** @type {HTMLInputElement} */ ($("chkIntensidade")).checked = intens; }
 }
 
-// ---------------------------------------------------------------- relógio e navegação
-function relogio() {
-  $("relogio").textContent = new Intl.DateTimeFormat("pt-BR", { timeZone: F.FUSO, hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
-  if (E.modelo || E.erro) renderSaude();
+// ---------------------------------------------------------------- idade dos dados e navegação
+// Não há relógio de parede: só a idade da última consulta, que cresce enquanto nada novo chega.
+function idades() {
+  if (E.modelo || E.erro) { renderSaude(); renderAvisos(); }
 }
 
 function scrollspy() {
@@ -713,7 +785,7 @@ function scrollspy() {
   const obs = new IntersectionObserver((ents) => {
     for (const e of ents) if (e.isIntersecting) links.forEach((a) => a.classList.toggle("ativa", a.getAttribute("href") === "#" + e.target.id));
   }, { rootMargin: "-45% 0px -50% 0px" });
-  document.querySelectorAll("main > section").forEach((s) => obs.observe(s));
+  todos("main > section").forEach((s) => obs.observe(s));
 }
 
 // ---------------------------------------------------------------- início
@@ -725,8 +797,7 @@ async function iniciar() {
   ligarControles();
   scrollspy();
   if (params.get("tv") === "1") modoTV(true);
-  setInterval(relogio, 1000);
-  relogio();
+  setInterval(idades, 5000);
   try { E.geo = prepararGeo(await (await fetch("data/br-uf.geojson")).json()); }
   catch { E.op.forma = "grade"; /* sem malha: usa a grade */ }
   atualizar();

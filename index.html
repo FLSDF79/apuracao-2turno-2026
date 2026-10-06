@@ -16,6 +16,8 @@
 <body>
 <a class="pular" href="#brasil">Pular para o placar</a>
 
+<div class="faixa-teste" id="faixaTeste" role="note" hidden><strong id="faixaTit"></strong><span id="faixaTxt"></span></div>
+
 <header class="topo">
   <div class="marca">
     <p class="sobretitulo">Eleições 2026 · Presidente · 2º turno · 25/10</p>
@@ -23,8 +25,12 @@
     <p class="independente">Painel independente com dados oficiais do TSE</p>
   </div>
   <div class="topo-dir">
-    <div class="relogio" aria-live="off"><span class="rel-rot">Brasília</span> <span id="relogio">--:--:--</span></div>
-    <div class="saude" id="saude" role="status"><span class="ponto"></span><span id="saudeTxt">conectando</span></div>
+    <dl class="tempos" aria-label="Horários dos dados, em horário de Brasília">
+      <div><dt>Publicado pelo TSE</dt><dd class="mono" id="tPub">—</dd></div>
+      <div><dt>Última mudança nos números</dt><dd class="mono" id="tMud">—</dd></div>
+      <div><dt>Última consulta ao TSE</dt><dd class="mono" id="tCon">—</dd></div>
+    </dl>
+    <div class="saude" id="saude"><span class="ponto" aria-hidden="true"></span><span id="saudeTxt">conectando</span></div>
     <div class="acoes">
       <button class="btn" type="button" id="btnCores" aria-haspopup="dialog">Cores</button>
       <button class="btn" type="button" id="btnTema" aria-label="Alternar tema claro ou escuro">Tema</button>
@@ -44,7 +50,8 @@
   <a href="#governador">Governador</a>
 </nav>
 
-<div id="avisos" class="avisos" aria-live="polite"></div>
+<div id="avisos" class="avisos"></div>
+<p id="anuncio" class="so-leitor" aria-live="polite"></p>
 
 <main id="conteudo">
   <!-- Visão Brasil -->
@@ -52,7 +59,7 @@
     <h2 id="t-brasil" class="rotulo-secao">Visão Brasil</h2>
     <div class="totalizacao">
       <div class="tot-num"><span id="totPct" class="tot-pct">—</span><span class="tot-txt">das seções totalizadas</span></div>
-      <div class="tot-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="totBarra"><div></div></div>
+      <div class="tot-barra" role="progressbar" aria-label="Seções totalizadas no Brasil" aria-valuemin="0" aria-valuemax="100" id="totBarra"><div></div></div>
       <div class="tot-det mono" id="totDet">—</div>
     </div>
     <div class="placar" id="placar"></div>
@@ -67,11 +74,11 @@
     <div class="cab-secao">
       <h2 id="t-mapa" class="rotulo-secao">Mapa</h2>
       <div class="controles" role="group" aria-label="Opções do mapa">
-        <div class="seg" role="radiogroup" aria-label="Recorte">
+        <div class="seg" role="group" aria-label="Recorte">
           <button type="button" data-nivel="uf" aria-pressed="true">Estados</button>
           <button type="button" data-nivel="regiao" aria-pressed="false">Regiões</button>
         </div>
-        <div class="seg" role="radiogroup" aria-label="Forma">
+        <div class="seg" role="group" aria-label="Forma">
           <button type="button" data-forma="geo" aria-pressed="true">Geográfico</button>
           <button type="button" data-forma="grade" aria-pressed="false">Grade</button>
         </div>
@@ -104,8 +111,8 @@
         <input type="search" id="busca" class="busca" placeholder="Buscar UF" aria-label="Buscar estado">
       </div>
     </div>
-    <div class="tabela-wrap"><table id="tabRegioes" class="tabela"></table></div>
-    <div class="tabela-wrap"><table id="tabUFs" class="tabela"></table></div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela de regiões, exterior e Brasil (role para os lados)"><table id="tabRegioes" class="tabela"></table></div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela de estados, DF e exterior (role para os lados)"><table id="tabUFs" class="tabela"></table></div>
     <p class="nota">Regiões e Brasil vêm do coletor, que soma votos absolutos e contagens de seções antes de calcular percentuais. O painel não faz média de percentuais.</p>
   </section>
 
@@ -113,7 +120,7 @@
   <section id="conferencia" class="bloco" aria-labelledby="t-conf">
     <h2 id="t-conf" class="rotulo-secao">Conferência · soma territorial × total do TSE</h2>
     <div id="confCab" class="conf-cab"></div>
-    <div class="tabela-wrap"><table id="tabConf" class="tabela tabela-conf"></table></div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela da conferência"><table id="tabConf" class="tabela tabela-conf"></table></div>
     <div id="confCobertura" class="conf-cob"></div>
     <p class="nota"><strong>A</strong> é a soma que o coletor faz das 27 UFs e do exterior. <strong>B</strong> é o total nacional publicado pelo TSE. São duas representações dos mesmos votos, por isso nunca se somam. Uma diferença temporária costuma ser arquivo publicado em horário diferente, não irregularidade.</p>
   </section>
@@ -122,7 +129,7 @@
   <section id="historico" class="bloco" aria-labelledby="t-hist">
     <div class="cab-secao">
       <h2 id="t-hist" class="rotulo-secao">Histórico observado</h2>
-      <div class="seg" role="radiogroup" aria-label="Eixo horizontal">
+      <div class="seg" role="group" aria-label="Eixo horizontal">
         <button type="button" data-eixo="tempo" aria-pressed="true">Por horário</button>
         <button type="button" data-eixo="secoes" aria-pressed="false">Por % totalizado</button>
       </div>
@@ -142,7 +149,7 @@
       <strong>Nenhum TRE publica arquivo próprio de resultados.</strong> Desde 2020 a totalização é centralizada no TSE, e os 27 recortes estaduais vêm da mesma base do TSE. O painel mostra cada recorte com essa origem, sem fingir que são 27 fontes independentes.
       <a id="lnkInventario" target="_blank" rel="noopener">Ver inventário das fontes</a>
     </div>
-    <div class="tabela-wrap"><table id="tabFontes" class="tabela tabela-fontes"></table></div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela das fontes por recorte"><table id="tabFontes" class="tabela tabela-fontes"></table></div>
     <ul class="links-oficiais" id="linksOficiais"></ul>
   </section>
 
@@ -181,7 +188,7 @@
 </footer>
 
 <a class="selo" id="selo" target="_blank" rel="noopener" title="Checagem de fatos com apoio da NFLS.AI Arena">
-  <img id="seloImg" alt="" width="18" height="18">
+  <img src="assets/nfls-ai-arena.svg" alt="" width="34" height="16">
   <span>checagem de fatos · <strong>NFLS.AI Arena</strong></span>
 </a>
 

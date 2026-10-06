@@ -38,6 +38,7 @@ window.PAINEL_CONFIG = {
     autor: "https://nfls-ai-arena.pages.dev/portal/autor",
     linkedin: "https://www.linkedin.com/in/flsdf79/",
     nfls: "https://nfls-ai-arena.pages.dev/",
-    nflsLogo: "https://nfls-ai-arena.pages.dev/MARCA/logo/nfls-ai-arena-football-primary-v3.svg"
+    // Logo guardado no próprio site (cópia do arquivo oficial da NFLS.AI Arena), sem depender de outro domínio.
+    nflsLogo: "assets/nfls-ai-arena.svg"
   }
 };

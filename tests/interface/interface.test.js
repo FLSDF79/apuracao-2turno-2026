@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { normalizar, normalizarHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, faixaMargem, UFS, REGIOES } from "../../js/contrato.js";
+import { normalizar, normalizarHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, faixaMargem, assinaturaConteudo, MARCAS, UFS, REGIOES } from "../../js/contrato.js";
 import * as F from "../../js/formato.js";
 import { carregarCores, trocar } from "../../js/cores.js";
 import { csvHistorico } from "../../js/exportar.js";
@@ -141,4 +141,57 @@ test("versão de contrato errada é avisada", () => {
   const snap = structuredClone(ensaio);
   snap.schema = "apuracao-2t-2026/v2";
   assert.ok(normalizar(snap, CFG).problemas.some((p) => p.includes("v2")));
+});
+
+test("contagem que não é inteiro ≥ 0 vira ausente e é registrada", () => {
+  const snap = structuredClone(simulado);
+  snap.brasil.oficial.candidatos.find((c) => c.numero === "22").votos = "23051556";
+  snap.territorios.ac.resultado.votos.brancos = 12.5;
+  snap.territorios.sp.resultado.secoes.totalizadas = -1;
+  const { modelo, problemas } = normalizar(snap, CFG);
+  assert.equal(modelo.territorios.br.candidatos["22"].votos, null);
+  assert.equal(modelo.territorios.ac.votos.brancos, null);
+  assert.equal(modelo.territorios.sp.secoes.totalizadas, null);
+  assert.equal(problemas.filter((p) => p.startsWith("Contagem inválida")).length, 3);
+  assert.equal(modelo.territorios.br.candidatos["13"].votos, 22010901, "o resto continua");
+});
+
+test("resposta sem brasil e sem territórios é rejeitada inteira", () => {
+  const r = normalizar({ schema: simulado.schema, gerado_em: "2026-10-25T21:00:00Z" }, CFG);
+  assert.equal(r.modelo, null);
+  assert.match(r.problemas.join(" "), /incompleta/);
+});
+
+test("marca de teste: simulação, ensaio, outro turno e modo desconhecido; oficial do 2º turno sem marca", () => {
+  assert.equal(normalizar(simulado, CFG).modelo.teste, "simulacao");
+  assert.equal(normalizar(ensaio, CFG).modelo.teste, "ensaio");
+  const outro = structuredClone(ensaio); outro.modo = "oficial";
+  assert.equal(normalizar(outro, CFG).modelo.teste, "outro_turno");
+  const estranho = structuredClone(simulado); estranho.modo = "producao";
+  assert.equal(normalizar(estranho, CFG).modelo.teste, "desconhecido");
+  const oficial = structuredClone(simulado); oficial.modo = "oficial";
+  assert.equal(normalizar(oficial, CFG).modelo.teste, null);
+  for (const k of ["ensaio", "simulacao", "outro_turno", "desconhecido"]) assert.ok(MARCAS[k].faixa && MARCAS[k].detalhe);
+});
+
+test("três horários separados: publicação do TSE, consulta e mudança (do snapshot quando vier)", () => {
+  const { modelo } = normalizar(simulado, CFG);
+  assert.equal(modelo.tempos.publicacaoTSE, simulado.brasil.oficial.horario.geracao);
+  assert.equal(modelo.tempos.consultaOk, simulado.brasil.coleta.ultimo_sucesso);
+  assert.equal(modelo.tempos.mudanca, null);
+  const com = structuredClone(simulado);
+  com.snapshot = { id: "s-9", sha256: "f".repeat(64), mudou_em: "2026-10-25T21:09:00Z", anterior_sha256: "e".repeat(64) };
+  const m2 = normalizar(com, CFG).modelo;
+  assert.equal(m2.tempos.mudanca, "2026-10-25T21:09:00Z");
+  assert.deepEqual(m2.snapshot, { id: "s-9", sha256: "f".repeat(64), mudouEm: "2026-10-25T21:09:00Z", anterior: "e".repeat(64) });
+});
+
+test("assinatura do conteúdo ignora horários de coleta e muda com os números", () => {
+  const a = structuredClone(simulado), b = structuredClone(simulado);
+  b.gerado_em = "2030-01-01T00:00:00Z";
+  b.coleta_geral.rodada_em = "2030-01-01T00:00:00Z";
+  b.brasil.coleta.ultimo_sucesso = "2030-01-01T00:00:00Z";
+  assert.equal(assinaturaConteudo(a), assinaturaConteudo(b));
+  b.brasil.oficial.candidatos[0].votos += 1;
+  assert.notEqual(assinaturaConteudo(a), assinaturaConteudo(b));
 });
