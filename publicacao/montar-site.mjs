@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { arquivoHeaders } from "./seguranca.mjs";
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
-export const ARQUIVOS_SITE = ["index.html", "style.css", "config.js", "js", "data", "exemplos"];
+export const ARQUIVOS_SITE = ["index.html", "style.css", "config.js", "js", "data", "assets", "exemplos"];
 
 export async function montarSite(destino = join(RAIZ, "dist/site")) {
   await rm(destino, { recursive: true, force: true });

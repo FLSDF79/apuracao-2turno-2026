@@ -98,7 +98,15 @@ test("noite inteira pelo coletor de verdade: regras do prompt valem em todas as 
 test("site montado só com a página e os exemplos (sem fixtures, testes ou coletor)", async () => {
   const destino = await montarSite(join(tmpdir(), `site-${process.pid}`));
   const itens = (await readdir(destino)).sort();
-  assert.deepEqual(itens, ["_headers", "config.js", "data", "exemplos", "index.html", "js", "style.css"]);
+  assert.deepEqual(itens, ["_headers", "assets", "config.js", "data", "exemplos", "index.html", "js", "style.css"]);
+});
+
+test("toda referência local da página existe no site montado", async () => {
+  const destino = await montarSite(join(tmpdir(), `site-ref-${process.pid}`));
+  const fontes = (await readFile(join(destino, "index.html"), "utf8")) + (await readFile(join(destino, "config.js"), "utf8"));
+  const refs = [...fontes.matchAll(/(?:src|href)="([^"#:?]+)"|"((?:assets|data|js)\/[^"]+)"/g)].map((m) => m[1] || m[2]).filter((r) => !r.startsWith("//") && r !== "./");
+  assert.ok(refs.length > 3);
+  for (const r of refs) await readFile(join(destino, r)).catch(() => assert.fail(`falta no site publicado: ${r}`));
 });
 
 test("wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera", async () => {

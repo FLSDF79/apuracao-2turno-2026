@@ -41,6 +41,8 @@ export async function verificarPagina(url, { tse = null, telas = null, modo = nu
       if (!m.text().startsWith("Failed to load resource")) erros.push(m.text()); // falha de recurso é tratada em requestfailed, com a URL
     });
     p.on("pageerror", (e) => erros.push(String(e)));
+    // arquivo do próprio site que falta (ex.: logo fora do pacote publicado) também é erro
+    p.on("response", (r) => r.status() >= 400 && new URL(r.url()).origin === origem && !r.url().includes("/dados/") && erros.push(`HTTP ${r.status()} ${r.url()}`));
     p.on("requestfailed", (q) => (new URL(q.url()).origin === origem ? erros.push(`${q.url()} ${q.failure()?.errorText}`) : externos.push(new URL(q.url()).host)));
     await p.goto(url + caminho);
     await p.waitForSelector("#placar .cand", { timeout: 15000 });

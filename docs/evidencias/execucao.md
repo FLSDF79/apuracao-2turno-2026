@@ -1,24 +1,24 @@
 # Execução das baterias de teste
 
-Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:03:27.095Z (commit 4b4213e).
+Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:04:47.353Z (commit 03d30d5).
 
 | Frente | Bateria | Resultado | Tempo | Saída |
 |---|---|---|---|---|
 | 1 · fontes | Consistência dos arquivos oficiais guardados | ✅ 11 testes, todos ok | 0.1 s | [log](logs/fontes.txt) |
-| 2 · coletor e cálculo | Coletor, normalização, agregação, conferência, histórico | ✅ 52 ok, 0 falha(s) | 1.6 s | [log](logs/coletor.txt) |
-| 3 · painel | Leitura do contrato pela página, estados, cores, horários, exportação | ✅ 20 ok, 0 falha(s) | 0.2 s | [log](logs/interface.txt) |
-| 3 · painel | Página no navegador (Chromium): estados, mapa, acessibilidade | ✅ 44 ok, 0 falha(s) | 11.3 s | [log](logs/navegador.txt) |
-| 4 · publicação | Noite simulada inteira pelo coletor, TSE simulado, site e deploy | ✅ 8 ok, 0 falha(s) | 2.9 s | [log](logs/publicacao.txt) |
+| 2 · coletor e cálculo | Coletor, normalização, agregação, conferência, histórico | ✅ 52 ok, 0 falha(s) | 1.5 s | [log](logs/coletor.txt) |
+| 3 · painel | Leitura do contrato pela página, estados, cores, horários, exportação | ✅ 20 ok, 0 falha(s) | 0.3 s | [log](logs/interface.txt) |
+| 3 · painel | Página no navegador (Chromium): estados, mapa, acessibilidade | ✅ 44 ok, 0 falha(s) | 10.7 s | [log](logs/navegador.txt) |
+| 4 · publicação | Noite simulada inteira pelo coletor, TSE simulado, site e deploy | ✅ 9 ok, 0 falha(s) | 3.2 s | [log](logs/publicacao.txt) |
 | 2 · coletor e cálculo | Exemplos do contrato regenerados sem diferença | ✅ ok | 0.4 s | [log](logs/exemplos.txt) |
 
 ## Ponta a ponta com dados oficiais reais (1º turno)
 
-2026-10-06T14:32:31.024Z · `node publicacao/ponta-a-ponta.mjs`
+2026-10-06T15:04:19.615Z · `node publicacao/ponta-a-ponta.mjs`
 
 | | Verificação | Detalhe |
 |---|---|---|
 | ✅ | arquivos oficiais íntegros (sha256) | 68 arquivos |
-| ✅ | coletor rodou sobre os arquivos oficiais | 2026-10-06T14:32:18.072Z concluida ok req=38 http={"200":38} conferência=compativel |
+| ✅ | coletor rodou sobre os arquivos oficiais | 2026-10-06T15:04:07.154Z concluida ok req=38 http={"200":38} conferência=compativel |
 | ✅ | placar com dois candidatos | 22 × 13 |
 | ✅ | votos de 22 na tela = contrato | 56.104.503 votos · contrato 56104503 |
 | ✅ | % de 22 na tela = contrato | 47,03% · contrato 47,03% |
