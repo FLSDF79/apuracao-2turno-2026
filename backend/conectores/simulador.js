@@ -4,7 +4,7 @@
 // escalados, só dos dois finalistas: servem para testar o sistema, nunca para exibir como resultado.
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { COMPONENTES_BRASIL } from "../nucleo/territorios.js";
+import { COMPONENTES_BRASIL } from "../normalizacao/territorios.js";
 
 const UFS_GOV = ["ac", "am", "df", "es", "rj", "rn", "to"];
 const BASE = "https://resultados.tse.jus.br";
@@ -53,7 +53,7 @@ function somar(lista) {
   return out;
 }
 
-function arquivo(modelo, k, { ele, cargo, cdabr, tpabr, hora, final, eleito }) {
+function arquivo(modelo, k, { ele, cargo, cdabr, tpabr, hora, final, eleito = false }) {
   const [data, h] = hora.split(" ");
   const lider = [...k.cands].sort((x, y) => y.vap - x.vap)[0];
   const cand = (x) => {
@@ -83,7 +83,9 @@ function agrupar(lista) {
 
 /**
  * Monta o "site do TSE" simulado num instante.
- * @param cenario {
+ * @param {any} base  saída de carregarBase
+ * @param {any} cenario campos:
+ * {
  *   publicado: false → configuração sem 2º turno (como em 06/10)
  *   fracao: { padrao: 0..1, [uf]: 0..1 }       fração de totalização por recorte
  *   hora: "25/10/2026 18:30:00"                 horário de geração/totalização

@@ -9,14 +9,17 @@ Para regenerar: `node tools/gerar-exemplo.mjs`.
 
 ## Arquivos
 
-Servidos em `/dados/v1/…` (Cloudflare) ou gravados em `<saida>/v1/…` (Node). Todos são regenerados a cada rodada do coletor (padrão 15 s).
+Servidos em `/dados/v1/…` (Cloudflare) ou gravados em `<saida>/v1/…` (Node). São regravados a cada rodada do coletor (padrão 15 s), mas o `gerado_em` só muda quando algum dado mudou de fato (ver "Horários").
 
 | Arquivo | Conteúdo |
 |---|---|
 | `presidente.json` | Placar do Brasil (oficial e calculado), 27 UFs, exterior, 5 regiões, conferência |
 | `governador.json` | Uma entrada por UF com 2º turno de governador (AC, AM, DF, ES, RJ, RN, TO). Nunca agregado entre UFs |
 | `historico.json` | Série do arquivo nacional (um ponto por versão nova publicada pelo TSE) e correções detectadas |
-| `saude.json` | Estado do coletor: rodada, códigos HTTP, pausa, situação de cada arquivo consultado |
+| `saude.json` | Estado do coletor: rodada, códigos HTTP, latência, pausa, situação de cada arquivo consultado |
+| `snapshots.json` | Índice dos últimos 500 corpos recebidos do TSE: URL, ETag, horários, `idg`, SHA-256, aceito ou não |
+| `snapshots/<sha256>.json` | Corpo exato recebido do TSE, imutável. O SHA-256 bate com o do arquivo oficial baixado direto |
+| `territorios.json` | Tabela TSE × IBGE (27 UFs, exterior e Brasil) com região |
 | `export/presidente.csv`, `export/governador.csv` | Exportação pronta (`;`, decimal com vírgula, UTF-8 com BOM: abre direto no Excel em português) |
 
 O JSON de exportação é o próprio `presidente.json`/`governador.json`: já trazem origem, horário do TSE e horário da coleta.
@@ -25,7 +28,8 @@ O JSON de exportação é o próprio `presidente.json`/`governador.json`: já tr
 
 - **Votos e contagens:** inteiros. `null` = informação ausente na fonte; `0` = zero confirmado. Nunca trocar um pelo outro.
 - **Percentuais:** número de 0 a 100 com precisão total (ex.: `47.02777235637371`). Arredondar só na tela (2 casas, como o TSE). Os campos `*_tse` / `oficial_tse` trazem o valor publicado pelo TSE, para conferência; os testes garantem que batem com os calculados até 10⁻⁶.
-- **Horários:** `horario.*` são do TSE, em ISO com `-03:00` (Brasília). `coleta.*`, `gerado_em` e `coletado_em` são do coletor, em UTC (`Z`). Exibir tudo em America/Sao_Paulo.
+- **Horários:** `horario.*` são do TSE, em ISO com `-03:00` (Brasília). `coleta.*`, `tempos.ultima_*`, `gerado_em` e `coletado_em` são do coletor, em UTC (`Z`). Exibir tudo em America/Sao_Paulo.
+- **Modo:** `modo` = `"oficial"` (2º turno real), `"ensaio"` (arquivos reais do 1º turno) ou `"simulacao"` (números fictícios). Fora do oficial, `aviso_modo` traz o texto pronto ("ENSAIO…", "SIMULAÇÃO…") e a página **tem** de exibi-lo com destaque; no oficial ele é `null`. O CSV traz a coluna `modo` em toda linha.
 - **Territórios:** chave = sigla do TSE em minúsculas (`ac`…`to`, `zz` exterior, `br` Brasil). `ibge_uf` é o código IBGE da UF, separado e explícito. O `data/br-uf.geojson` usa a mesma sigla em `properties.uf`.
 - **Candidatos:** identificados por `numero` (texto) e `sqcand` (id versionado do TSE). Metadados (nome, partido, federação, vice) ficam só em `candidatos[]` no topo; nos territórios vão só número, votos e percentuais.
 
@@ -42,7 +46,8 @@ O JSON de exportação é o próprio `presidente.json`/`governador.json`: já tr
 ## `presidente.json`
 
 ```text
-schema, tipo:"presidente", gerado_em, modo ("oficial" | "simulacao" | "ensaio"), aviso
+schema, tipo:"presidente", gerado_em, modo ("oficial" | "simulacao" | "ensaio"), aviso_modo, aviso
+tempos: { ultima_consulta_ok, publicacao_fonte, totalizacao_fonte, ultima_mudanca, ultima_mudanca_qualquer_recorte }
 fonte: { base, ambiente, portal }
 eleicao: { estado: "publicada" | "nao_publicada" | "sem_cargo", eleicao:"6258", turno:2, cargo:1, cargo_nome, nome, pleito, data,
            eleicao_esperada (quando não publicada), motivo }
@@ -61,11 +66,29 @@ conferencia: Conferencia | null (null enquanto a eleição não está publicada)
 coleta_geral: { estado: "ok" | "atrasada" | "pausada" | "bloqueada" | "indisponivel", mensagem, rodada_em, proxima_em, intervalo_s }
 ```
 
+**Horários (`tempos`), do arquivo nacional:**
+
+| Campo | O que é | Avança quando |
+|---|---|---|
+| `ultima_consulta_ok` | Última consulta bem-sucedida ao TSE (200 ou 304) | a cada rodada que deu certo |
+| `publicacao_fonte` | Horário de geração do arquivo no TSE (`horario.geracao`) | o TSE publica versão nova |
+| `totalizacao_fonte` | Horário da totalização informado pelo TSE | o TSE publica versão nova |
+| `ultima_mudanca` | Quando o coletor recebeu conteúdo diferente pela última vez | o dado muda de fato |
+| `ultima_mudanca_qualquer_recorte` | O mesmo, considerando todas as UFs e o exterior | qualquer recorte muda |
+
+`gerado_em` = `ultima_mudanca_qualquer_recorte`. Para "verificado há X s", usar `ultima_consulta_ok`; para "dados de", usar `publicacao_fonte`/`totalizacao_fonte`. Nunca mostrar a hora da rodada como se fosse dado novo.
+
 `coleta_geral` também vem em `governador.json` e em `saude.json` (dentro de `coletor`). `atrasada` = algum recorte `defasado` ou `indisponivel`; `bloqueada` = o TSE respondeu 403/429 e o coletor está em pausa; `indisponivel` = a configuração do TSE nunca foi lida.
 
 **Territorio:** `{ codigo, tipo: "uf"|"exterior", nome, regiao, ibge_uf, esperado, coleta: Coleta, atraso_vs_nacional_min, resultado: Resultado | null }`. `atraso_vs_nacional_min` = minutos entre a totalização do arquivo nacional e a do recorte (0 = mesmo horário).
 
-**Coleta:** `{ situacao, url, ultima_tentativa, ultimo_sucesso, status_http, ultimo_erro{em,mensagem,status}, sem_alteracao, adiado }`
+**Coleta:** `{ situacao, url, ultima_tentativa, ultimo_sucesso, ultima_mudanca, status_http, ultimo_erro{em,mensagem,status}, alertas[], sha256, sem_alteracao, nova_versao, correcao, fora_de_ordem, adiado }`
+
+- `sha256`: hash do corpo aceito em uso (link: `snapshots/<sha256>.json`). Só muda quando o TSE publica um arquivo diferente; serve como identificador da versão dos dados.
+- `alertas`: identidades aritméticas que não fecharam no arquivo oficial (ex.: `validos ≠ nominais + legenda`). O dado é mantido como veio; exibir como aviso discreto.
+- `nova_versao` / `correcao`: nesta rodada chegou versão nova / versão nova com queda de votos ou seções (correção oficial aceita).
+- `fora_de_ordem`: `{ recebido, mantido }` quando o TSE devolveu uma geração mais antiga que a já aceita; a mais nova é mantida.
+- Resposta incompleta (falta campo obrigatório, turno ou eleição errados) é rejeitada: o recorte fica `defasado` com `ultimo_erro.mensagem` explicando.
 
 | `situacao` | Significado | Tratamento visual sugerido |
 |---|---|---|
@@ -105,8 +128,8 @@ classificacao: { codigo, texto, motivo, desde }
 
 | `codigo` | Quando |
 |---|---|
-| `compativel` | Todas as linhas com diferença zero e nenhum recorte faltando |
-| `cobertura_incompleta` | Falta o nacional, falta algum recorte, ou algum está `defasado` |
+| `compativel` | Todas as linhas com diferença zero, nenhum recorte faltando e nenhum defasado |
+| `cobertura_incompleta` | Falta o nacional, falta algum recorte, ou algum está `defasado` (mesmo com somas iguais; o `motivo` diz se os valores disponíveis batem) |
 | `horarios_diferentes` | Há diferença, a cobertura está completa e os arquivos têm horários de totalização diferentes |
 | `diferenca_persistente` | A mesma diferença dura 10 min ou mais (configurável), ou os arquivos têm o mesmo horário e somas diferentes |
 
@@ -115,7 +138,7 @@ A e B **nunca** se somam: são duas representações dos mesmos votos.
 ## `governador.json`
 
 ```text
-schema, tipo:"governador", gerado_em, modo, aviso, fonte, eleicao (6260, cargo 3)
+schema, tipo:"governador", gerado_em, modo, aviso_modo, aviso, fonte, eleicao (6260, cargo 3)
 ufs: { ac, am, df, es, rj, rn, to: { codigo, nome, regiao, ibge_uf, coleta, estado_publicacao, candidatos[], eleito{publicado,candidatos}, resultado: Resultado } }
 ```
 
@@ -124,21 +147,36 @@ As UFs saem da configuração oficial do 2º turno (`abr` da eleição 6260 no `
 ## `historico.json`
 
 ```text
-serie_brasil: [ { coletado_em, totalizacao, idg, pct_totalizadas, votos{numero:int}, pct_validos{numero:float}, disputa, correcao: bool } ]
-correcoes: [ { recorte, disputa, eleicao, coletado_em, de_idg, para_idg, totalizacao, quedas: [ {campo, antes, depois} ] } ]
+serie_brasil: [ { coletado_em, totalizacao, idg, sha256, pct_totalizadas, votos{numero:int}, pct_validos{numero:float}, disputa, correcao: bool } ]
+correcoes: [ { recorte, disputa, eleicao, coletado_em, de_idg, para_idg, de_sha256, para_sha256, totalizacao, quedas: [ {campo, antes, depois} ] } ]
+eventos: [ { em, tipo, recorte, disputa, ... } ]   (últimos 200)
 ```
+
+`eventos[].tipo`: `arquivo_rejeitado` (resposta incompleta ou inválida), `fora_de_ordem`, `correcao_oficial`, `alerta_aritmetico`, `configuracao_rejeitada`.
 
 Um ponto entra só quando o TSE publica versão nova do arquivo nacional. Correções (votos ou seções que diminuem) são aceitas como vieram e ficam registradas; o painel não força crescimento.
 
 ## `saude.json`
 
 ```text
-coletor: { estado, mensagem, rodada_em, proxima_em, intervalo_s, rodada{inicio,fim,duracao_ms,requisicoes,adiadas}, status_http{"200":n,"304":n,…}, pausa: {ate,motivo} | null }
+coletor: { estado, mensagem, rodada_em, proxima_em, intervalo_s, rodada{inicio,fim,duracao_ms,requisicoes,adiadas,recusadas}, status_http{"200":n,"304":n,…}, latencia_ms{mediana,max}, pausa: {ate,motivo} | null }
 configuracao: { url, coletada_em, ultimo_erro, idg, geracao }
 disputas: { presidente, governador }   (saída da descoberta)
 recortes: [ { id: "presidente:6258:sp", ...Coleta } ]
 origem: texto pronto sobre a origem (base do TSE, nenhum TRE com arquivo próprio)
 ```
+
+## `snapshots.json` e `territorios.json`
+
+```text
+snapshots.json:   schema, tipo:"snapshots", modo, total, como_conferir,
+                  snapshots: [ { coletado_em, url, etag, sha256, bytes, tipo:"configuracao"|"abrangencia"|"resultado", disputa, eleicao, recorte, idg, geracao, totalizacao, aceito, motivo? } ]  (mais recente primeiro)
+territorios.json: schema, tipo:"territorios", fontes{tse,ibge}, territorios: [ { tse, ibge_uf, nome, tipo, regiao } ]
+```
+
+## Exportação CSV
+
+`;` como separador, decimal com vírgula, UTF-8 com BOM. Últimas colunas de toda linha: `situacao_coleta`, `ultima_consulta_ok`, `ultima_mudanca`, `url_fonte`, `sha256_arquivo`, `eleicao`, `turno`, `cargo`, `modo`. No governador, as colunas `cand1_*`/`cand2_*` são o mais votado e o segundo da UF.
 
 ## Mudanças no contrato
 

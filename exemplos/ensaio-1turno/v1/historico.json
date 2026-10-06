@@ -1,7 +1,9 @@
 {
  "schema": "apuracao-2t-2026/v1",
  "tipo": "historico",
- "gerado_em": "2026-10-06T13:00:03.000Z",
+ "gerado_em": "2026-10-06T13:00:02.000Z",
+ "modo": "ensaio",
+ "aviso_modo": "ENSAIO com os arquivos reais do 1º turno de 04/10/2026. Não é a apuração do 2º turno.",
  "eleicao": {
   "estado": "publicada",
   "eleicao": "6257",
@@ -17,9 +19,10 @@
  },
  "serie_brasil": [
   {
-   "coletado_em": "2026-10-06T13:00:02.000Z",
+   "coletado_em": "2026-10-06T13:00:00.000Z",
    "totalizacao": "2026-10-05T12:51:05-03:00",
    "idg": "2837531",
+   "sha256": "2866703eb4fc0ad6f17f0e081a00ab1175490b0786325e700cff1d8b40d25bca",
    "pct_totalizadas": 100,
    "votos": {
     "13": 53879538,
@@ -59,5 +62,6 @@
    "correcao": false
   }
  ],
- "correcoes": []
+ "correcoes": [],
+ "eventos": []
 }

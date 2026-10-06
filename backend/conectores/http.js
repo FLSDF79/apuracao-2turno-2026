@@ -12,14 +12,42 @@ export const PADRAO = {
   pausaBloqueioMs: 10 * 60 * 1000, // documentação do TSE: bloqueio de 10 min
   pausa404Ms: 2 * 60 * 1000,
   limite404Seguidos: 3,
+  espera404Ms: 15000, // arquivo ainda não publicado: tenta de novo na rodada seguinte
   maxPorSegundo: 10,
   userAgent: "apuracao-2turno-2026/1 (painel independente; github.com/FLSDF79/apuracao-2turno-2026)",
+  // Únicos destinos que o backend consulta. Qualquer outra URL é recusada antes de sair da máquina.
+  hostsPermitidos: ["resultados.tse.jus.br", "resultados-sim.tse.jus.br"],
+  // Só para teste local (ex.: "127.0.0.1:8788" com wrangler dev); nunca configurado em produção.
+  hostsExtras: [],
 };
 
+/** Recusa qualquer URL fora da lista de hosts do TSE (https) ou dos extras de teste. */
+export function urlPermitida(url, { hostsPermitidos = PADRAO.hostsPermitidos, hostsExtras = [] } = {}) {
+  let u;
+  try {
+    u = new URL(url);
+  } catch {
+    return false;
+  }
+  if (u.username || u.password) return false;
+  if (u.protocol === "https:" && hostsPermitidos.includes(u.host)) return true;
+  return hostsExtras.includes(u.host) && (u.protocol === "http:" || u.protocol === "https:");
+}
+
+/**
+ * @typedef {Partial<typeof PADRAO> & {
+ *   fetch?: (url: string, init: any) => Promise<Response>,
+ *   agora?: () => number,
+ *   esperar?: (ms: number) => Promise<void>,
+ *   estado?: any,
+ * }} OpcoesFonte
+ */
+
 export class Fonte {
+  /** @param {OpcoesFonte} [opcoesFonte] */
   constructor({ fetch: f, agora = () => Date.now(), esperar, estado = {}, ...opcoes } = {}) {
     // chamado sempre como função solta: no Workers, fetch fora do globalThis dá "Illegal invocation"
-    this.fetch = f ?? ((...a) => globalThis.fetch(...a));
+    this.fetch = f ?? ((url, init) => globalThis.fetch(url, init));
     this.agora = agora;
     this.esperar = esperar ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
     this.op = { ...PADRAO, ...opcoes };
@@ -54,6 +82,9 @@ export class Fonte {
    * { ok, status, url, dados?, alterado?, erro?, adiado?, horario_coleta, etag }
    */
   async obter(url) {
+    if (!urlPermitida(url, this.op)) {
+      return { ok: false, url, status: null, recusado: true, erro: "URL fora dos endereços oficiais do TSE: recusada", horario_coleta: new Date(this.agora()).toISOString() };
+    }
     const st = (this.estado.urls[url] ||= { etag: null, modificado: null, corpo: null, falhas: 0, proximaEm: 0, ultimoOk: null });
     const coleta = new Date(this.agora()).toISOString();
     const pausa = this.pausado();
@@ -65,6 +96,7 @@ export class Fonte {
     if (st.etag && st.corpo) headers["If-None-Match"] = st.etag;
     if (st.modificado && st.corpo) headers["If-Modified-Since"] = st.modificado;
 
+    const t0 = this.agora();
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), this.op.timeoutMs);
     let r;
@@ -80,7 +112,7 @@ export class Fonte {
         this.estado.seguidos404 = 0;
         st.falhas = 0;
         st.ultimoOk = coleta;
-        return { ok: true, url, status: 304, alterado: false, dados: JSON.parse(st.corpo), etag: st.etag, horario_coleta: coleta };
+        return { ok: true, url, status: 304, alterado: false, dados: JSON.parse(st.corpo), texto: st.corpo, etag: st.etag, horario_coleta: coleta, ms: this.agora() - t0 };
       }
       if (r.status === 200) {
         const texto = await r.text();
@@ -93,7 +125,7 @@ export class Fonte {
         this.estado.seguidos404 = 0;
         const alterado = texto !== st.corpo;
         Object.assign(st, { etag: r.headers.get("etag"), modificado: r.headers.get("last-modified"), corpo: texto, falhas: 0, proximaEm: 0, ultimoOk: coleta });
-        return { ok: true, url, status: 200, alterado, dados, etag: st.etag, horario_coleta: coleta };
+        return { ok: true, url, status: 200, alterado, dados, texto, etag: st.etag, horario_coleta: coleta, ms: this.agora() - t0 };
       }
       if (r.status === 404) {
         this.estado.seguidos404 += 1;
@@ -101,7 +133,7 @@ export class Fonte {
           this.pausar(this.op.pausa404Ms, `${this.estado.seguidos404} respostas 404 seguidas`);
         }
         st.falhas += 1;
-        st.proximaEm = this.agora() + 60000; // fixo: o disjuntor global já segura sequências; atraso máximo de 1 min quando o arquivo surgir
+        st.proximaEm = this.agora() + this.op.espera404Ms; // fixo: a rodada só testa um arquivo por disputa enquanto nada foi publicado
         return { ok: false, url, status: 404, nao_publicado: true, erro: "arquivo ainda não publicado (404)", horario_coleta: coleta };
       }
       const espera = segundosRetryAfter(retryAfter, this.agora());

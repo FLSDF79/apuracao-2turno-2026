@@ -5,7 +5,7 @@
 //   sobre a qual o próprio TSE contou a abstenção;
 // - válidos, brancos e nulos sobre o total de votos (tv = comparecimento);
 // - região e Brasil calculado somam votos e seções antes de qualquer percentual. Nunca média de percentuais.
-import { BLOCOS } from "./normalizar.js";
+import { BLOCOS } from "../normalizacao/normalizar.js";
 
 export function pct(parte, todo) {
   if (parte === null || parte === undefined || !todo) return null;
@@ -60,8 +60,9 @@ function extremos(lista) {
 
 /**
  * Soma resultados normalizados de vários recortes (ex.: UFs de uma região; 27 UFs + exterior).
- * @param itens   mapa codigo → resultado normalizado (ou null se o recorte não está disponível)
- * @param codigos recortes que compõem o agregado
+ * @param {Record<string, any>} itens  mapa codigo → resultado normalizado (ou null se o recorte não está disponível)
+ * @param {string[]} codigos  recortes que compõem o agregado
+ * @param {string} [rotulo]
  */
 export function agregar(itens, codigos, rotulo) {
   const presentes = codigos.filter((c) => itens[c]);

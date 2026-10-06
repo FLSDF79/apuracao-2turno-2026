@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Fonte } from "../../coletor/fonte.js";
-import { rodada } from "../../coletor/rodada.js";
-import { fetchDeFixtures } from "../../coletor/fixtures.js";
-import { carregarBase, montarSite, fetchSimulado } from "../../coletor/simulador.js";
-import { SCHEMA } from "../../nucleo/contrato.js";
+import { Fonte } from "../../backend/conectores/http.js";
+import { rodada } from "../../backend/coletor/rodada.js";
+import { fetchDeFixtures } from "../../backend/conectores/fixtures.js";
+import { carregarBase, montarSite, fetchSimulado } from "../../backend/conectores/simulador.js";
+import { SCHEMA } from "../../backend/api/contrato.js";
 import { RAIZ, relogio } from "./apoio.mjs";
 
 test("ensaio com os arquivos reais do 1º turno: contrato completo, conferência compatível e sem recontagem", async () => {
@@ -91,6 +91,9 @@ test("noite simulada do 2º turno: espera, apuração, atraso de UF, falha, corr
   p = r.saidas["v1/presidente.json"];
   const h = r.saidas["v1/historico.json"];
   assert.ok(h.correcoes.some((c) => c.recorte === "ac"));
+  // cada correção aponta os dois snapshots (antes e depois) para conferência
+  for (const c of h.correcoes) assert.ok(/^[0-9a-f]{64}$/.test(c.de_sha256) && /^[0-9a-f]{64}$/.test(c.para_sha256) && c.de_sha256 !== c.para_sha256);
+  assert.ok(h.serie_brasil.every((pt) => /^[0-9a-f]{64}$/.test(pt.sha256)));
   assert.ok(Math.abs(p.territorios.ac.resultado.indicadores.pct_totalizadas - 20) < 0.1);
   assert.equal(p.conferencia.classificacao.codigo, "compativel");
   assert.ok(h.serie_brasil.some((pt) => pt.correcao));
@@ -152,4 +155,47 @@ test("resumo da coleta para a página: ok, atrasada e bloqueada", async () => {
   rel.avancar(15000);
   r = await rodada(fonte, r.estado);
   assert.equal(r.saidas["v1/saude.json"].coletor.estado, "bloqueada");
+});
+
+test("dados de teste nunca saem como apuração real: modo e aviso em todos os arquivos e no CSV", async () => {
+  const rel = relogio("2026-10-06T13:00:00Z");
+  const r = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel }), null, { modo: "ensaio" });
+  for (const nome of ["presidente", "governador", "historico", "saude"]) {
+    const j = r.saidas[`v1/${nome}.json`];
+    assert.equal(j.modo, "ensaio", nome);
+    assert.match(j.aviso_modo, /ENSAIO.*Não é a apuração do 2º turno/, nome);
+  }
+  for (const nome of ["presidente", "governador"]) {
+    const [cab, ...linhas] = r.saidas[`v1/export/${nome}.csv`].replace(/^\uFEFF/, "").trim().split("\r\n").map((l) => l.split(";"));
+    for (const col of ["origem", "horario_totalizacao_tse", "ultima_consulta_ok", "url_fonte", "sha256_arquivo", "modo"]) assert.ok(cab.includes(col), `${nome}.csv sem ${col}`);
+    const iModo = cab.indexOf("modo"), iUrl = cab.indexOf("url_fonte");
+    assert.ok(linhas.every((l) => l[iModo] === "ensaio"));
+    assert.ok(linhas.some((l) => l[iUrl].startsWith("https://resultados.tse.jus.br/")));
+  }
+  const oficial = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel }), null, { modo: "oficial" });
+  assert.equal(oficial.saidas["v1/presidente.json"].aviso_modo, null);
+});
+
+test("configuração do 2º turno publicada antes dos arquivos: um 404 por disputa, sem pausa, leitura na rodada seguinte", async () => {
+  const base = await carregarBase(RAIZ);
+  const completo = montarSite(base, { hora: "25/10/2026 17:00:00", fracao: { padrao: 0 } });
+  const soConfig = Object.fromEntries(Object.entries(completo).filter(([k]) => !k.endsWith("-u.json")));
+  let site = soConfig;
+  const registro = [];
+  const rel = relogio("2026-10-25T19:59:00Z");
+  const fonte = new Fonte({ fetch: fetchSimulado(() => site, registro), ...rel });
+  let r = await rodada(fonte, null, { modo: "oficial" });
+  const resultados = registro.filter((u) => u.endsWith("-u.json"));
+  assert.equal(resultados.length, 2, resultados.join("\n")); // nacional de presidente + primeira UF de governador
+  const s = r.saidas["v1/saude.json"];
+  assert.equal(s.coletor.pausa, null);
+  assert.equal(r.saidas["v1/presidente.json"].territorios.sp.coleta.situacao, "nao_publicado");
+
+  site = completo;
+  rel.avancar(15000);
+  r = await rodada(fonte, r.estado, { modo: "oficial" });
+  const p = r.saidas["v1/presidente.json"];
+  assert.equal(p.estado_publicacao, "aguardando_resultados");
+  assert.equal(p.territorios.sp.coleta.situacao, "atualizado");
+  assert.equal(Object.values(r.saidas["v1/governador.json"].ufs).filter((u) => u.coleta.situacao === "atualizado").length, 7);
 });

@@ -22,6 +22,10 @@ jobs:
           node-version: "22"
       - name: Testes de consistência das fontes
         run: python3 -m unittest discover -s tests -v
+      - name: Dependências de desenvolvimento (só TypeScript para checagem; nada vai para produção)
+        run: npm ci
+      - name: Checagem de tipos (JSDoc + checkJs)
+        run: npm run tipos
       - name: Testes do coletor e do motor de cálculo
         run: npm test
       - name: Exemplos do contrato estão atualizados

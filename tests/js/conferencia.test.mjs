@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizarResultado } from "../../nucleo/normalizar.js";
-import { agregar, comIndicadores } from "../../nucleo/calcular.js";
-import { conferir, AVISO_MESMA_BASE } from "../../nucleo/conferencia.js";
-import { COMPONENTES_BRASIL } from "../../nucleo/territorios.js";
+import { normalizarResultado } from "../../backend/normalizacao/normalizar.js";
+import { agregar, comIndicadores } from "../../backend/agregacao/calcular.js";
+import { conferir, AVISO_MESMA_BASE } from "../../backend/agregacao/conferencia.js";
+import { COMPONENTES_BRASIL } from "../../backend/normalizacao/territorios.js";
 import { presidente } from "./apoio.mjs";
 
 const base = () => Object.fromEntries([...COMPONENTES_BRASIL, "br"].map((c) => [c, normalizarResultado(presidente(c))]));
@@ -32,6 +32,10 @@ test("UF ausente ou defasada: cobertura incompleta, com a lista", () => {
   const c2 = conferir(...ab(t2), { defasados: ["sp"] });
   assert.equal(c2.classificacao.codigo, "cobertura_incompleta");
   assert.match(c2.classificacao.motivo, /SP/);
+  // somas iguais, mas recortes com dado da rodada anterior (ex.: TSE respondendo 503): ainda incompleta
+  const c3 = conferir(...ab(base()), { defasados: ["ac", "sp"] });
+  assert.equal(c3.classificacao.codigo, "cobertura_incompleta");
+  assert.match(c3.classificacao.motivo, /AC, SP.*batem/);
 });
 
 test("nacional mais novo que uma UF: horários diferentes; a mesma diferença por 10 min vira persistente", () => {

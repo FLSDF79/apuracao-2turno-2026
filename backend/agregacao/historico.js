@@ -21,7 +21,7 @@ function mesmaVersao(a, b) {
   return a.idg === b.idg && a.totalizacao === b.totalizacao && JSON.stringify(a.votos) === JSON.stringify(b.votos) && a.secoes_totalizadas === b.secoes_totalizadas;
 }
 
-/** @returns { historico, nova, correcao } — historico é um objeto novo; o anterior não é alterado. */
+/** Devolve { historico, nova, correcao }; historico é um objeto novo e o anterior não é alterado. */
 export function registrarVersao(historico, resultado, coletadoEm) {
   const h = { versoes: [...(historico?.versoes || [])], correcoes: [...(historico?.correcoes || [])] };
   const atual = resumo(resultado, coletadoEm);
@@ -46,11 +46,12 @@ export function registrarVersao(historico, resultado, coletadoEm) {
 }
 
 /** Ponto da série que a página usa no gráfico de evolução. */
-export function pontoSerie(r, coletadoEm, correcao) {
+export function pontoSerie(r, coletadoEm, correcao, sha256 = null) {
   return {
     coletado_em: coletadoEm,
     totalizacao: r.horario.totalizacao,
     idg: r.idg,
+    sha256,
     pct_totalizadas: r.indicadores.pct_totalizadas,
     votos: Object.fromEntries(r.candidatos.map((c) => [c.numero, c.votos])),
     pct_validos: Object.fromEntries(r.candidatos.map((c) => [c.numero, c.pct_validos])),
