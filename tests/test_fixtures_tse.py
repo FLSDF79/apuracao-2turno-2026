@@ -141,7 +141,9 @@ class SegundoTurnoGovernador(unittest.TestCase):
     def test_presidente_vai_ao_segundo_turno(self):
         finalistas = sorted(c["n"] for c in candidatos(presidente("br")) if c["st"] == "2º turno")
         self.assertEqual(finalistas, ["13", "22"])
-        self.assertFalse(any(c["e"] == "s" and c["st"] == "Eleito" for c in candidatos(presidente("br"))))
+        self.assertFalse(any(c["st"] == "Eleito" for c in candidatos(presidente("br"))))
+        # "e" = "s" também nos classificados ao 2º turno: não serve para exibir "eleito".
+        self.assertEqual(sorted(c["n"] for c in candidatos(presidente("br")) if c["e"] == "s"), ["13", "22"])
 
 
 if __name__ == "__main__":
