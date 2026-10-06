@@ -1,0 +1,835 @@
+{
+ "contrato": "0.1-provisorio",
+ "amostra": true,
+ "eleicao": {
+  "ciclo": "ele2026",
+  "codigo": "6259",
+  "turno": 1,
+  "cargo": "governador",
+  "modo": "teste-1t"
+ },
+ "coleta": {
+  "em": "2026-10-25T21:47:30+00:00",
+  "saude": "ok"
+ },
+ "ufs": {
+  "ac": {
+   "id": "ac",
+   "tipo": "uf",
+   "nome": "Acre",
+   "regiao": "n",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-04T19:07:20-03:00",
+   "atualizado_em": "2026-10-04T19:07:20-03:00",
+   "secoes": {
+    "previstas": 2270,
+    "totalizadas": 2270,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 613316,
+    "apto_secoes_totalizadas": 613316
+   },
+   "comparecimento": {
+    "votos": 487971,
+    "pct": 79.5627
+   },
+   "abstencao": {
+    "votos": 125345,
+    "pct": 20.4373
+   },
+   "votos": {
+    "validos": 439647,
+    "base_pct": 439647,
+    "brancos": 8926,
+    "nulos": 39398,
+    "anulados_sub_judice": 0,
+    "total": 487971
+   },
+   "candidatos": {
+    "11": {
+     "votos": 218760,
+     "pct": 49.7581,
+     "situacao": "2º turno"
+    },
+    "10": {
+     "votos": 141859,
+     "pct": 32.2666,
+     "situacao": "2º turno"
+    },
+    "45": {
+     "votos": 44946,
+     "pct": 10.2232,
+     "situacao": "Não eleito"
+    },
+    "40": {
+     "votos": 32963,
+     "pct": 7.4976,
+     "situacao": "Não eleito"
+    },
+    "21": {
+     "votos": 715,
+     "pct": 0.1626,
+     "situacao": "Não eleito"
+    },
+    "36": {
+     "votos": 404,
+     "pct": 0.0919,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "11",
+   "margem": {
+    "votos": 76901,
+    "pp": 17.4915
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "11": {
+     "nome_urna": "MAILZA ASSIS",
+     "partido": "PP",
+     "situacao": "2º turno"
+    },
+    "21": {
+     "nome_urna": "EUDO RAFFAEL",
+     "partido": "PCB",
+     "situacao": "Não eleito"
+    },
+    "36": {
+     "nome_urna": "DR.LUISINHO",
+     "partido": "AGIR",
+     "situacao": "Não eleito"
+    },
+    "10": {
+     "nome_urna": "ALAN RICK",
+     "partido": "REPUBLICANOS",
+     "situacao": "2º turno"
+    },
+    "40": {
+     "nome_urna": "THOR DANTAS",
+     "partido": "PSB",
+     "situacao": "Não eleito"
+    },
+    "45": {
+     "nome_urna": "TIÃO BOCALOM",
+     "partido": "PSDB",
+     "situacao": "Não eleito"
+    }
+   }
+  },
+  "am": {
+   "id": "am",
+   "tipo": "uf",
+   "nome": "Amazonas",
+   "regiao": "n",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-05T04:59:33-03:00",
+   "atualizado_em": "2026-10-05T04:59:33-03:00",
+   "secoes": {
+    "previstas": 8157,
+    "totalizadas": 8157,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 2796053,
+    "apto_secoes_totalizadas": 2796053
+   },
+   "comparecimento": {
+    "votos": 2232271,
+    "pct": 79.8365
+   },
+   "abstencao": {
+    "votos": 563782,
+    "pct": 20.1635
+   },
+   "votos": {
+    "validos": 2071985,
+    "base_pct": 2071985,
+    "brancos": 50340,
+    "nulos": 109946,
+    "anulados_sub_judice": 0,
+    "total": 2232271
+   },
+   "candidatos": {
+    "55": {
+     "votos": 841846,
+     "pct": 40.6299,
+     "situacao": "2º turno"
+    },
+    "22": {
+     "votos": 507335,
+     "pct": 24.4855,
+     "situacao": "2º turno"
+    },
+    "44": {
+     "votos": 453896,
+     "pct": 21.9063,
+     "situacao": "Não eleito"
+    },
+    "70": {
+     "votos": 218490,
+     "pct": 10.545,
+     "situacao": "Não eleito"
+    },
+    "33": {
+     "votos": 36176,
+     "pct": 1.746,
+     "situacao": "Não eleito"
+    },
+    "18": {
+     "votos": 11459,
+     "pct": 0.553,
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "votos": 2783,
+     "pct": 0.1343,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "55",
+   "margem": {
+    "votos": 334511,
+    "pp": 16.1444
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "44": {
+     "nome_urna": "ROBERTO CIDADE",
+     "partido": "UNIÃO",
+     "situacao": "Não eleito"
+    },
+    "55": {
+     "nome_urna": "OMAR AZIZ",
+     "partido": "PSD",
+     "situacao": "2º turno"
+    },
+    "18": {
+     "nome_urna": "ISAEL MUNDURUKU",
+     "partido": "REDE",
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "nome_urna": "GILBERTO VASCONCELOS",
+     "partido": "PSTU",
+     "situacao": "Não eleito"
+    },
+    "22": {
+     "nome_urna": "PROFESSORA MARIA DO CARMO",
+     "partido": "PL",
+     "situacao": "2º turno"
+    },
+    "33": {
+     "nome_urna": "CABO DACIOLO",
+     "partido": "MOBILIZA",
+     "situacao": "Não eleito"
+    },
+    "70": {
+     "nome_urna": "DAVID ALMEIDA",
+     "partido": "AVANTE",
+     "situacao": "Não eleito"
+    }
+   }
+  },
+  "df": {
+   "id": "df",
+   "tipo": "uf",
+   "nome": "Distrito Federal",
+   "regiao": "co",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-04T20:22:29-03:00",
+   "atualizado_em": "2026-10-04T20:22:29-03:00",
+   "secoes": {
+    "previstas": 6969,
+    "totalizadas": 6969,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 2243988,
+    "apto_secoes_totalizadas": 2243988
+   },
+   "comparecimento": {
+    "votos": 1817921,
+    "pct": 81.013
+   },
+   "abstencao": {
+    "votos": 426067,
+    "pct": 18.987
+   },
+   "votos": {
+    "validos": 1651394,
+    "base_pct": 1653237,
+    "brancos": 74774,
+    "nulos": 89910,
+    "anulados_sub_judice": 1843,
+    "total": 1817921
+   },
+   "candidatos": {
+    "11": {
+     "votos": 825530,
+     "pct": 49.9342,
+     "situacao": "2º turno"
+    },
+    "13": {
+     "votos": 569930,
+     "pct": 34.4736,
+     "situacao": "2º turno"
+    },
+    "45": {
+     "votos": 140765,
+     "pct": 8.5145,
+     "situacao": "Não eleito"
+    },
+    "30": {
+     "votos": 72148,
+     "pct": 4.364,
+     "situacao": "Não eleito"
+    },
+    "40": {
+     "votos": 36828,
+     "pct": 2.2276,
+     "situacao": "Não eleito"
+    },
+    "80": {
+     "votos": 3958,
+     "pct": 0.2394,
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "votos": 1640,
+     "pct": 0.0992,
+     "situacao": "Não eleito"
+    },
+    "36": {
+     "votos": 1172,
+     "pct": 0.0709,
+     "situacao": "Não eleito"
+    },
+    "28": {
+     "votos": 671,
+     "pct": 0.0406,
+     "situacao": "Não eleito"
+    },
+    "29": {
+     "votos": 595,
+     "pct": 0.036,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "11",
+   "margem": {
+    "votos": 255600,
+    "pp": 15.4606
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "29": {
+     "nome_urna": "EXPEDITO MENDONÇA",
+     "partido": "PCO",
+     "situacao": "Não eleito"
+    },
+    "11": {
+     "nome_urna": "CELINA LEÃO",
+     "partido": "PP",
+     "situacao": "2º turno"
+    },
+    "80": {
+     "nome_urna": "PROFESSORA SAMARA MINEIRO",
+     "partido": "UP",
+     "situacao": "Não eleito"
+    },
+    "45": {
+     "nome_urna": "PAULA BELMONTE",
+     "partido": "PSDB",
+     "situacao": "Não eleito"
+    },
+    "40": {
+     "nome_urna": "CAPPELLI",
+     "partido": "PSB",
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "nome_urna": "PROFESSOR ROBSON",
+     "partido": "PSTU",
+     "situacao": "Não eleito"
+    },
+    "13": {
+     "nome_urna": "LEANDRO GRASS",
+     "partido": "PT",
+     "situacao": "2º turno"
+    },
+    "28": {
+     "nome_urna": "RICO PINHEIRO",
+     "partido": "PRTB",
+     "situacao": "Não eleito"
+    },
+    "36": {
+     "nome_urna": "ELISSON",
+     "partido": "AGIR",
+     "situacao": "Não eleito"
+    },
+    "30": {
+     "nome_urna": "KIKO CAPUTO",
+     "partido": "NOVO",
+     "situacao": "Não eleito"
+    }
+   }
+  },
+  "es": {
+   "id": "es",
+   "tipo": "uf",
+   "nome": "Espírito Santo",
+   "regiao": "se",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-04T20:56:14-03:00",
+   "atualizado_em": "2026-10-04T20:56:14-03:00",
+   "secoes": {
+    "previstas": 9844,
+    "totalizadas": 9844,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 2987584,
+    "apto_secoes_totalizadas": 2987584
+   },
+   "comparecimento": {
+    "votos": 2348612,
+    "pct": 78.6124
+   },
+   "abstencao": {
+    "votos": 638972,
+    "pct": 21.3876
+   },
+   "votos": {
+    "validos": 2112171,
+    "base_pct": 2112171,
+    "brancos": 110040,
+    "nulos": 126401,
+    "anulados_sub_judice": 0,
+    "total": 2348612
+   },
+   "candidatos": {
+    "10": {
+     "votos": 1048633,
+     "pct": 49.6472,
+     "situacao": "2º turno"
+    },
+    "15": {
+     "votos": 719397,
+     "pct": 34.0596,
+     "situacao": "2º turno"
+    },
+    "13": {
+     "votos": 323483,
+     "pct": 15.3152,
+     "situacao": "Não eleito"
+    },
+    "14": {
+     "votos": 17988,
+     "pct": 0.8516,
+     "situacao": "Não eleito"
+    },
+    "80": {
+     "votos": 2670,
+     "pct": 0.1264,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "10",
+   "margem": {
+    "votos": 329236,
+    "pp": 15.5876
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "10": {
+     "nome_urna": "LORENZO PAZOLINI",
+     "partido": "REPUBLICANOS",
+     "situacao": "2º turno"
+    },
+    "15": {
+     "nome_urna": "RICARDO FERRAÇO",
+     "partido": "MDB",
+     "situacao": "2º turno"
+    },
+    "13": {
+     "nome_urna": "HELDER SALOMÃO",
+     "partido": "PT",
+     "situacao": "Não eleito"
+    },
+    "80": {
+     "nome_urna": "RAFAEL DEMUNER",
+     "partido": "UP",
+     "situacao": "Não eleito"
+    },
+    "14": {
+     "nome_urna": "BRENO BARCELOS",
+     "partido": "MISSÃO",
+     "situacao": "Não eleito"
+    }
+   }
+  },
+  "rj": {
+   "id": "rj",
+   "tipo": "uf",
+   "nome": "Rio de Janeiro",
+   "regiao": "se",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-04T22:19:52-03:00",
+   "atualizado_em": "2026-10-04T22:19:52-03:00",
+   "secoes": {
+    "previstas": 37675,
+    "totalizadas": 37675,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 12842517,
+    "apto_secoes_totalizadas": 12842517
+   },
+   "comparecimento": {
+    "votos": 9845867,
+    "pct": 76.6662
+   },
+   "abstencao": {
+    "votos": 2996650,
+    "pct": 23.3338
+   },
+   "votos": {
+    "validos": 8394627,
+    "base_pct": 8669038,
+    "brancos": 501537,
+    "nulos": 675292,
+    "anulados_sub_judice": 274411,
+    "total": 9845867
+   },
+   "candidatos": {
+    "22": {
+     "votos": 4271199,
+     "pct": 49.2696,
+     "situacao": "2º turno"
+    },
+    "55": {
+     "votos": 3706984,
+     "pct": 42.7612,
+     "situacao": "2º turno"
+    },
+    "10": {
+     "votos": 274411,
+     "pct": 3.1654,
+     "situacao": "Não eleito"
+    },
+    "50": {
+     "votos": 235347,
+     "pct": 2.7148,
+     "situacao": "Não eleito"
+    },
+    "14": {
+     "votos": 84889,
+     "pct": 0.9792,
+     "situacao": "Não eleito"
+    },
+    "30": {
+     "votos": 45359,
+     "pct": 0.5232,
+     "situacao": "Não eleito"
+    },
+    "80": {
+     "votos": 33430,
+     "pct": 0.3856,
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "votos": 14642,
+     "pct": 0.1689,
+     "situacao": "Não eleito"
+    },
+    "29": {
+     "votos": 2777,
+     "pct": 0.032,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "22",
+   "margem": {
+    "votos": 564215,
+    "pp": 6.5084
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "22": {
+     "nome_urna": "DOUGLAS RUAS",
+     "partido": "PL",
+     "situacao": "2º turno"
+    },
+    "30": {
+     "nome_urna": "ANDRÉ MARINHO",
+     "partido": "NOVO",
+     "situacao": "Não eleito"
+    },
+    "29": {
+     "nome_urna": "LUAN MONTEIRO",
+     "partido": "PCO",
+     "situacao": "Não eleito"
+    },
+    "55": {
+     "nome_urna": "EDUARDO PAES",
+     "partido": "PSD",
+     "situacao": "2º turno"
+    },
+    "80": {
+     "nome_urna": "JULIETE",
+     "partido": "UP",
+     "situacao": "Não eleito"
+    },
+    "50": {
+     "nome_urna": "WILLIAM SIRI",
+     "partido": "PSOL",
+     "situacao": "Não eleito"
+    },
+    "10": {
+     "nome_urna": "GAROTINHO",
+     "partido": "REPUBLICANOS",
+     "situacao": "Não eleito"
+    },
+    "14": {
+     "nome_urna": "CORONEL BUSNELLO",
+     "partido": "MISSÃO",
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "nome_urna": "CYRO GARCIA",
+     "partido": "PSTU",
+     "situacao": "Não eleito"
+    }
+   }
+  },
+  "rn": {
+   "id": "rn",
+   "tipo": "uf",
+   "nome": "Rio Grande do Norte",
+   "regiao": "ne",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-04T23:01:26-03:00",
+   "atualizado_em": "2026-10-04T23:01:26-03:00",
+   "secoes": {
+    "previstas": 8115,
+    "totalizadas": 8115,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 2656207,
+    "apto_secoes_totalizadas": 2656207
+   },
+   "comparecimento": {
+    "votos": 2167714,
+    "pct": 81.6094
+   },
+   "abstencao": {
+    "votos": 488493,
+    "pct": 18.3906
+   },
+   "votos": {
+    "validos": 1986441,
+    "base_pct": 1986668,
+    "brancos": 76524,
+    "nulos": 104522,
+    "anulados_sub_judice": 227,
+    "total": 2167714
+   },
+   "candidatos": {
+    "44": {
+     "votos": 733809,
+     "pct": 36.9367,
+     "situacao": "2º turno"
+    },
+    "13": {
+     "votos": 718300,
+     "pct": 36.156,
+     "situacao": "2º turno"
+    },
+    "22": {
+     "votos": 530580,
+     "pct": 26.707,
+     "situacao": "Não eleito"
+    },
+    "80": {
+     "votos": 1466,
+     "pct": 0.0738,
+     "situacao": "Não eleito"
+    },
+    "16": {
+     "votos": 1388,
+     "pct": 0.0699,
+     "situacao": "Não eleito"
+    },
+    "27": {
+     "votos": 464,
+     "pct": 0.0234,
+     "situacao": "Não eleito"
+    },
+    "36": {
+     "votos": 434,
+     "pct": 0.0218,
+     "situacao": "Não eleito"
+    },
+    "29": {
+     "votos": 227,
+     "pct": 0.0114,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "44",
+   "margem": {
+    "votos": 15509,
+    "pp": 0.7807
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "36": {
+     "nome_urna": "RODRIGO DE BOLSONARO",
+     "partido": "AGIR",
+     "situacao": "Não eleito"
+    },
+    "27": {
+     "nome_urna": "GODEIRO LINHARESS",
+     "partido": "DC",
+     "situacao": "Não eleito"
+    },
+    "80": {
+     "nome_urna": "ARINALDA DO MLB",
+     "partido": "UP",
+     "situacao": "Não eleito"
+    },
+    "13": {
+     "nome_urna": "CADU DE LULA",
+     "partido": "PT",
+     "situacao": "2º turno"
+    },
+    "16": {
+     "nome_urna": "DÁRIO BARBOSA",
+     "partido": "PSTU",
+     "situacao": "Não eleito"
+    },
+    "22": {
+     "nome_urna": "ÁLVARO DIAS",
+     "partido": "PL",
+     "situacao": "Não eleito"
+    },
+    "44": {
+     "nome_urna": "ALLYSON",
+     "partido": "UNIÃO",
+     "situacao": "2º turno"
+    },
+    "29": {
+     "nome_urna": "HENRIQUE LYRA",
+     "partido": "PCO",
+     "situacao": "Não eleito"
+    }
+   }
+  },
+  "to": {
+   "id": "to",
+   "tipo": "uf",
+   "nome": "Tocantins",
+   "regiao": "n",
+   "situacao": "concluida",
+   "totalizado_tse": "2026-10-04T20:59:57-03:00",
+   "atualizado_em": "2026-10-04T20:59:57-03:00",
+   "secoes": {
+    "previstas": 4384,
+    "totalizadas": 4384,
+    "pct": 100.0
+   },
+   "eleitorado": {
+    "total": 1180433,
+    "apto_secoes_totalizadas": 1180433
+   },
+   "comparecimento": {
+    "votos": 963810,
+    "pct": 81.6489
+   },
+   "abstencao": {
+    "votos": 216623,
+    "pct": 18.3511
+   },
+   "votos": {
+    "validos": 848629,
+    "base_pct": 848629,
+    "brancos": 27085,
+    "nulos": 88096,
+    "anulados_sub_judice": 0,
+    "total": 963810
+   },
+   "candidatos": {
+    "44": {
+     "votos": 386260,
+     "pct": 45.5158,
+     "situacao": "2º turno"
+    },
+    "45": {
+     "votos": 372848,
+     "pct": 43.9353,
+     "situacao": "2º turno"
+    },
+    "55": {
+     "votos": 69967,
+     "pct": 8.2447,
+     "situacao": "Não eleito"
+    },
+    "30": {
+     "votos": 13173,
+     "pct": 1.5523,
+     "situacao": "Não eleito"
+    },
+    "50": {
+     "votos": 5109,
+     "pct": 0.602,
+     "situacao": "Não eleito"
+    },
+    "27": {
+     "votos": 1272,
+     "pct": 0.1499,
+     "situacao": "Não eleito"
+    }
+   },
+   "lider": "44",
+   "margem": {
+    "votos": 13412,
+    "pp": 1.5805
+   },
+   "eleito": null,
+   "candidatos_info": {
+    "45": {
+     "nome_urna": "VICENTINHO JÚNIOR",
+     "partido": "PSDB",
+     "situacao": "2º turno"
+    },
+    "27": {
+     "nome_urna": "DU PEREIRA",
+     "partido": "DC",
+     "situacao": "Não eleito"
+    },
+    "30": {
+     "nome_urna": "ATAIDES DE OLIVEIRA",
+     "partido": "NOVO",
+     "situacao": "Não eleito"
+    },
+    "55": {
+     "nome_urna": "LAUREZ MOREIRA",
+     "partido": "PSD",
+     "situacao": "Não eleito"
+    },
+    "50": {
+     "nome_urna": "PROF WITER NAVES",
+     "partido": "PSOL",
+     "situacao": "Não eleito"
+    },
+    "44": {
+     "nome_urna": "PROFESSORA DORINHA",
+     "partido": "UNIÃO",
+     "situacao": "2º turno"
+    }
+   }
+  }
+ }
+}

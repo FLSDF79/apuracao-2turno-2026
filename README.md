@@ -6,13 +6,21 @@ Painel independente (pt-BR, modo escuro, mobile) da apuração do **2º turno de
 
 ## Como funciona
 
-- **Site 100% estático** (HTML + CSS + JS puro, sem bibliotecas, sem servidor, grátis no GitHub Pages).
-- O navegador de cada visitante busca direto os JSON oficiais em `resultados.tse.jus.br`.
-  Testado em 06/10/2026: o TSE responde `Access-Control-Allow-Origin` com a origem de quem pede
-  (inclusive `*.github.io`), e aceita `If-None-Match` (responde `304` quando nada mudou). Por isso **não precisa de proxy**.
-- Atualiza a cada ~45 s (com variação aleatória de até 5 s), usando `cache: "no-cache"` → o navegador revalida por ETag.
-  Depois de 100% totalizado, passa a checar a cada 5 min.
-- Histórico da noite (para o gráfico de evolução) fica no `localStorage` do navegador.
+- **Coletor (frente 2, em construção):** único, no servidor, conversa com o TSE e publica snapshots prontos
+  (`api/estado.json`, `api/historico.json`, `api/governador.json`). Todas as somas, percentuais e a conferência são feitos lá.
+- **Página (esta pasta):** HTML, CSS e JavaScript puro, sem build e sem dependências. Só lê os snapshots do coletor
+  a cada 10 s (revalidando por ETag) e apresenta. Não consulta o TSE e não recalcula nada.
+- O formato que a página consome está em [docs/interface/contrato-provisorio.md](docs/interface/contrato-provisorio.md)
+  e fica isolado em `js/contrato.js`; quando o coletor fechar o contrato definitivo, muda só esse arquivo.
+
+## Áreas do painel
+
+Visão Brasil · Mapa (estados ou regiões, geográfico ou em grade, intensidade pela margem opcional, barras de vantagem em votos,
+exterior em cartão próprio) · Estados e regiões (tabelas ordenáveis com filtro) · Conferência (A soma territorial × B total do TSE,
+classificada) · Histórico (por horário ou por % totalizado, com correções oficiais marcadas) · Fontes e saúde · Governador (AC, AM, DF, ES, RJ, RN e TO, em módulo separado).
+
+Também: modo TV (`?tv=1` ou botão), tema claro e escuro, cores fixas e trocáveis por candidato (salvas no navegador),
+exportação CSV/JSON com origem e horário, horário de Brasília, crédito de autoria e selo da NFLS.AI Arena.
 
 ## Endpoints do TSE usados (estrutura de 2026)
 
@@ -33,16 +41,24 @@ Códigos (do `ele-c.json`): ciclo `ele2026`, pleito 1º turno `3220`, **eleiçã
 
 Obs.: o antigo caminho `dados-simplificados/...-r.json` (usado em 2022/2024) **não existe** para 2026 (404).
 
-## Modos
+## Pré-visualização sem coletor
 
-- Padrão (automático): tenta o 2º turno (6258, ou o código que o `ele-c.json` indicar). Enquanto o TSE não publicar
-  o arquivo, mostra o **1º turno de 04/10 como MODO TESTE** e troca sozinho quando o 2º turno aparecer.
-- `?turno=1` força o 1º turno; `?turno=2` força o 2º turno; `?eleicao=NNNN` força qualquer código.
-- `?demo=1` **simulação** (progressão fictícia a partir do resultado final do 1º turno), só para testar gráfico/mapa/projeção.
+Enquanto o coletor não está publicado, a página aceita dados de teste gerados a partir dos arquivos oficiais do 1º turno
+guardados em `tests/fixtures` (script descartável `dev/gerar_amostra.py`, a apagar quando o coletor existir):
+
+- `?fonte=amostra`: resultado final real do 1º turno (04/10) no formato do painel.
+- `?fonte=simulacao`: **simulação** de noite de apuração (números fictícios), com UF indisponível, UF defasada, UF sem votos e uma correção oficial no histórico, para testar os estados visuais.
+
+Para rodar localmente: `python3 -m http.server` na raiz e abrir `http://localhost:8000/?fonte=simulacao`.
 
 ## Configuração
 
-Tudo em `config.js` (códigos, candidatos/cores, intervalo, tolerância).
+`config.js`: onde ler os snapshots, intervalo de releitura, limite de defasagem, candidatos e cores padrão, UFs com 2º turno para governador e links.
+
+## Testes
+
+- `python3 -m unittest discover -s tests`: consistência dos arquivos oficiais guardados.
+- `node --test tests/interface/*.test.js`: adaptador de dados, estados visuais, cores, horários e exportação da página.
 
 ## Conferência
 
@@ -51,9 +67,8 @@ No dia: `python3 tools/validar.py 6258`.
 
 ## Limitações
 
-- Frequência real = frequência com que o TSE regera os arquivos (o `cache-control` do TSE é de ~3–60 s); o painel checa a cada ~45 s.
-- O gráfico de evolução só tem pontos a partir do momento em que o painel foi aberto naquele navegador.
-- Mapa por município não incluído (seriam 5.570 arquivos por ciclo — inviável sem servidor).
-- Projeção é uma conta simples (estimativa), não resultado oficial.
+- Frequência real = frequência com que o TSE regera os arquivos e com que o coletor os lê.
+- Mapa por município não incluído.
+- O painel não faz projeção: liderança parcial não é resultado.
 
 Mapa: malha estadual do IBGE (API de malhas v3), embutida em `data/br-uf.geojson`.

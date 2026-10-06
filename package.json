@@ -1,0 +1,9 @@
+{
+  "name": "apuracao-2turno-2026",
+  "private": true,
+  "type": "module",
+  "description": "Painel independente da apuração do 2º turno de 2026 com dados oficiais do TSE.",
+  "scripts": {
+    "test:interface": "node --test tests/interface/*.test.js"
+  }
+}
