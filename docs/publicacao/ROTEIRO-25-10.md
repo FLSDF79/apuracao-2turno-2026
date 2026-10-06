@@ -40,7 +40,7 @@ Marcos do plano: primeira versão ponta a ponta até 09/10, no ar até 14/10, en
 ## Antes de 18/10 (uma vez)
 
 1. **Conta Cloudflare.** Em *My Profile > API Tokens > Create Token*, modelo **Edit Cloudflare Workers**. Copie também o **Account ID** (página *Workers & Pages*, barra lateral).
-2. **Segredo de administração.** `npx wrangler secret put ADMIN_TOKEN` (valor de `openssl rand -hex 32`, guardado num gerenciador de senhas).
+2. **Segredo de administração.** Crie também o segredo `ADMIN_TOKEN` no GitHub (valor de `openssl rand -hex 32`, guardado num gerenciador de senhas); o fluxo de publicação o copia para o Worker. Pelo terminal: `npx wrangler secret put ADMIN_TOKEN`.
 3. **Segredos no GitHub.** Em *Settings > Secrets and variables > Actions* do repositório, crie `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
 4. **Merge na ordem** #1 (fontes), #3 (coletor), #2 (página) e por último o PR desta frente.
 5. **Publicar o ensaio.** Em *Actions > Publicar na Cloudflare > Run workflow*, escolha `ensaio`. O fluxo roda todos os testes, publica e confere o site no ar.
