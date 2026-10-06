@@ -4,7 +4,7 @@
 import * as F from "./formato.js";
 import {
   UFS, REGIOES, REGIAO_DA_UF, NOMES, SITUACOES, CONFERENCIA, MODOS, MARCAS, PUBLICACAO,
-  normalizar, assinaturaConteudo, normalizarHistorico, correcoesHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, FAIXAS_MARGEM
+  normalizar, assinaturaConteudo, normalizarHistorico, correcoesHistorico, eventosHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, FAIXAS_MARGEM
 } from "./contrato.js";
 import { PALETAS, carregarCores, salvarCores, trocar } from "./cores.js";
 import { prepararGeo, svgGeo, svgGrade, defs } from "./mapa.js";
@@ -29,10 +29,10 @@ const URLS = {
 };
 
 const E = {
-  bruto: null, modelo: null, problemas: [], historico: [], correcoes: [], gov: null, saude: null,
+  bruto: null, modelo: null, problemas: [], historico: [], correcoes: [], eventos: [], gov: null, saude: null,
   ultimoOk: null, erro: null, carregou: false, ciclo: 0, timer: null,
   // assinatura do conteúdo: muda só quando os números mudam (não a cada consulta)
-  assinatura: null, mudouLocal: null, foraDeOrdem: 0, latenciaS: null,
+  assinatura: null, mudouLocal: null, foraDeOrdem: 0, latenciaS: null, histPendente: false, histLido: false,
   cores: carregarCores(CFG.candidatos),
   op: { nivel: "uf", forma: "geo", intensidade: true, eixo: "tempo", regiao: "todas", busca: "", ordem: { col: "uf", asc: true } },
   geo: null, selecionado: null
@@ -86,14 +86,22 @@ async function atualizar() {
       E.bruto = snap; E.modelo = modelo; E.problemas = problemas;
       const pub = Date.parse(modelo.tempos.publicacaoTSE ?? "");
       if (mudou || E.latenciaS === null) E.latenciaS = Number.isFinite(pub) ? Math.max(0, Math.round((Date.now() - pub) / 1000)) : null;
-      if (mudou) anunciar();
+      if (mudou) { anunciar(); E.histPendente = true; }
     }
     E.ultimoOk = Date.now(); E.erro = null;
   } catch (err) {
     // preserva o último dado válido e mostra a defasagem
     E.erro = err.name === "AbortError" ? "tempo esgotado" : err.message || String(err);
   }
-  try { const h = await buscar(URLS.historico); E.historico = normalizarHistorico(h); E.correcoes = correcoesHistorico(h); } catch { /* mantém o anterior */ }
+  // Histórico só muda quando o arquivo nacional muda; relê nessa hora e, para as ocorrências do coletor,
+  // a cada 6 ciclos. Poupa a cota de requisições do servidor (plano gratuito).
+  if (E.histPendente || !E.histLido || E.ciclo % 6 === 0) {
+    try {
+      const h = await buscar(URLS.historico);
+      E.historico = normalizarHistorico(h); E.correcoes = correcoesHistorico(h); E.eventos = eventosHistorico(h);
+      E.histPendente = false; E.histLido = true;
+    } catch { /* mantém o anterior e tenta de novo no próximo ciclo */ }
+  }
   if (E.ciclo % 3 === 1 || !E.gov) {
     try { E.gov = normalizarGovernador(await buscar(URLS.governador)); } catch { /* mantém o anterior */ }
     try { E.saude = normalizarSaude(await buscar(URLS.saude)); } catch { /* mantém o anterior */ }
@@ -108,6 +116,7 @@ async function atualizar() {
 function renderTudo() {
   aplicarCoresCSS();
   renderMarcaTeste();
+  renderSobretitulo();
   renderAvisos();
   renderSaude();
   renderTempos();
@@ -149,7 +158,7 @@ function renderMarcaTeste() {
   document.body.classList.toggle("modo-teste", !!mk);
   if (mk) {
     $("faixaTit").textContent = mk.faixa;
-    $("faixaTxt").innerHTML = `${F.esc(mk.detalhe)}${FONTE !== "api" ? ' <a href="./">Ver dados ao vivo</a>' : ""}`;
+    $("faixaTxt").innerHTML = `${F.esc(E.modelo?.avisoModo || mk.detalhe)}${FONTE !== "api" ? ' <a href="./">Ver dados ao vivo</a>' : ""}`;
     document.documentElement.style.setProperty("--marca", JSON.stringify(mk.marca));
   }
   const base = "Apuração 2º turno 2026 · Presidente";
@@ -162,6 +171,14 @@ function anunciar() {
   const [A, B] = principais();
   $("anuncio").textContent = `Números atualizados pelo TSE: ${F.pct(br.secoes.pct)} das seções totalizadas. ${A.nome} ${F.pct(br.candidatos[A.numero]?.pct)}, ${B.nome} ${F.pct(br.candidatos[B.numero]?.pct)}.`;
   document.body.classList.remove("pulso"); void document.body.offsetWidth; document.body.classList.add("pulso");
+}
+
+// Sobretítulo vem do arquivo lido: dado do 1º turno nunca aparece com o rótulo "2º turno".
+function renderSobretitulo() {
+  const el = $("sobretitulo"), e = E.modelo?.eleicao;
+  if (!e || !e.turno) return;
+  const data = /^\d{2}\/\d{2}/.test(e.data || "") ? e.data.slice(0, 5) : "";
+  el.textContent = ["Eleições 2026", e.cargo || "Presidente", `${e.turno}º turno`, data].filter(Boolean).join(" · ");
 }
 
 function renderVazio() {
@@ -220,6 +237,8 @@ function renderBrasil() {
   $("totDet").textContent = `${F.int(br.secoes.totalizadas)} de ${F.int(br.secoes.previstas)} seções · ${SITUACOES[br.situacao]}`;
 
   const [A, B] = principais();
+  // Com 100% totalizado não é mais "parcial", mas "eleito" continua só quando o TSE publica.
+  const totalizada = (pctSec ?? 0) >= 100 || ["totalizada_100", "concluida"].includes(m.eleicao.publicacao);
   const card = (c) => {
     const d = br.candidatos[c.numero] || {};
     const eleito = br.eleito === c.numero;
@@ -230,7 +249,7 @@ function renderBrasil() {
       <div class="cand-cab"><div><div class="cand-nome" title="${F.esc(c.nomeUrna)}">${F.esc(c.nome)}</div><div class="cand-meta">${F.esc(c.partido || "")}${c.vice ? ` · vice ${F.esc(F.nomeLegivel(c.vice))}` : ""} · cor ${p.nome}</div></div><span class="cand-num" aria-label="número">${F.esc(c.numero)}</span></div>
       <div class="cand-pct">${F.pct(d.pct).replace("%", "<small>%</small>")}</div>
       <div class="cand-votos">${F.int(d.votos)} <span>votos</span></div>
-      ${eleito ? `<span class="selo-sit eleito">Eleito · publicado pelo TSE</span>` : frente ? `<span class="selo-sit">À frente na apuração parcial</span>` : ""}
+      ${eleito ? `<span class="selo-sit eleito">Eleito · publicado pelo TSE</span>` : frente ? `<span class="selo-sit">${totalizada ? "Mais votado · 100% totalizado, sem declaração de eleito" : "À frente na apuração parcial"}</span>` : ""}
       ${eleito ? "" : sitTSE}
     </article>`;
   };
@@ -558,6 +577,17 @@ function renderHistorico() {
 }
 
 // ---------------------------------------------------------------- Fontes e saúde
+// Hash do corpo exato recebido do TSE; com o coletor publicado, o link abre a cópia imutável para conferência.
+function linkSnapshot(sha) {
+  const curto = F.esc(sha.slice(0, 12));
+  return FONTE === "api" ? `<a href="${F.esc(BASE + "snapshots/" + sha + ".json")}" target="_blank" rel="noopener" title="${F.esc(sha)}">${curto}…</a>` : `<span title="${F.esc(sha)}">${curto}…</span>`;
+}
+
+const EVENTOS = {
+  arquivo_rejeitado: "Arquivo rejeitado (incompleto ou inválido)", fora_de_ordem: "Versão mais antiga recebida e ignorada",
+  correcao_oficial: "Correção oficial aceita", alerta_aritmetico: "Alerta aritmético no arquivo oficial", configuracao_rejeitada: "Configuração rejeitada"
+};
+
 function renderFontes() {
   const m = E.modelo;
   const ok = m.fontes.filter((f) => f.situacao === "atualizado").length;
@@ -571,7 +601,8 @@ function renderFontes() {
     <div><b>Rodada do coletor</b><span class="mono">${F.dh(m.coleta.em)}</span></div>
     <div><b>Esta página recebeu</b><span class="mono">${E.ultimoOk ? F.dh(new Date(E.ultimoOk).toISOString()) : "—"}</span></div>
     <div><b>Latência observada</b><span>${m.teste ? "não medida em dados de teste" : E.latenciaS === null ? "—" : `${E.latenciaS.toLocaleString("pt-BR")} s da publicação do TSE até esta tela`}</span></div>
-    <div><b>Snapshot</b><span class="mono">${m.snapshot ? `${F.esc(String(m.snapshot.id ?? "—"))} · sha256 ${F.esc((m.snapshot.sha256 || "—").slice(0, 12))}` : `assinatura local ${F.esc(E.assinatura || "—")}`}</span></div>
+    <div><b>Arquivo nacional em uso</b><span class="mono">${m.sha256BR ? `sha256 ${linkSnapshot(m.sha256BR)}` : m.snapshot ? `${F.esc(String(m.snapshot.id ?? "—"))} · sha256 ${F.esc((m.snapshot.sha256 || "—").slice(0, 12))}` : `assinatura local ${F.esc(E.assinatura || "—")}`}</span></div>
+    ${sd?.latenciaMs && !m.teste ? `<div><b>Resposta do TSE ao coletor</b><span>mediana ${F.int(sd.latenciaMs.mediana)} ms · máx. ${F.int(sd.latenciaMs.max)} ms</span></div>` : ""}
     <div><b>Respostas fora de ordem ignoradas</b><span>${E.foraDeOrdem}</span></div>
     <div><b>Intervalo</b><span>${m.coleta.intervaloS ? m.coleta.intervaloS + " s" : "—"}</span></div>
     <div><b>Arquivos respondendo</b><span>${ok} de ${m.fontes.length}</span></div>
@@ -582,8 +613,12 @@ function renderFontes() {
     <div><b>Pausa</b><span>${sd.pausa ? `até ${F.h(sd.pausa.ate)} (${F.esc(sd.pausa.motivo || "")})` : "nenhuma"}</span></div>` : "") +
     (E.problemas.length ? `<div style="grid-column:1/-1"><b>Inconsistências no snapshot</b><span class="nota">${E.problemas.map(F.esc).join(" ")}</span></div>` : "");
   const nomeF = (id) => (id === "br" ? "Brasil" : NOMES[id] || id);
-  $("tabFontes").innerHTML = `<thead><tr><th scope="col">Recorte</th><th scope="col">Origem efetiva</th><th scope="col">HTTP</th><th scope="col">Totalizado TSE</th><th scope="col">Arquivo gerado</th><th scope="col">Coletado</th><th scope="col">Atraso vs. nacional</th><th scope="col">Arquivo</th></tr></thead><tbody>` +
-    m.fontes.map((f) => `<tr><td>${F.esc(nomeF(f.id))}</td><td>${F.esc(f.origem || "—")}${f.erro ? `<br><span class="sit indisponivel">${F.esc(f.erro)}</span>` : ""}</td><td>${f.http ?? "—"}${f.situacao && f.situacao !== "atualizado" ? ` <span class="sit ${f.situacao === "defasado" ? "defasada" : "indisponivel"}">${F.esc(f.situacao)}</span>` : ""}</td><td class="mono">${F.dh(f.totalizado)}</td><td class="mono">${F.dh(f.gerado)}</td><td class="mono">${F.dh(f.coletado)}</td><td>${f.atrasoMin == null ? "—" : f.atrasoMin === 0 ? "mesmo horário" : f.atrasoMin + " min"}</td><td>${f.url ? `<a href="${F.esc(f.url)}" target="_blank" rel="noopener">JSON</a>` : "—"}</td></tr>`).join("") + `</tbody>`;
+  $("tabFontes").innerHTML = `<thead><tr><th scope="col">Recorte</th><th scope="col">Origem efetiva</th><th scope="col">HTTP</th><th scope="col">Totalizado TSE</th><th scope="col">Arquivo gerado</th><th scope="col">Coletado</th><th scope="col">Atraso vs. nacional</th><th scope="col">SHA-256 em uso</th><th scope="col">Arquivo</th></tr></thead><tbody>` +
+    m.fontes.map((f) => `<tr><td>${F.esc(nomeF(f.id))}</td><td>${F.esc(f.origem || "—")}${f.erro ? `<br><span class="sit indisponivel">${F.esc(f.erro)}</span>` : ""}</td><td>${f.http ?? "—"}${f.situacao && f.situacao !== "atualizado" ? ` <span class="sit ${f.situacao === "defasado" ? "defasada" : "indisponivel"}">${F.esc(f.situacao)}</span>` : ""}</td><td class="mono">${F.dh(f.totalizado)}</td><td class="mono">${F.dh(f.gerado)}</td><td class="mono">${F.dh(f.coletado)}</td><td>${f.atrasoMin == null ? "—" : f.atrasoMin === 0 ? "mesmo horário" : f.atrasoMin + " min"}</td><td class="mono">${f.sha256 ? linkSnapshot(f.sha256) : "—"}${f.alertas.length ? `<br><span class="sit defasada" title="${F.esc(f.alertas.join("; "))}">${f.alertas.length} alerta(s) aritmético(s)</span>` : ""}</td><td>${f.url ? `<a href="${F.esc(f.url)}" target="_blank" rel="noopener">JSON</a>` : "—"}</td></tr>`).join("") + `</tbody>`;
+  const ev = E.eventos.slice(-12).reverse();
+  $("eventos").innerHTML = `<h3 class="rotulo-mini">Ocorrências registradas pelo coletor</h3>` + (ev.length
+    ? `<ul>${ev.map((e) => `<li><span class="mono">${F.dh(e.em)}</span> ${F.esc(EVENTOS[e.tipo] || e.tipo)}${e.recorte ? ` · ${F.esc(nomeF(e.recorte))}` : ""}${e.detalhe ? ` · <span class="mudo">${F.esc(e.detalhe)}</span>` : ""}</li>`).join("")}</ul>`
+    : `<p class="nota">Nenhuma ocorrência: nenhum arquivo rejeitado, fora de ordem ou corrigido até agora.</p>`);
 }
 
 function renderLinksFixos() {

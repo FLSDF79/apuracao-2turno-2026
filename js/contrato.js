@@ -126,7 +126,9 @@ function territorio(id, { nome, tipo, regiao, coleta, resultado, atrasoMin, elei
     atrasoMin: num(atrasoMin),
     coleta: coleta ? {
       situacao: coleta.situacao || null, url: coleta.url || null, http: coleta.status_http ?? null,
-      ultimoSucesso: coleta.ultimo_sucesso || null, erro: coleta.ultimo_erro?.mensagem || null, correcao: !!coleta.correcao
+      ultimoSucesso: coleta.ultimo_sucesso || null, erro: coleta.ultimo_erro?.mensagem || null, correcao: !!coleta.correcao,
+      mudanca: coleta.ultima_mudanca || null, sha256: coleta.sha256 || null, alertas: Array.isArray(coleta.alertas) ? coleta.alertas : [],
+      foraDeOrdem: coleta.fora_de_ordem || null
     } : null,
     faltando: r?.faltando || [],
     secoes: { previstas: n(r?.secoes?.total, "secoes.total"), totalizadas: n(r?.secoes?.totalizadas, "secoes.totalizadas"), pct: num(i.pct_totalizadas) },
@@ -197,6 +199,7 @@ export function normalizar(snap, cfg) {
       id, url: c?.url || null, http: c?.status_http ?? null, situacao: c?.situacao || null,
       gerado: horario(r?.horario?.geracao), totalizado: horario(r?.horario?.totalizacao), coletado: c?.ultimo_sucesso || null,
       atrasoMin: id === "br" ? 0 : num(snap.territorios?.[id]?.atraso_vs_nacional_min), erro: c?.ultimo_erro?.mensagem || null,
+      mudanca: c?.ultima_mudanca || null, sha256: c?.sha256 || null, alertas: Array.isArray(c?.alertas) ? c.alertas : [],
       origem: id === "br" || id === "zz" ? "base TSE" : `base TSE (recorte ${id.toUpperCase()}; TRE-${id.toUpperCase()} sem arquivo próprio)`
     }));
 
@@ -214,12 +217,16 @@ export function normalizar(snap, cfg) {
       snapshot: sn ? { id: sn.id ?? null, sha256: sn.sha256 || null, mudouEm: sn.mudou_em || null, anterior: sn.anterior_sha256 || null } : null,
       // Os três horários que a tela mostra separados (seção 7): publicação da fonte, última consulta
       // bem-sucedida e última mudança efetiva (esta vem do snapshot ou do histórico, ver app.js).
+      // Preferência: bloco tempos do coletor; sem ele, os campos equivalentes do arquivo nacional.
       tempos: {
-        publicacaoTSE: terr.br.gerado || terr.br.totalizado,
-        totalizacaoTSE: terr.br.totalizado,
-        consultaOk: snap.brasil?.coleta?.ultimo_sucesso || null,
-        mudanca: sn?.mudou_em || null
+        publicacaoTSE: snap.tempos?.publicacao_fonte || terr.br.gerado || terr.br.totalizado,
+        totalizacaoTSE: snap.tempos?.totalizacao_fonte || terr.br.totalizado,
+        consultaOk: snap.tempos?.ultima_consulta_ok || snap.brasil?.coleta?.ultimo_sucesso || null,
+        mudanca: snap.tempos?.ultima_mudanca || sn?.mudou_em || snap.brasil?.coleta?.ultima_mudanca || null,
+        mudancaQualquer: snap.tempos?.ultima_mudanca_qualquer_recorte || null
       },
+      avisoModo: snap.aviso_modo || null,
+      sha256BR: snap.brasil?.coleta?.sha256 || sn?.sha256 || null,
       // Marca de teste: tudo que não é o 2º turno oficial ganha faixa e marca d'água.
       teste: modo !== "oficial" ? modo : turno !== null && turno !== 2 ? "outro_turno" : null,
       aviso: snap.aviso || null,
@@ -255,7 +262,7 @@ export function normalizar(snap, cfg) {
 
 // Assinatura do conteúdo de um snapshot, sem os campos que mudam a cada rodada mesmo sem número novo
 // (horários de coleta, gerado_em). Serve só para a página saber se algo mudou de fato; não é segurança.
-const VOLATEIS = new Set(["gerado_em", "coleta", "coleta_geral", "snapshot", "atraso_vs_nacional_min"]);
+const VOLATEIS = new Set(["gerado_em", "tempos", "coleta", "coleta_geral", "snapshot", "atraso_vs_nacional_min"]);
 export function assinaturaConteudo(snap) {
   const txt = JSON.stringify(snap ?? null, (k, v) => (VOLATEIS.has(k) ? undefined : v));
   let h = 0x811c9dc5; // FNV-1a 32 bits
@@ -274,6 +281,10 @@ export function normalizarHistorico(h) {
     }))
     .filter((p) => Number.isFinite(p.t))
     .sort((a, b) => a.t - b.t);
+}
+
+export function eventosHistorico(h) {
+  return (Array.isArray(h?.eventos) ? h.eventos : []).map((e) => ({ em: e.em || null, tipo: e.tipo || "?", recorte: e.recorte || null, detalhe: e.motivo || e.mensagem || e.detalhe || null }));
 }
 
 export function correcoesHistorico(h) {
@@ -297,6 +308,7 @@ export function normalizarSaude(s) {
   return {
     estado: c.estado || null, mensagem: c.mensagem || null, rodadaEm: c.rodada_em || null, intervaloS: num(c.intervalo_s),
     duracaoMs: num(c.rodada?.duracao_ms), requisicoes: num(c.rodada?.requisicoes), statusHttp: c.status_http || {},
+    latenciaMs: c.latencia_ms ? { mediana: num(c.latencia_ms.mediana), max: num(c.latencia_ms.max) } : null,
     pausa: c.pausa ? { ate: c.pausa.ate || null, motivo: c.pausa.motivo || null } : null,
     configuracao: s.configuracao ? { url: s.configuracao.url, coletada: s.configuracao.coletada_em, erro: s.configuracao.ultimo_erro } : null,
     origem: s.origem || null

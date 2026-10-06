@@ -19,8 +19,10 @@ jobs:
           node-version: "22"
       - name: Testes de unidade da interface
         run: node --test tests/interface/*.test.js
-      - name: Checagem de tipos (JSDoc + checkJs)
-        run: npx --yes -p typescript@5.9 tsc -p js/tsconfig.json
+      - name: Dependências de desenvolvimento (TypeScript só para checagem)
+        run: npm ci
+      - name: Checagem de tipos da página (JSDoc + checkJs)
+        run: npm run tipos:painel
 
   navegador:
     runs-on: ubuntu-latest

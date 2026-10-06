@@ -45,7 +45,7 @@ O prompt admite React/Next.js com TypeScript "ou alternativa tecnicamente justif
 
 Banco: o armazenamento SQLite do Durable Object guarda estado, últimos dados válidos e histórico. Não há banco separado, porque o volume é pequeno (dezenas de arquivos, poucas centenas de versões por noite) e um único escritor elimina concorrência.
 
-A checagem de tipos roda no CI do backend (`npm run tipos`) e da interface (`npm run tipos:interface`); `typescript` e `@types/node` são só dependências de desenvolvimento.
+A checagem de tipos roda no CI do backend (`npm run tipos`) e da interface (`npm run tipos:painel`); `typescript` e `@types/node` são só dependências de desenvolvimento.
 
 ## Segurança
 

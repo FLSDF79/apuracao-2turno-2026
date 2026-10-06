@@ -97,6 +97,16 @@ for (const [nome, q, pasta] of [["ensaio", "?fonte=ensaio", "exemplos/ensaio-1tu
       assert.equal(await p.pagina.$("#relogio"), null);
     });
 
+    test("cabeçalho e rótulo do placar seguem o arquivo lido", async () => {
+      const e = snap.eleicao;
+      assert.equal(await p.pagina.textContent("#sobretitulo"), `Eleições 2026 · ${e.cargo_nome} · ${e.turno}º turno · ${e.data.slice(0, 5)}`);
+      const placar = await p.pagina.textContent("#placar");
+      if (snap.brasil.oficial.indicadores.pct_totalizadas >= 100) {
+        assert.doesNotMatch(placar, /parcial/);
+        assert.match(placar, /100% totalizado, sem declaração de eleito/);
+      } else assert.match(placar, /À frente na apuração parcial/);
+    });
+
     test("identificação de teste destacada", async () => {
       assert.equal(await p.pagina.isVisible("#faixaTeste"), true);
       const tit = await p.pagina.textContent("#faixaTit");
@@ -276,12 +286,19 @@ describe("cenários de atualização e falha", () => {
   let base;
   before(async () => { base = await lerJSON("exemplos/simulado-2turno/v1/presidente.json"); });
   const json = (corpo) => ({ status: 200, contentType: "application/json", body: JSON.stringify(corpo) });
-  const comHorario = (snap, iso) => ({ ...structuredClone(snap), gerado_em: iso, coleta_geral: { ...snap.coleta_geral, rodada_em: iso }, brasil: { ...structuredClone(snap.brasil), coleta: { ...snap.brasil.coleta, ultimo_sucesso: iso } } });
+  // consulta = horário da consulta ao TSE; mudanca = última mudança efetiva (o coletor põe a mesma em gerado_em)
+  const comHorario = (snap, consulta, mudanca = consulta) => ({
+    ...structuredClone(snap), gerado_em: mudanca, coleta_geral: { ...snap.coleta_geral, rodada_em: consulta },
+    tempos: { ...snap.tempos, ultima_consulta_ok: consulta, ultima_mudanca: mudanca, ultima_mudanca_qualquer_recorte: mudanca },
+    brasil: { ...structuredClone(snap.brasil), coleta: { ...snap.brasil.coleta, ultimo_sucesso: consulta, ultima_mudanca: mudanca } }
+  });
+  let pedidosHistorico = 0;
   async function cenario(respostas, nome) {
     let i = 0;
+    pedidosHistorico = 0;
     const rotas = [
       ["**/dados/v1/presidente.json", (r) => { const x = respostas[Math.min(i++, respostas.length - 1)]; return typeof x === "function" ? x(r) : r.fulfill(json(x)); }],
-      ["**/dados/v1/historico.json", (r) => r.fulfill(json({ serie_brasil: [], correcoes: [] }))],
+      ["**/dados/v1/historico.json", (r) => { pedidosHistorico++; return r.fulfill(json({ serie_brasil: [], correcoes: [] })); }],
       ["**/dados/v1/governador.json", (r) => r.fulfill(json({ ufs: {} }))],
       ["**/dados/v1/saude.json", (r) => r.fulfill(json({ coletor: {} }))]
     ];
@@ -292,28 +309,30 @@ describe("cenários de atualização e falha", () => {
   }
 
   test("conteúdo igual: consulta avança, 'última mudança' não", async () => {
-    const a = comHorario(base, "2026-10-25T21:10:32.000Z"), b = comHorario(base, "2026-10-25T21:10:45.000Z");
+    const a = comHorario(base, "2026-10-25T21:10:32.000Z"), b = comHorario(base, "2026-10-25T21:10:45.000Z", "2026-10-25T21:10:32.000Z");
     const c = await cenario([a, b, b]);
     const mud1 = await c.pagina.textContent("#tMud"), con1 = await c.pagina.textContent("#tCon");
     await c.proxima(); await c.proxima();
     assert.equal(await c.pagina.textContent("#tMud"), mud1);
     assert.notEqual(await c.pagina.textContent("#tCon"), con1);
     assert.equal(await c.pagina.textContent("#anuncio"), "", "não anuncia mudança que não houve");
+    assert.equal(pedidosHistorico, 1, "histórico não é relido enquanto o placar não muda");
     assert.deepEqual(c.erros, []);
     anotar("conteúdo igual", { ultima_mudanca: mud1, consulta_antes: con1, consulta_depois: await c.pagina.textContent("#tCon") });
     await c.fechar();
   });
 
-  test("conteúdo novo: 'última mudança' segue o snapshot e o leitor de tela é avisado", async () => {
+  test("conteúdo novo: 'última mudança' segue o coletor, o hash aponta a cópia do TSE e o leitor de tela é avisado", async () => {
     const a = comHorario(base, "2026-10-25T21:10:32.000Z");
     const b = comHorario(base, "2026-10-25T21:11:02.000Z");
     b.brasil.oficial.candidatos.find((x) => x.numero === "13").votos += 1000;
-    b.snapshot = { id: "s-2", sha256: "ab".repeat(32), mudou_em: "2026-10-25T21:11:02.000Z" };
+    b.brasil.coleta.sha256 = "ab".repeat(32);
     const c = await cenario([a, b]);
     await c.proxima();
     assert.equal(await c.pagina.textContent("#tMud"), F.dh("2026-10-25T21:11:02.000Z"));
     assert.match(await c.pagina.textContent("#anuncio"), /Números atualizados/);
-    assert.match(await c.pagina.textContent("#fontesResumo"), /s-2 · sha256 abababababab/);
+    assert.match(await c.pagina.textContent("#fontesResumo"), /sha256 abababababab/);
+    assert.equal(await c.pagina.getAttribute("#fontesResumo a[href*='snapshots/']", "href"), "dados/v1/snapshots/" + "ab".repeat(32) + ".json");
     await c.fechar();
   });
 

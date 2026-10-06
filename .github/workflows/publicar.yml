@@ -45,7 +45,7 @@ jobs:
       - name: Testes (tipos, fontes, coletor, página, ensaio)
         run: |
           npm run tipos
-          npm run tipos:interface
+          npm run tipos:painel
           python3 -m unittest discover -s tests
           npm test
           node --test tests/interface/*.test.js
