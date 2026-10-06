@@ -51,13 +51,31 @@ Limites do plano gratuito usados na conta (conferir na página de preços da Clo
 |---|---|---|
 | Linhas gravadas | Rodada sem novidade: ~8 chaves (medido no teste `plano gratuito: …`). A cada 15 s = ~46 mil/dia. Rodadas com arquivo novo gravam mais, só nos recortes que mudaram | cabe, ~2× |
 | Linhas lidas | O estado fica na memória do Durable Object; o storage só é lido quando ele reinicia | ampla |
+| Linhas gravadas (noite cheia) | Atualização com os 38 arquivos mudando: ~110 chaves (resultado e histórico de cada recorte, último bloco do índice, corpos novos, saídas). Com o TSE atualizando tudo a cada minuto por 5 h: ~33 mil, que somadas às ~46 mil das rodadas sem novidade dão ~80 mil | cabe, com pouca folga; se apertar, o intervalo de 20 s baixa as rodadas sem novidade para ~35 mil |
 | Armazenamento | Corpos oficiais por hash: ~38 arquivos × poucos KB por versão nova. Uma noite inteira fica na casa de dezenas de MB | ampla |
 | Requisições ao TSE | ~38 por rodada, quase todas 304, limitadas a 10/s | não conta na Cloudflare como requisição de visitante |
 
-**Riscos para a frente 4 decidir (não são do lado dos dados):**
+### CPU por execução
 
-1. **Requisições de visitantes.** Cada leitura de `/dados/v1/*` passa pelo Worker e conta no limite de 100 mil/dia, mesmo com cache. Uma página que lê `presidente.json` a cada 15 s gasta 240 requisições por visitante por hora, então o limite acaba em cerca de 400 visitantes-hora. Para uma noite com público, o plano pago de Workers (US$ 5/mês) resolve; é contratação e precisa de aprovação do Fabiano.
-2. **CPU de 10 ms.** A rodada monta ~250 KB de JSON. Em `wrangler dev` não há limite; o consumo real só aparece no primeiro deploy (o log do Worker imprime cada rodada).
+O plano gratuito limita a CPU de cada requisição HTTP e de cada cron do Worker a 10 ms. A página de limites dos Durable Objects indica 30 s de CPU por execução, sem valor diferente para o plano gratuito. Como isso não está explícito para alarmes no plano gratuito, o coletor foi ajustado para caber nos 10 ms mesmo assim:
+
+- **Cópia rasa do estado.** A rodada reaproveita o que não mudou e nunca altera valores no lugar.
+- **Arquivo sem mudança é pulado.** Um 304 de arquivo já aceito não é lido, validado nem recalculado.
+- **Só o que mudou é regravado.** Valores iguais (pela mesma referência) não são serializados de novo. O índice de snapshots é gravado em blocos de 100, e o histórico por recorte guarda só a última versão; o registro completo fica nos snapshots.
+- **Execução dividida.** No Worker, no máximo 12 arquivos com conteúdo novo são processados por execução (`MAX_NOVOS_POR_EXECUCAO`). O resto segue 1 s depois, numa execução separada, e os arquivos públicos só são refeitos quando todos chegam. Assim a página nunca mostra metade de uma atualização.
+- **Arquivos que não mudaram não são refeitos.** `historico.json` e `snapshots.json` só são reconstruídos quando o conteúdo deles muda.
+
+Medição com `npm run cpu`: 100 rodadas da noite simulada com o índice já perto de 5.000 snapshots, CPU do processo em Node, fetch sem custo de rede e SHA-256 síncrono como o nativo do Workers.
+
+| Execução | Antes (55d8f58) | Depois |
+|---|---|---|
+| Rodada sem novidade (38 respostas 304) | mediana 34 ms | mediana 2,5 ms |
+| Execução parcial, só coleta (até 12 arquivos novos) | não existia | mediana 2 ms |
+| Execução que monta os arquivos depois de tudo mudar | mediana 34 ms; rodada inteira 50 ms | mediana 4,5 a 5,7 ms |
+
+O p95 no Node fica entre 8 e 16 ms. É dominado pelo coletor de lixo do próprio processo de medição (o simulador gera 38 arquivos a cada passo) e varia muito de uma execução para outra. O número que vale é o do Workers: no primeiro deploy, o painel de logs do Worker mostra a CPU de cada execução, e o log do coletor imprime `continuar` quando a execução foi dividida. Se ainda passar do limite, basta baixar `MAX_NOVOS_POR_EXECUCAO` (8 deixa a coleta abaixo de 2 ms de mediana).
+
+**Público:** cada leitura de `/dados/v1/*` conta nas 100 mil requisições/dia do Workers gratuito, cerca de 400 visitantes-hora com a página lendo a cada 15 s. Em 06/10 o Fabiano decidiu ficar no plano gratuito, porque o público será pequeno.
 
 ## Tabela TSE × IBGE
 

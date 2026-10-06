@@ -463,7 +463,7 @@
    "situacao": "atualizado",
    "sem_alteracao": false,
    "fora_de_ordem": null,
-   "nova_versao": false,
+   "nova_versao": true,
    "correcao": false
   },
   "calculado": {

@@ -17,6 +17,8 @@ function opcoes(env) {
     base: env.BASE || OPCOES_PADRAO.base,
     ambiente: env.AMBIENTE || OPCOES_PADRAO.ambiente,
     intervaloS: Math.max(10, Number(env.INTERVALO_S || OPCOES_PADRAO.intervaloS)),
+    // Limite de CPU do plano gratuito: arquivos novos além deste número ficam para a execução seguinte.
+    maxNovosPorExecucao: Math.max(1, Number(env.MAX_NOVOS_POR_EXECUCAO || 12)),
   };
 }
 
@@ -47,15 +49,17 @@ export class Coletor {
     const fonte = new Fonte({ estado: estado?.fonte, hostsExtras: hostsExtras(this.env) });
     const r = await rodada(fonte, estado, op);
     const linhas = (await gravarEstado(this.state.storage, r.estado)) + (await gravarSaidas(this.state.storage, r.saidas, r.brutos));
-    this.estado = JSON.parse(JSON.stringify(r.estado));
-    console.log(JSON.stringify({ rodada: r.saidas["v1/saude.json"]?.coletor?.rodada_em, chaves_gravadas: linhas }));
+    this.estado = r.estado;
+    console.log(JSON.stringify({ rodada: r.saidas["v1/saude.json"]?.coletor?.rodada_em ?? "parcial", chaves_gravadas: linhas, continuar: Boolean(r.continuar) }));
     return r;
   }
 
   async alarm() {
     if (await this.pausado()) return;
     await this.state.storage.setAlarm(Date.now() + opcoes(this.env).intervaloS * 1000);
-    await this.executarRodada();
+    const r = await this.executarRodada();
+    // Muitos arquivos novos de uma vez: continua em 1 s, numa execução separada (CPU contada à parte).
+    if (r.continuar) await this.state.storage.setAlarm(Date.now() + 1000);
   }
 
   async fetch(req) {
@@ -76,7 +80,7 @@ export class Coletor {
     }
     if (caminho === "/_admin/rodada") {
       const r = await this.executarRodada();
-      return Response.json(r.saidas["v1/saude.json"]);
+      return Response.json(r.continuar ? { continuar: true } : r.saidas["v1/saude.json"]);
     }
     if (caminho === "/_admin/estado") {
       const saude = await this.state.storage.get("saida:v1/saude.json");

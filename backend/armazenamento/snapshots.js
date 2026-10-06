@@ -14,10 +14,12 @@ export async function sha256Hex(texto) {
 
 /**
  * @param {any[]} indice  lista atual (não é alterada)
- * @param {object} entrada  campos: tipo, disputa, eleicao, recorte, url, etag, idg, geracao, totalizacao, coletado_em, sha256, bytes, aceito, motivo
+ * @param {...object} entradas  campos: tipo, disputa, eleicao, recorte, url, etag, idg, geracao, totalizacao, coletado_em, sha256, bytes, aceito, motivo
  */
-export function acrescentarSnapshot(indice, entrada) {
-  const novo = [...(indice || []), entrada];
-  if (novo.length > MAX_INDICE) novo.splice(0, novo.length - MAX_INDICE);
+export function acrescentarSnapshot(indice, ...entradas) {
+  const novo = [...(indice || []), ...entradas];
+  // Corta em múltiplos do bloco do armazenamento (100): assim cada entrada nova só regrava o último
+  // bloco, e não a lista inteira.
+  if (novo.length > MAX_INDICE) novo.splice(0, Math.ceil((novo.length - MAX_INDICE) / 100) * 100);
   return novo;
 }

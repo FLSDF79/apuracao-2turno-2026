@@ -10,7 +10,8 @@
     "test": "node --test tests/js/*.test.mjs",
     "tipos": "tsc -p .",
     "coletor": "node backend/execucao/node.js",
-    "exemplo": "node tools/gerar-exemplo.mjs"
+    "exemplo": "node tools/gerar-exemplo.mjs",
+    "cpu": "node tools/medir-cpu.mjs --sha-sincrono --max=12"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

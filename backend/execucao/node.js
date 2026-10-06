@@ -40,6 +40,7 @@ for (;;) {
   estado = r.estado;
   await gravarSaidas(a.saida, r.saidas, r.brutos);
   await gravarEstado(arquivoEstado, estado);
+  if (r.continuar) continue; // execução parcial (limite de arquivos novos): segue direto
   const s = r.saidas["v1/saude.json"].coletor;
   const pres = r.saidas["v1/presidente.json"];
   console.log(`${new Date().toISOString()} ${pres.estado_publicacao} ${s.estado} req=${s.rodada.requisicoes} http=${JSON.stringify(s.status_http)} conferência=${pres.conferencia?.classificacao.codigo ?? "-"}${s.pausa ? ` PAUSA até ${s.pausa.ate}` : ""}`);
