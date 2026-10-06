@@ -1128,5 +1128,12 @@
     }
    }
   }
+ },
+ "coleta_geral": {
+  "estado": "ok",
+  "mensagem": null,
+  "rodada_em": "2026-10-25T20:40:12.000Z",
+  "proxima_em": "2026-10-25T20:40:27.000Z",
+  "intervalo_s": 15
  }
 }

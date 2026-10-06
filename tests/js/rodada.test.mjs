@@ -134,3 +134,22 @@ test("governador com abrangência 'br' na configuração: consulta só as 7 UFs 
   assert.deepEqual(Object.keys(r.saidas["v1/governador.json"].ufs), ["ac", "am", "df", "es", "rj", "rn", "to"]);
   assert.deepEqual(r.saidas["v1/saude.json"].coletor.status_http, { 200: 39 }); // config + 2 abrangências + 29 + 7
 });
+
+test("resumo da coleta para a página: ok, atrasada e bloqueada", async () => {
+  const site = montarSite(await carregarBase(RAIZ), { hora: "25/10/2026 18:00:00", fracao: { padrao: 0.2 } });
+  const rel = relogio();
+  const f = fetchSimulado(() => site);
+  let falhar = null;
+  const fonte = new Fonte({ fetch: (u, i) => (falhar && u.includes(falhar.trecho) ? new Response("", { status: falhar.status }) : f(u, i)), ...rel });
+  let r = await rodada(fonte, null);
+  assert.equal(r.saidas["v1/presidente.json"].coleta_geral.estado, "ok");
+  assert.equal(Date.parse(r.saidas["v1/presidente.json"].coleta_geral.proxima_em) - rel.agora(), 15000);
+  falhar = { trecho: "/rj/", status: 500 };
+  rel.avancar(15000);
+  r = await rodada(fonte, r.estado);
+  assert.equal(r.saidas["v1/governador.json"].coleta_geral.estado, "atrasada");
+  falhar = { trecho: "/ac/", status: 403 };
+  rel.avancar(15000);
+  r = await rodada(fonte, r.estado);
+  assert.equal(r.saidas["v1/saude.json"].coletor.estado, "bloqueada");
+});

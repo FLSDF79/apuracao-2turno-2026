@@ -118,6 +118,20 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   }
   const serieBr = dPres?.eleicao ? estado.series[`presidente:${dPres.eleicao}:${BRASIL}`] ?? [] : [];
 
+  const fimRodada = new Date(fonte.agora()).toISOString();
+  const pausa = fonte.pausado();
+  const situacoes = Object.values(estado.coleta).map((c) => c.situacao);
+  const resumoColeta = {
+    estado: pausa ? (/40[3]|429/.test(pausa.motivo) ? "bloqueada" : "pausada")
+      : !estado.config ? "indisponivel"
+      : situacoes.some((x) => x === "defasado" || x === "indisponivel") ? "atrasada" : "ok",
+    mensagem: pausa ? `${pausa.motivo} (até ${pausa.ate})` : !estado.config ? estado.config_erro?.mensagem ?? "configuração do TSE ainda não lida" : null,
+    rodada_em: fimRodada,
+    proxima_em: new Date(Date.parse(fimRodada) + op.intervaloS * 1000).toISOString(),
+    intervalo_s: op.intervaloS,
+  };
+  pres.coleta_geral = resumoColeta;
+  gov.coleta_geral = resumoColeta;
   saidas["v1/presidente.json"] = pres;
   saidas["v1/governador.json"] = gov;
   saidas["v1/historico.json"] = {
@@ -135,7 +149,7 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
     gerado_em: agora,
     modo: op.modo,
     coletor: {
-      intervalo_s: op.intervaloS,
+      ...resumoColeta,
       rodada: { inicio, fim, duracao_ms: Date.parse(fim) - Date.parse(inicio), requisicoes: log.filter((r) => !r.adiado).length, adiadas: log.filter((r) => r.adiado).length },
       status_http: contar(log.filter((r) => !r.adiado).map((r) => r.status ?? "erro")),
       pausa: fonte.pausado(),

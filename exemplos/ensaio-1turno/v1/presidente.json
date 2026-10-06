@@ -7457,5 +7457,12 @@
    "motivo": "Todas as linhas batem.",
    "desde": "2026-10-06T13:00:03.000Z"
   }
+ },
+ "coleta_geral": {
+  "estado": "ok",
+  "mensagem": null,
+  "rodada_em": "2026-10-06T13:00:03.000Z",
+  "proxima_em": "2026-10-06T13:00:18.000Z",
+  "intervalo_s": 15
  }
 }

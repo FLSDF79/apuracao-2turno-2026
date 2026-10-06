@@ -58,7 +58,10 @@ exterior: Territorio (o mesmo objeto de territorios.zz)
 territorios: { ac…to, zz: Territorio }
 regioes: { N, NE, CO, SE, S: { codigo, nome, ufs[], resultado: Resultado (calculado) } }
 conferencia: Conferencia | null (null enquanto a eleição não está publicada)
+coleta_geral: { estado: "ok" | "atrasada" | "pausada" | "bloqueada" | "indisponivel", mensagem, rodada_em, proxima_em, intervalo_s }
 ```
+
+`coleta_geral` também vem em `governador.json` e em `saude.json` (dentro de `coletor`). `atrasada` = algum recorte `defasado` ou `indisponivel`; `bloqueada` = o TSE respondeu 403/429 e o coletor está em pausa; `indisponivel` = a configuração do TSE nunca foi lida.
 
 **Territorio:** `{ codigo, tipo: "uf"|"exterior", nome, regiao, ibge_uf, esperado, coleta: Coleta, atraso_vs_nacional_min, resultado: Resultado | null }`. `atraso_vs_nacional_min` = minutos entre a totalização do arquivo nacional e a do recorte (0 = mesmo horário).
 
@@ -130,7 +133,7 @@ Um ponto entra só quando o TSE publica versão nova do arquivo nacional. Corre�
 ## `saude.json`
 
 ```text
-coletor: { intervalo_s, rodada{inicio,fim,duracao_ms,requisicoes,adiadas}, status_http{"200":n,"304":n,…}, pausa: {ate,motivo} | null }
+coletor: { estado, mensagem, rodada_em, proxima_em, intervalo_s, rodada{inicio,fim,duracao_ms,requisicoes,adiadas}, status_http{"200":n,"304":n,…}, pausa: {ate,motivo} | null }
 configuracao: { url, coletada_em, ultimo_erro, idg, geracao }
 disputas: { presidente, governador }   (saída da descoberta)
 recortes: [ { id: "presidente:6258:sp", ...Coleta } ]
