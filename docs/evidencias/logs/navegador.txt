@@ -1,0 +1,325 @@
+$ node --test tests/navegador/painel.test.mjs
+
+TAP version 13
+# Subtest: valores exibidos = arquivos de origem (ensaio)
+    # Subtest: placar nacional
+    ok 1 - placar nacional
+      ---
+      duration_ms: 170.186029
+      type: 'test'
+      ...
+    # Subtest: tabela das 27 UFs e exterior
+    ok 2 - tabela das 27 UFs e exterior
+      ---
+      duration_ms: 32.005511
+      type: 'test'
+      ...
+    # Subtest: regiões e Brasil (soma) vêm prontos do coletor
+    ok 3 - regiões e Brasil (soma) vêm prontos do coletor
+      ---
+      duration_ms: 11.522841
+      type: 'test'
+      ...
+    # Subtest: conferência A × B linha a linha
+    ok 4 - conferência A × B linha a linha
+      ---
+      duration_ms: 15.230626
+      type: 'test'
+      ...
+    # Subtest: três horários separados e sem relógio de parede
+    ok 5 - três horários separados e sem relógio de parede
+      ---
+      duration_ms: 23.492698
+      type: 'test'
+      ...
+    # Subtest: identificação de teste destacada
+    ok 6 - identificação de teste destacada
+      ---
+      duration_ms: 23.575366
+      type: 'test'
+      ...
+    # Subtest: console sem erros
+    ok 7 - console sem erros
+      ---
+      duration_ms: 0.594596
+      type: 'test'
+      ...
+    # Subtest: captura
+    ok 8 - captura
+      ---
+      duration_ms: 0.531029
+      type: 'test'
+      ...
+    1..8
+ok 1 - valores exibidos = arquivos de origem (ensaio)
+  ---
+  duration_ms: 619.067998
+  type: 'suite'
+  ...
+# Subtest: valores exibidos = arquivos de origem (simulacao)
+    # Subtest: placar nacional
+    ok 1 - placar nacional
+      ---
+      duration_ms: 131.797095
+      type: 'test'
+      ...
+    # Subtest: tabela das 27 UFs e exterior
+    ok 2 - tabela das 27 UFs e exterior
+      ---
+      duration_ms: 12.328838
+      type: 'test'
+      ...
+    # Subtest: regiões e Brasil (soma) vêm prontos do coletor
+    ok 3 - regiões e Brasil (soma) vêm prontos do coletor
+      ---
+      duration_ms: 12.529428
+      type: 'test'
+      ...
+    # Subtest: conferência A × B linha a linha
+    ok 4 - conferência A × B linha a linha
+      ---
+      duration_ms: 10.301746
+      type: 'test'
+      ...
+    # Subtest: três horários separados e sem relógio de parede
+    ok 5 - três horários separados e sem relógio de parede
+      ---
+      duration_ms: 14.986318
+      type: 'test'
+      ...
+    # Subtest: identificação de teste destacada
+    ok 6 - identificação de teste destacada
+      ---
+      duration_ms: 24.215922
+      type: 'test'
+      ...
+    # Subtest: console sem erros
+    ok 7 - console sem erros
+      ---
+      duration_ms: 0.139337
+      type: 'test'
+      ...
+    # Subtest: captura
+    ok 8 - captura
+      ---
+      duration_ms: 0.041383
+      type: 'test'
+      ...
+    1..8
+ok 2 - valores exibidos = arquivos de origem (simulacao)
+  ---
+  duration_ms: 454.664972
+  type: 'suite'
+  ...
+# Subtest: mapa, filtros e navegação no computador
+    # Subtest: 27 UFs no mapa, cada uma acessível pelo teclado e com nome
+    ok 1 - 27 UFs no mapa, cada uma acessível pelo teclado e com nome
+      ---
+      duration_ms: 106.839358
+      type: 'test'
+      ...
+    # Subtest: passar o cursor mostra votos e totalização
+    ok 2 - passar o cursor mostra votos e totalização
+      ---
+      duration_ms: 99.423657
+      type: 'test'
+      ...
+    # Subtest: clicar abre o detalhamento estadual; Esc fecha e devolve o foco
+    ok 3 - clicar abre o detalhamento estadual; Esc fecha e devolve o foco
+      ---
+      duration_ms: 115.778866
+      type: 'test'
+      ...
+    # Subtest: teclado: Tab chega a uma UF e Enter abre o detalhe
+    ok 4 - teclado: Tab chega a uma UF e Enter abre o detalhe
+      ---
+      duration_ms: 45.939429
+      type: 'test'
+      ...
+    # Subtest: visão por região e mapa em grade
+    ok 5 - visão por região e mapa em grade
+      ---
+      duration_ms: 273.387634
+      type: 'test'
+      ...
+    # Subtest: legenda explica cores, intensidade, empate, sem dados e defasagem
+    ok 6 - legenda explica cores, intensidade, empate, sem dados e defasagem
+      ---
+      duration_ms: 5.798468
+      type: 'test'
+      ...
+    # Subtest: barras por volume de votos ordenadas pela vantagem
+    ok 7 - barras por volume de votos ordenadas pela vantagem
+      ---
+      duration_ms: 5.698188
+      type: 'test'
+      ...
+    # Subtest: filtro por região, busca e ordenação da tabela
+    ok 8 - filtro por região, busca e ordenação da tabela
+      ---
+      duration_ms: 379.919705
+      type: 'test'
+      ...
+    # Subtest: abas levam a cada área
+    ok 9 - abas levam a cada área
+      ---
+      duration_ms: 280.258291
+      type: 'test'
+      ...
+    # Subtest: governador em módulo separado, só nas 7 UFs
+    ok 10 - governador em módulo separado, só nas 7 UFs
+      ---
+      duration_ms: 12.742209
+      type: 'test'
+      ...
+    # Subtest: selo NFLS.AI Arena servido pelo próprio site
+    ok 11 - selo NFLS.AI Arena servido pelo próprio site
+      ---
+      duration_ms: 10.266021
+      type: 'test'
+      ...
+    # Subtest: nenhum recurso de terceiros além das fontes
+    ok 12 - nenhum recurso de terceiros além das fontes
+      ---
+      duration_ms: 2.826695
+      type: 'test'
+      ...
+    # Subtest: modo TV
+    ok 13 - modo TV
+      ---
+      duration_ms: 327.760503
+      type: 'test'
+      ...
+    # Subtest: console sem erros
+    ok 14 - console sem erros
+      ---
+      duration_ms: 0.583041
+      type: 'test'
+      ...
+    1..14
+ok 3 - mapa, filtros e navegação no computador
+  ---
+  duration_ms: 1901.264735
+  type: 'suite'
+  ...
+# Subtest: celular
+    # Subtest: sem rolagem horizontal da página
+    ok 1 - sem rolagem horizontal da página
+      ---
+      duration_ms: 110.091645
+      type: 'test'
+      ...
+    # Subtest: mapa em grade por padrão e toque abre o detalhe
+    ok 2 - mapa em grade por padrão e toque abre o detalhe
+      ---
+      duration_ms: 175.009032
+      type: 'test'
+      ...
+    # Subtest: três horários visíveis e legíveis
+    ok 3 - três horários visíveis e legíveis
+      ---
+      duration_ms: 10.709056
+      type: 'test'
+      ...
+    # Subtest: console sem erros
+    ok 4 - console sem erros
+      ---
+      duration_ms: 0.236664
+      type: 'test'
+      ...
+    1..4
+ok 4 - celular
+  ---
+  duration_ms: 531.86867
+  type: 'suite'
+  ...
+# Subtest: cenários de atualização e falha
+    # Subtest: conteúdo igual: consulta avança, 'última mudança' não
+    ok 1 - conteúdo igual: consulta avança, 'última mudança' não
+      ---
+      duration_ms: 1288.058194
+      type: 'test'
+      ...
+    # Subtest: conteúdo novo: 'última mudança' segue o snapshot e o leitor de tela é avisado
+    ok 2 - conteúdo novo: 'última mudança' segue o snapshot e o leitor de tela é avisado
+      ---
+      duration_ms: 930.103358
+      type: 'test'
+      ...
+    # Subtest: resposta fora de ordem é ignorada
+    ok 3 - resposta fora de ordem é ignorada
+      ---
+      duration_ms: 901.916649
+      type: 'test'
+      ...
+    # Subtest: coletor fora do ar: mantém o último dado válido e avisa
+    ok 4 - coletor fora do ar: mantém o último dado válido e avisa
+      ---
+      duration_ms: 925.552036
+      type: 'test'
+      ...
+    # Subtest: resposta incompleta não substitui o último dado válido
+    ok 5 - resposta incompleta não substitui o último dado válido
+      ---
+      duration_ms: 935.868422
+      type: 'test'
+      ...
+    # Subtest: campo inválido vira “—” e o problema é mostrado
+    ok 6 - campo inválido vira “—” e o problema é mostrado
+      ---
+      duration_ms: 330.730929
+      type: 'test'
+      ...
+    # Subtest: arquivo oficial de outro turno nunca aparece como 2º turno
+    ok 7 - arquivo oficial de outro turno nunca aparece como 2º turno
+      ---
+      duration_ms: 324.172009
+      type: 'test'
+      ...
+    # Subtest: modo desconhecido é tratado como teste
+    ok 8 - modo desconhecido é tratado como teste
+      ---
+      duration_ms: 333.859668
+      type: 'test'
+      ...
+    # Subtest: “eleito” só quando o TSE publica
+    ok 9 - “eleito” só quando o TSE publica
+      ---
+      duration_ms: 1111.672084
+      type: 'test'
+      ...
+    # Subtest: sem coletor publicado: estado vazio explicado, sem quebrar
+    ok 10 - sem coletor publicado: estado vazio explicado, sem quebrar
+      ---
+      duration_ms: 212.187413
+      type: 'test'
+      ...
+    1..10
+ok 5 - cenários de atualização e falha
+  ---
+  duration_ms: 7296.943663
+  type: 'suite'
+  ...
+# Subtest: acessibilidade
+    # Subtest: axe-core sem violações sérias ou críticas (tema escuro e claro)
+    ok 1 - axe-core sem violações sérias ou críticas (tema escuro e claro) # SKIP axe-core não instalado
+      ---
+      duration_ms: 1.269207
+      type: 'test'
+      ...
+    1..1
+ok 6 - acessibilidade
+  ---
+  duration_ms: 1.448206
+  type: 'suite'
+  ...
+1..6
+# tests 45
+# suites 6
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 11254.692514
+

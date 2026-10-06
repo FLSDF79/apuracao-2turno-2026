@@ -42,7 +42,20 @@ Pausa de emergência sem token (exige deploy): `npx wrangler deploy --env="" --v
 
 ## Custos
 
-CUSTOS_PREENCHIDOS_PELO_ENSAIO
+**Plano escolhido: Cloudflare Workers gratuito, custo R$ 0** (decisão do Fabiano em 06/10: público pequeno). Limites e preços conferidos em 06/10 em developers.cloudflare.com/workers/platform/pricing e /limits.
+
+| Recurso | Limite gratuito | Consumo medido no ensaio | Margem |
+|---|---|---|---|
+| Página (HTML, JS, mapa) | Ilimitado: arquivos estáticos não contam | — | — |
+| Requisições ao Worker (`/dados/v1/*`) | 100 mil por dia (zera 0h UTC, 21h de Brasília) | **1.008 por visitante por hora** (16,8/min: `presidente` e `historico` a cada 10 s, `governador` e `saude` a cada ~30 s) | **~99 visitantes-hora por dia**. Ex.: 15 pessoas acompanhando 6 h = 90 |
+| Requisições ao Durable Object | 100 mil por dia | Alarme a cada 15 s = 5.760/dia, mais no máximo 4 leituras a cada 5 s (cache do Worker) enquanto houver visitantes | Folgado |
+| CPU por invocação | 10 ms | Rodada do coletor: mediana 10 a 15 ms, p90 ~22 ms (medido em Node, sem o TSE simulado) | **Risco**: ver abaixo |
+
+**Se a cota de requisições acabar**, as leituras de `/dados` falham até a virada do dia (21h de Brasília) e a página mostra "sem conexão com o coletor" com o último dado que já tinha. A página continua abrindo. Para um público pequeno isso não deve acontecer; o número de visitantes-hora é a margem a vigiar (painel da Cloudflare, *Workers & Pages > Metrics*).
+
+**Risco de CPU.** A documentação limita 10 ms de CPU por invocação no plano gratuito e não detalha o caso do alarme do Durable Object. A rodada mede de 10 a 15 ms em Node. Isso só se confirma no primeiro deploy: rodar o ensaio publicado e olhar `npx wrangler tail --env ensaio` (aparece `exceededCpu` se estourar) e se `conferir-no-ar` mostra o coletor rodando. Se estourar, as saídas são rodar o coletor fora da Cloudflare (ver [contingência](CONTINGENCIA.md#plano-b-tse-recusa-a-cloudflare)) ou o plano pago, que é decisão do Fabiano.
+
+Teste de carga local (`publicacao/teste-carga.mjs` contra `wrangler dev`, uma máquina de 4 núcleos): 200 conexões simultâneas por 30 s, **322 req/s, 9.770 respostas, nenhum erro**, p50 578 ms, p95 1,0 s. Com 1.000 conexões, nenhum erro, mas latência alta (p50 5,3 s) por saturar a máquina de teste. Na Cloudflare cada pedido é atendido no ponto de presença mais próximo, então o gargalo real para o plano gratuito é a cota diária, não a vazão.
 
 ## Manutenção
 

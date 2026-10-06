@@ -105,3 +105,17 @@ No dia: `python3 tools/validar.py 6258`.
 - O painel não faz projeção: liderança parcial não é resultado.
 
 Mapa: malha estadual do IBGE (API de malhas v3), embutida em `data/br-uf.geojson`.
+
+## Publicação, ensaio e operação (frente 4)
+
+- Arquitetura, camadas e segurança: [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
+- Publicar na Cloudflare, roteiro e checklist de 25/10: [docs/publicacao/ROTEIRO-25-10.md](docs/publicacao/ROTEIRO-25-10.md)
+- Operação, configuração, custos e manutenção: [docs/publicacao/OPERACAO.md](docs/publicacao/OPERACAO.md)
+- Indisponibilidade das fontes: [docs/publicacao/CONTINGENCIA.md](docs/publicacao/CONTINGENCIA.md)
+- Evidências dos testes das três frentes: [docs/evidencias/EVIDENCIAS.md](docs/evidencias/EVIDENCIAS.md)
+
+```bash
+node publicacao/ponta-a-ponta.mjs   # dados oficiais do 1º turno → coletor → página → navegador
+node ensaio/rodar.mjs               # noite de 2º turno simulada, relógio real (~26 min)
+node publicacao/evidencias.mjs      # todas as baterias, com logs e capturas em docs/evidencias/
+```

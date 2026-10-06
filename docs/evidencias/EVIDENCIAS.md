@@ -42,6 +42,13 @@ Legenda: ✅ comprovado · ⚠️ parcial · ❌ lacuna
 | Não atualizar relógio para parecer dado novo | ✅ | `gerado_em` só muda quando o dado muda; a tela separa "consulta ok" de "dados de" | 2, 3 |
 | Nenhum LLM nos números | ✅ | Todo cálculo é código determinístico em `nucleo/` | 2 |
 
+## Latência e carga: como ler os números
+
+- **Latência medida** na noite simulada (relógio real, [execucao.md](execucao.md)): do arquivo novo no TSE simulado até o arquivo do coletor, mediana ~4 s; até a tela, mediana ~13 s, máximo 14 s, sem nenhuma versão perdida. O coletor desse ensaio começou alinhado com os blocos de 30 s do roteiro, o que favorece o número do coletor.
+- **Pior caso esperado em 25/10**, sem esse alinhamento: até 15 s do coletor (intervalo) + até 10 s da página (releitura) + tempo de rede, ou seja **até ~25 s**, média em torno de 12 s. É o "tempo real" da seção 7: baixa latência sobre a publicação oficial.
+- **Carga por visitante** no Worker: 1.008 pedidos por hora. No plano gratuito, a cota de 100 mil por dia dá ~99 visitantes-hora (detalhes em [OPERACAO.md](../publicacao/OPERACAO.md#custos)).
+- **Carga no TSE**: independe de visitantes; na noite simulada, pico de 146 requisições por minuto (2,4/s), quase metade respondidas com 304.
+
 ## Observações enviadas aos donos
 
 - **Frente 2 (resolvido em 06/10, commit 55d8f58):** recorte defasado com conferência "compatível" passou a dar "cobertura incompleta"; a pausa de 2 min na publicação da configuração virou sentinela de 404. O verificador do ensaio agora trata a combinação antiga como falha.

@@ -1,0 +1,325 @@
+$ node --test tests/js/calcular.test.mjs tests/js/cloudflare.test.mjs tests/js/conferencia.test.mjs tests/js/confiabilidade.test.mjs tests/js/descoberta.test.mjs tests/js/fonte.test.mjs tests/js/historico.test.mjs tests/js/normalizar.test.mjs tests/js/rodada.test.mjs tests/js/territorios.test.mjs
+
+TAP version 13
+# Subtest: percentuais calculados batem com os oficiais do TSE em todos os recortes (presidente e governador)
+ok 1 - percentuais calculados batem com os oficiais do TSE em todos os recortes (presidente e governador)
+  ---
+  duration_ms: 25.882307
+  type: 'test'
+  ...
+# Subtest: base do percentual é vvc (válidos + anulados sub judice): caso real do RJ
+ok 2 - base do percentual é vvc (válidos + anulados sub judice): caso real do RJ
+  ---
+  duration_ms: 0.484021
+  type: 'test'
+  ...
+# Subtest: Brasil calculado (27 UFs + exterior) é idêntico ao total nacional, campo a campo
+ok 3 - Brasil calculado (27 UFs + exterior) é idêntico ao total nacional, campo a campo
+  ---
+  duration_ms: 11.153242
+  type: 'test'
+  ...
+# Subtest: região soma votos antes do percentual; média simples dos percentuais das UFs daria outro número
+ok 4 - região soma votos antes do percentual; média simples dos percentuais das UFs daria outro número
+  ---
+  duration_ms: 4.695908
+  type: 'test'
+  ...
+# Subtest: as cinco regiões + exterior somam o Brasil, sem dupla contagem do DF
+ok 5 - as cinco regiões + exterior somam o Brasil, sem dupla contagem do DF
+  ---
+  duration_ms: 8.897536
+  type: 'test'
+  ...
+# Subtest: recorte ausente fica listado e não vira zero; campo ausente em um componente anula a soma do campo
+ok 6 - recorte ausente fica listado e não vira zero; campo ausente em um componente anula a soma do campo
+  ---
+  duration_ms: 17.210078
+  type: 'test'
+  ...
+# Subtest: disputa: liderança, empate e ausência de votos
+ok 7 - disputa: liderança, empate e ausência de votos
+  ---
+  duration_ms: 0.321765
+  type: 'test'
+  ...
+# Subtest: governador: os 7 arquivos das UFs com 2º turno ficam separados de presidente
+ok 8 - governador: os 7 arquivos das UFs com 2º turno ficam separados de presidente
+  ---
+  duration_ms: 0.948199
+  type: 'test'
+  ...
+# Subtest: divisão por zero vira null (nunca NaN ou Infinity)
+ok 9 - divisão por zero vira null (nunca NaN ou Infinity)
+  ---
+  duration_ms: 0.831087
+  type: 'test'
+  ...
+# Subtest: exterior entra uma única vez no Brasil calculado e em nenhuma região
+ok 10 - exterior entra uma única vez no Brasil calculado e em nenhuma região
+  ---
+  duration_ms: 6.126212
+  type: 'test'
+  ...
+# Subtest: estado dividido no storage do Durable Object volta igual e a rodada seguinte usa 304
+ok 11 - estado dividido no storage do Durable Object volta igual e a rodada seguinte usa 304
+  ---
+  duration_ms: 296.861784
+  type: 'test'
+  ...
+# Subtest: plano gratuito: rodada sem novidade do TSE regrava poucas chaves (linhas gravadas por dia)
+ok 12 - plano gratuito: rodada sem novidade do TSE regrava poucas chaves (linhas gravadas por dia)
+  ---
+  duration_ms: 282.873551
+  type: 'test'
+  ...
+# Subtest: arquivos reais do 1º turno: compatível, com aviso de mesma base
+ok 13 - arquivos reais do 1º turno: compatível, com aviso de mesma base
+  ---
+  duration_ms: 17.015548
+  type: 'test'
+  ...
+# Subtest: UF ausente ou defasada: cobertura incompleta, com a lista
+ok 14 - UF ausente ou defasada: cobertura incompleta, com a lista
+  ---
+  duration_ms: 25.499414
+  type: 'test'
+  ...
+# Subtest: nacional mais novo que uma UF: horários diferentes; a mesma diferença por 10 min vira persistente
+ok 15 - nacional mais novo que uma UF: horários diferentes; a mesma diferença por 10 min vira persistente
+  ---
+  duration_ms: 10.184982
+  type: 'test'
+  ...
+# Subtest: mesmo horário de totalização e soma diferente: diferença a investigar na hora
+ok 16 - mesmo horário de totalização e soma diferente: diferença a investigar na hora
+  ---
+  duration_ms: 8.720521
+  type: 'test'
+  ...
+# Subtest: sem total nacional: cobertura incompleta
+ok 17 - sem total nacional: cobertura incompleta
+  ---
+  duration_ms: 7.830965
+  type: 'test'
+  ...
+# Subtest: resposta incompleta é rejeitada com motivo; turno errado também
+ok 18 - resposta incompleta é rejeitada com motivo; turno errado também
+  ---
+  duration_ms: 3.800095
+  type: 'test'
+  ...
+# Subtest: identidade aritmética quebrada vira alerta, não descarta o dado oficial
+ok 19 - identidade aritmética quebrada vira alerta, não descarta o dado oficial
+  ---
+  duration_ms: 1.666194
+  type: 'test'
+  ...
+# Subtest: arquivo inválido no meio da noite: mantém o último válido, marca defasado e guarda o snapshot rejeitado
+ok 20 - arquivo inválido no meio da noite: mantém o último válido, marca defasado e guarda o snapshot rejeitado
+  ---
+  duration_ms: 167.876547
+  type: 'test'
+  ...
+# Subtest: resposta fora de ordem (geração mais antiga) não substitui a mais nova
+ok 21 - resposta fora de ordem (geração mais antiga) não substitui a mais nova
+  ---
+  duration_ms: 88.349587
+  type: 'test'
+  ...
+# Subtest: snapshot: SHA-256 igual ao do arquivo oficial byte a byte; rodadas repetidas não duplicam nem recontam
+ok 22 - snapshot: SHA-256 igual ao do arquivo oficial byte a byte; rodadas repetidas não duplicam nem recontam
+  ---
+  duration_ms: 171.672464
+  type: 'test'
+  ...
+# Subtest: três horários separados: consulta avança, publicação e mudança só quando o dado muda
+ok 23 - três horários separados: consulta avança, publicação e mudança só quando o dado muda
+  ---
+  duration_ms: 124.67568
+  type: 'test'
+  ...
+# Subtest: o backend só consulta endereços do TSE: URL arbitrária é recusada sem sair da máquina
+ok 24 - o backend só consulta endereços do TSE: URL arbitrária é recusada sem sair da máquina
+  ---
+  duration_ms: 0.445575
+  type: 'test'
+  ...
+# Subtest: configuração com modelo de diretório apontando para outro host é rejeitada
+ok 25 - configuração com modelo de diretório apontando para outro host é rejeitada
+  ---
+  duration_ms: 1.079253
+  type: 'test'
+  ...
+# Subtest: token de administração: comparação exige segredo configurado com 32+ caracteres
+ok 26 - token de administração: comparação exige segredo configurado com 32+ caracteres
+  ---
+  duration_ms: 0.456364
+  type: 'test'
+  ...
+# Subtest: configuração real de 06/10: 2º turno ainda não publicado, com o código esperado do cdt2
+ok 27 - configuração real de 06/10: 2º turno ainda não publicado, com o código esperado do cdt2
+  ---
+  duration_ms: 1.429065
+  type: 'test'
+  ...
+# Subtest: modo ensaio usa o 1º turno: 6257 presidente (br) e 6259 governador
+ok 28 - modo ensaio usa o 1º turno: 6257 presidente (br) e 6259 governador
+  ---
+  duration_ms: 1.945199
+  type: 'test'
+  ...
+# Subtest: quando a configuração listar o 2º turno (formato de 2024), a descoberta encontra 6258 e as 7 UFs de 6260
+ok 29 - quando a configuração listar o 2º turno (formato de 2024), a descoberta encontra 6258 e as 7 UFs de 6260
+  ---
+  duration_ms: 42.104386
+  type: 'test'
+  ...
+# Subtest: URLs saem dos modelos 'arq' do ele-c.json e apontam para arquivos que existem
+ok 30 - URLs saem dos modelos 'arq' do ele-c.json e apontam para arquivos que existem
+  ---
+  duration_ms: 3.367713
+  type: 'test'
+  ...
+# Subtest: lista de abrangência: só siglas conhecidas viram recorte
+ok 31 - lista de abrangência: só siglas conhecidas viram recorte
+  ---
+  duration_ms: 0.807545
+  type: 'test'
+  ...
+# Subtest: requisição condicional: manda If-None-Match e reaproveita o corpo no 304
+ok 32 - requisição condicional: manda If-None-Match e reaproveita o corpo no 304
+  ---
+  duration_ms: 43.374284
+  type: 'test'
+  ...
+# Subtest: 404 em sequência pausa o coletor inteiro e nenhuma requisição sai durante a pausa
+ok 33 - 404 em sequência pausa o coletor inteiro e nenhuma requisição sai durante a pausa
+  ---
+  duration_ms: 1.100016
+  type: 'test'
+  ...
+# Subtest: 429 com Retry-After pausa pelo tempo pedido; 403 pausa 10 min
+ok 34 - 429 com Retry-After pausa pelo tempo pedido; 403 pausa 10 min
+  ---
+  duration_ms: 0.640958
+  type: 'test'
+  ...
+# Subtest: erro de rede e timeout: backoff por URL, sem derrubar as outras
+ok 35 - erro de rede e timeout: backoff por URL, sem derrubar as outras
+  ---
+  duration_ms: 22.49535
+  type: 'test'
+  ...
+# Subtest: resposta 200 que não é JSON não substitui o último dado válido
+ok 36 - resposta 200 que não é JSON não substitui o último dado válido
+  ---
+  duration_ms: 1.58053
+  type: 'test'
+  ...
+# Subtest: limite global de requisições por segundo
+ok 37 - limite global de requisições por segundo
+  ---
+  duration_ms: 3.95519
+  type: 'test'
+  ...
+# Subtest: Retry-After em segundos ou data HTTP
+ok 38 - Retry-After em segundos ou data HTTP
+  ---
+  duration_ms: 0.27521
+  type: 'test'
+  ...
+# Subtest: mesma versão não duplica; versão nova substitui (não soma); queda vira correção aceita
+ok 39 - mesma versão não duplica; versão nova substitui (não soma); queda vira correção aceita
+  ---
+  duration_ms: 5.50294
+  type: 'test'
+  ...
+# Subtest: contagens viram inteiros e campo ausente vira null, não zero
+ok 40 - contagens viram inteiros e campo ausente vira null, não zero
+  ---
+  duration_ms: 4.764408
+  type: 'test'
+  ...
+# Subtest: horário do TSE vira ISO em Brasília (-03:00)
+ok 41 - horário do TSE vira ISO em Brasília (-03:00)
+  ---
+  duration_ms: 0.5792
+  type: 'test'
+  ...
+# Subtest: arquivo de outra eleição, cargo ou recorte é rejeitado
+ok 42 - arquivo de outra eleição, cargo ou recorte é rejeitado
+  ---
+  duration_ms: 1.321018
+  type: 'test'
+  ...
+# Subtest: 'eleito' só vem da situação textual: o campo e='s' aparece até para quem foi ao 2º turno
+ok 43 - 'eleito' só vem da situação textual: o campo e='s' aparece até para quem foi ao 2º turno
+  ---
+  duration_ms: 3.058278
+  type: 'test'
+  ...
+# Subtest: metadados do candidato: partido, federação e vice
+ok 44 - metadados do candidato: partido, federação e vice
+  ---
+  duration_ms: 0.495761
+  type: 'test'
+  ...
+# Subtest: ensaio com os arquivos reais do 1º turno: contrato completo, conferência compatível e sem recontagem
+ok 45 - ensaio com os arquivos reais do 1º turno: contrato completo, conferência compatível e sem recontagem
+  ---
+  duration_ms: 179.508277
+  type: 'test'
+  ...
+# Subtest: noite simulada do 2º turno: espera, apuração, atraso de UF, falha, correção e eleito
+ok 46 - noite simulada do 2º turno: espera, apuração, atraso de UF, falha, correção e eleito
+  ---
+  duration_ms: 208.91941
+  type: 'test'
+  ...
+# Subtest: troca do ensaio para o 2º turno não mistura eleições
+ok 47 - troca do ensaio para o 2º turno não mistura eleições
+  ---
+  duration_ms: 97.605077
+  type: 'test'
+  ...
+# Subtest: governador com abrangência 'br' na configuração: consulta só as 7 UFs com 2º turno, sem 404
+ok 48 - governador com abrangência 'br' na configuração: consulta só as 7 UFs com 2º turno, sem 404
+  ---
+  duration_ms: 44.604503
+  type: 'test'
+  ...
+# Subtest: resumo da coleta para a página: ok, atrasada e bloqueada
+ok 49 - resumo da coleta para a página: ok, atrasada e bloqueada
+  ---
+  duration_ms: 67.045567
+  type: 'test'
+  ...
+# Subtest: dados de teste nunca saem como apuração real: modo e aviso em todos os arquivos e no CSV
+ok 50 - dados de teste nunca saem como apuração real: modo e aviso em todos os arquivos e no CSV
+  ---
+  duration_ms: 56.509444
+  type: 'test'
+  ...
+# Subtest: configuração do 2º turno publicada antes dos arquivos: um 404 por disputa, sem pausa, leitura na rodada seguinte
+ok 51 - configuração do 2º turno publicada antes dos arquivos: um 404 por disputa, sem pausa, leitura na rodada seguinte
+  ---
+  duration_ms: 39.94293
+  type: 'test'
+  ...
+# Subtest: tabela TSE × IBGE: 27 UFs, códigos IBGE distintos, mesmas siglas da malha do mapa e da abrangência do TSE
+ok 52 - tabela TSE × IBGE: 27 UFs, códigos IBGE distintos, mesmas siglas da malha do mapa e da abrangência do TSE
+  ---
+  duration_ms: 3.583152
+  type: 'test'
+  ...
+1..52
+# tests 52
+# suites 0
+# pass 52
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1500.756138
+
