@@ -35,14 +35,14 @@ function cabecalho(numeros) {
     "votos_total", "validos", "pct_validos", "brancos", "pct_brancos", "nulos", "pct_nulos",
     ...numeros.flatMap((n) => [`votos_${n}`, `pct_validos_${n}`]),
     "situacao_disputa", "lider", "diferenca_votos", "diferenca_pontos",
-    "horario_totalizacao_tse", "situacao_coleta", "coletado_em", "url_fonte", "gerado_em", "eleicao", "turno", "cargo",
+    "horario_totalizacao_tse", "situacao_coleta", "ultima_consulta_ok", "ultima_mudanca", "url_fonte", "sha256_arquivo", "eleicao", "turno", "cargo", "modo",
   ];
 }
 
 export function csvPresidente(snap) {
   const numeros = snap.candidatos.map((c) => c.numero);
   const el = snap.eleicao ?? {};
-  const fim = (coleta) => [coleta?.situacao, coleta?.ultimo_sucesso, coleta?.url, snap.gerado_em, el.eleicao, el.turno, el.cargo_nome];
+  const fim = (coleta) => [coleta?.situacao, coleta?.ultimo_sucesso, coleta?.ultima_mudanca, coleta?.url, coleta?.sha256, el.eleicao, el.turno, el.cargo_nome, snap.modo];
   const linhas = [linhaCsv(cabecalho(numeros))];
   linhas.push(linhaCsv(["br", "Brasil", "brasil", "TSE (total nacional publicado)", "", ...colunasResultado(snap.brasil.oficial, numeros), ...fim(snap.brasil.coleta)]));
   linhas.push(linhaCsv(["br-calc", "Brasil (27 UFs + exterior)", "brasil", "calculado pelo painel", "", ...colunasResultado(snap.brasil.calculado, numeros), ...fim({})]));
@@ -69,13 +69,13 @@ export function csvGovernador(snap) {
       r?.votos?.validos_computados, r?.votos?.brancos, r?.votos?.nulos_total,
       ...[0, 1].flatMap((i) => [ordem[i]?.numero, nomes[ordem[i]?.numero], ordem[i]?.votos, ordem[i]?.pct_validos]),
       r?.disputa?.lider, r?.disputa?.diferenca_votos, r?.disputa?.diferenca_pontos,
-      r?.horario?.totalizacao, u.coleta?.situacao, u.coleta?.ultimo_sucesso, u.coleta?.url, snap.gerado_em, el.eleicao, el.turno, el.cargo_nome,
+      r?.horario?.totalizacao, u.coleta?.situacao, u.coleta?.ultimo_sucesso, u.coleta?.ultima_mudanca, u.coleta?.url, u.coleta?.sha256, el.eleicao, el.turno, el.cargo_nome, snap.modo,
     ]));
   }
   const cab = [
     "uf", "nome", "origem", "secoes_totalizadas", "secoes_previstas", "pct_totalizadas", "validos", "brancos", "nulos",
     "cand1_numero", "cand1_nome", "cand1_votos", "cand1_pct_validos", "cand2_numero", "cand2_nome", "cand2_votos", "cand2_pct_validos",
-    "lider", "diferenca_votos", "diferenca_pontos", "horario_totalizacao_tse", "situacao_coleta", "coletado_em", "url_fonte", "gerado_em", "eleicao", "turno", "cargo",
+    "lider", "diferenca_votos", "diferenca_pontos", "horario_totalizacao_tse", "situacao_coleta", "ultima_consulta_ok", "ultima_mudanca", "url_fonte", "sha256_arquivo", "eleicao", "turno", "cargo", "modo",
   ];
   return BOM + [linhaCsv(cab), ...linhas].join("\r\n") + "\r\n";
 }

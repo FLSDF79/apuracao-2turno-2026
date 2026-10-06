@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Fonte } from "../../coletor/fonte.js";
-import { rodada } from "../../coletor/rodada.js";
-import { fetchDeFixtures } from "../../coletor/fixtures.js";
-import { carregarBase, montarSite, fetchSimulado } from "../../coletor/simulador.js";
-import { SCHEMA } from "../../nucleo/contrato.js";
+import { Fonte } from "../../backend/conectores/http.js";
+import { rodada } from "../../backend/coletor/rodada.js";
+import { fetchDeFixtures } from "../../backend/conectores/fixtures.js";
+import { carregarBase, montarSite, fetchSimulado } from "../../backend/conectores/simulador.js";
+import { SCHEMA } from "../../backend/api/contrato.js";
 import { RAIZ, relogio } from "./apoio.mjs";
 
 test("ensaio com os arquivos reais do 1º turno: contrato completo, conferência compatível e sem recontagem", async () => {
@@ -152,4 +152,23 @@ test("resumo da coleta para a página: ok, atrasada e bloqueada", async () => {
   rel.avancar(15000);
   r = await rodada(fonte, r.estado);
   assert.equal(r.saidas["v1/saude.json"].coletor.estado, "bloqueada");
+});
+
+test("dados de teste nunca saem como apuração real: modo e aviso em todos os arquivos e no CSV", async () => {
+  const rel = relogio("2026-10-06T13:00:00Z");
+  const r = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel }), null, { modo: "ensaio" });
+  for (const nome of ["presidente", "governador", "historico", "saude"]) {
+    const j = r.saidas[`v1/${nome}.json`];
+    assert.equal(j.modo, "ensaio", nome);
+    assert.match(j.aviso_modo, /ENSAIO.*Não é a apuração do 2º turno/, nome);
+  }
+  for (const nome of ["presidente", "governador"]) {
+    const [cab, ...linhas] = r.saidas[`v1/export/${nome}.csv`].replace(/^\uFEFF/, "").trim().split("\r\n").map((l) => l.split(";"));
+    for (const col of ["origem", "horario_totalizacao_tse", "ultima_consulta_ok", "url_fonte", "sha256_arquivo", "modo"]) assert.ok(cab.includes(col), `${nome}.csv sem ${col}`);
+    const iModo = cab.indexOf("modo"), iUrl = cab.indexOf("url_fonte");
+    assert.ok(linhas.every((l) => l[iModo] === "ensaio"));
+    assert.ok(linhas.some((l) => l[iUrl].startsWith("https://resultados.tse.jus.br/")));
+  }
+  const oficial = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel }), null, { modo: "oficial" });
+  assert.equal(oficial.saidas["v1/presidente.json"].aviso_modo, null);
 });

@@ -1,7 +1,9 @@
 {
  "schema": "apuracao-2t-2026/v1",
  "tipo": "historico",
- "gerado_em": "2026-10-25T21:10:33.000Z",
+ "gerado_em": "2026-10-25T21:10:32.000Z",
+ "modo": "simulacao",
+ "aviso_modo": "SIMULAÇÃO: números fictícios derivados do 1º turno, para teste. Não é resultado real.",
  "eleicao": {
   "estado": "publicada",
   "eleicao": "6258",
@@ -167,6 +169,20 @@
      "depois": 114502
     }
    ]
+  }
+ ],
+ "eventos": [
+  {
+   "em": "2026-10-25T21:00:30.000Z",
+   "tipo": "correcao_oficial",
+   "recorte": "ac",
+   "disputa": "presidente"
+  },
+  {
+   "em": "2026-10-25T21:00:33.000Z",
+   "tipo": "correcao_oficial",
+   "recorte": "ac",
+   "disputa": "governador"
   }
  ]
 }

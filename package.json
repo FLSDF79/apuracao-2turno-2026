@@ -2,11 +2,18 @@
   "name": "apuracao-2turno-2026",
   "private": true,
   "type": "module",
-  "description": "Coletor e motor de cálculo do painel de apuração do 2º turno de 2026",
-  "engines": { "node": ">=20" },
+  "description": "Painel de apuração do 2º turno de 2026: coletor, motor de cálculo e API (JavaScript sem dependências em produção)",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "node --test tests/js/*.test.mjs",
-    "coletor": "node coletor/node.js",
+    "tipos": "tsc -p .",
+    "coletor": "node backend/execucao/node.js",
     "exemplo": "node tools/gerar-exemplo.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3"
   }
 }

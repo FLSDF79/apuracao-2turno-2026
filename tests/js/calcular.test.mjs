@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizarResultado } from "../../nucleo/normalizar.js";
-import { comIndicadores, agregar, disputa } from "../../nucleo/calcular.js";
-import { COMPONENTES_BRASIL, REGIOES, SIGLAS_UF } from "../../nucleo/territorios.js";
+import { normalizarResultado } from "../../backend/normalizacao/normalizar.js";
+import { comIndicadores, agregar, disputa } from "../../backend/agregacao/calcular.js";
+import { COMPONENTES_BRASIL, REGIOES, SIGLAS_UF } from "../../backend/normalizacao/territorios.js";
 import { presidente, governador, UFS_2T_GOV } from "./apoio.mjs";
 
 const norm = (d) => normalizarResultado(d);
@@ -94,4 +94,23 @@ test("governador: os 7 arquivos das UFs com 2º turno ficam separados de preside
     assert.equal(r.cargo.codigo, 3);
     assert.equal(r.candidatos.filter((c) => c.situacao === "2º turno").length, 2, uf);
   }
+});
+
+test("divisão por zero vira null (nunca NaN ou Infinity)", () => {
+  const r = norm(presidente("ac"));
+  for (const b of ["secoes", "eleitorado", "votos"]) for (const k of Object.keys(r[b])) r[b][k] = 0;
+  r.candidatos.forEach((c) => (c.votos = 0));
+  const i = comIndicadores(r);
+  assert.ok(Object.values(i.indicadores).every((v) => v === null || v === 0), JSON.stringify(i.indicadores));
+  assert.ok(i.candidatos.every((c) => c.pct_validos === null));
+  assert.equal(i.disputa.situacao, "sem_votos");
+});
+
+test("exterior entra uma única vez no Brasil calculado e em nenhuma região", () => {
+  const t = todos();
+  const semZz = agregar(t, SIGLAS_UF);
+  const comZz = agregar(t, COMPONENTES_BRASIL);
+  assert.equal(comZz.votos.total - semZz.votos.total, t.zz.votos.total);
+  assert.ok(Object.values(REGIOES).every((r) => !r.ufs.includes("zz")));
+  assert.equal(COMPONENTES_BRASIL.filter((c) => c === "zz").length, 1);
 });

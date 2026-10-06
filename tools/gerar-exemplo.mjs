@@ -6,10 +6,10 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { Fonte } from "../coletor/fonte.js";
-import { rodada } from "../coletor/rodada.js";
-import { fetchDeFixtures } from "../coletor/fixtures.js";
-import { carregarBase, montarSite, fetchSimulado } from "../coletor/simulador.js";
+import { Fonte } from "../backend/conectores/http.js";
+import { rodada } from "../backend/coletor/rodada.js";
+import { fetchDeFixtures } from "../backend/conectores/fixtures.js";
+import { carregarBase, montarSite, fetchSimulado } from "../backend/conectores/simulador.js";
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FIX = join(RAIZ, "tests/fixtures/tse-2026-10-06");

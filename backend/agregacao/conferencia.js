@@ -36,9 +36,9 @@ function linha(chave, rotulo, a, b) {
 }
 
 /**
- * @param A          agregado de calcular.agregar (Brasil calculado)
- * @param B          resultado oficial normalizado do recorte "br" (ou null)
- * @param opcoes     { defasados: [codigos], anterior: conferência da rodada anterior, agora: ISO, persistenciaMin }
+ * @param {any} A  agregado de calcular.agregar (Brasil calculado)
+ * @param {any} B  resultado oficial normalizado do recorte "br" (ou null)
+ * @param {{ defasados?: string[], anterior?: any, agora?: string, persistenciaMin?: number }} [opcoes]
  */
 export function conferir(A, B, { defasados = [], anterior = null, agora = new Date().toISOString(), persistenciaMin = 10 } = {}) {
   const numeros = [...new Set([...(A?.candidatos || []), ...(B?.candidatos || [])].map((c) => c.numero))];

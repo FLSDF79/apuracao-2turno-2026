@@ -1,12 +1,14 @@
 # Coletor do painel na Cloudflare (frente 4 publica). Durable Object com SQLite, disponível no plano gratuito.
 name = "apuracao-2turno-coletor"
 main = "worker.js"
+# Segredo de administração (não fica neste arquivo): wrangler secret put ADMIN_TOKEN  (mín. 32 caracteres)
 compatibility_date = "2026-10-01"
 
 [vars]
 MODO = "oficial"        # "ensaio" usa o 1º turno de 04/10
 INTERVALO_S = "15"      # mínimo 10
-PAUSADO = "nao"         # "sim" para o coletor parar de consultar o TSE
+PAUSADO = "nao"         # "sim" para o coletor parar de consultar o TSE (também dá para pausar por POST /admin/pausar)
+# HOSTS_EXTRAS_TESTE = "127.0.0.1:8788"   # só em teste local; nunca em produção
 
 [[durable_objects.bindings]]
 name = "COLETOR"

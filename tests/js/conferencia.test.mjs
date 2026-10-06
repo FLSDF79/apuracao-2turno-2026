@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizarResultado } from "../../nucleo/normalizar.js";
-import { agregar, comIndicadores } from "../../nucleo/calcular.js";
-import { conferir, AVISO_MESMA_BASE } from "../../nucleo/conferencia.js";
-import { COMPONENTES_BRASIL } from "../../nucleo/territorios.js";
+import { normalizarResultado } from "../../backend/normalizacao/normalizar.js";
+import { agregar, comIndicadores } from "../../backend/agregacao/calcular.js";
+import { conferir, AVISO_MESMA_BASE } from "../../backend/agregacao/conferencia.js";
+import { COMPONENTES_BRASIL } from "../../backend/normalizacao/territorios.js";
 import { presidente } from "./apoio.mjs";
 
 const base = () => Object.fromEntries([...COMPONENTES_BRASIL, "br"].map((c) => [c, normalizarResultado(presidente(c))]));

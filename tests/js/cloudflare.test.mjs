@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Fonte } from "../../coletor/fonte.js";
-import { rodada } from "../../coletor/rodada.js";
-import { fetchDeFixtures } from "../../coletor/fixtures.js";
-import { carregarEstado, gravarEstado, gravarSaidas } from "../../coletor/cloudflare/armazenamento.js";
+import { Fonte } from "../../backend/conectores/http.js";
+import { rodada } from "../../backend/coletor/rodada.js";
+import { fetchDeFixtures } from "../../backend/conectores/fixtures.js";
+import { carregarEstado, gravarEstado, gravarSaidas } from "../../backend/armazenamento/durable-object.js";
 import { RAIZ, relogio } from "./apoio.mjs";
 
 // Imitação mínima do storage de Durable Object (get, put em lote com limite de 128, list por prefixo)
@@ -35,4 +35,20 @@ test("estado dividido no storage do Durable Object volta igual e a rodada seguin
   rel.avancar(15000);
   const r2 = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel, estado: volta.fonte }), volta, { modo: "ensaio" });
   assert.deepEqual(r2.saidas["v1/saude.json"].coletor.status_http, { 304: 36 });
+});
+
+test("plano gratuito: rodada sem novidade do TSE regrava poucas chaves (linhas gravadas por dia)", async () => {
+  const st = storageFalso();
+  const rel = relogio();
+  let estado = null;
+  const gravadas = [];
+  for (let i = 0; i < 4; i++) {
+    const r = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel, estado: estado?.fonte }), estado, { modo: "ensaio" });
+    gravadas.push((await gravarEstado(st, r.estado)) + (await gravarSaidas(st, r.saidas, r.brutos)));
+    estado = JSON.parse(JSON.stringify(r.estado));
+    rel.avancar(15000);
+  }
+  assert.ok(gravadas[0] > 50, `primeira rodada grava tudo (${gravadas[0]})`);
+  // 5.760 rodadas/dia a cada 15 s; o plano gratuito permite 100 mil linhas gravadas por dia.
+  for (const n of gravadas.slice(1)) assert.ok(n * 5760 < 100000, `rodada sem novidade gravou ${n} chaves`);
 });

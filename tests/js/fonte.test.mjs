@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Fonte, segundosRetryAfter } from "../../coletor/fonte.js";
+import { Fonte, segundosRetryAfter } from "../../backend/conectores/http.js";
 import { relogio } from "./apoio.mjs";
 
 const U = "https://resultados.tse.jus.br/oficial/x.json";
