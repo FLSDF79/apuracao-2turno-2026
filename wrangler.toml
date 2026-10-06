@@ -1,0 +1,77 @@
+# Publicação do painel na Cloudflare (frente 4): um Worker serve a página (arquivos estáticos de dist/site)
+# e /dados/v1/* a partir do coletor único (Durable Object com alarme, backend/execucao/cloudflare/worker.js).
+# Página e dados na mesma origem: sem CORS e sem configuração extra na página.
+#
+#   node publicacao/montar-site.mjs && npx wrangler deploy                 # produção (TSE oficial)
+#   node publicacao/montar-site.mjs && npx wrangler deploy --env ensaio    # ensaio com TSE simulado
+#   node publicacao/montar-site.mjs && npx wrangler deploy --env teste-tse # 1º turno real lido do TSE (prova o acesso)
+#
+# Roteiro de operação: docs/publicacao/ROTEIRO-25-10.md
+name = "apuracao-2turno-2026"
+main = "publicacao/worker.js"   # coletor da frente 2 + cabeçalhos de segurança
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[assets]
+directory = "dist/site"
+
+[vars]
+MODO = "oficial"
+INTERVALO_S = "15"    # mínimo 10 (o coletor força)
+PAUSADO = "nao"       # "sim" para o coletor parar de consultar o TSE (exige novo deploy)
+MAX_NOVOS_POR_EXECUCAO = "12"   # arquivos novos processados por execução; o resto segue 1 s depois (limite de CPU). Se a CPU passar de 10 ms nos logs, baixe para 8
+
+[[durable_objects.bindings]]
+name = "COLETOR"
+class_name = "Coletor"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Coletor"]
+
+[triggers]
+crons = ["* * * * *"]   # vigia: rearma o alarme do coletor se ele parar
+
+[observability]
+enabled = true
+
+# Ensaio: mesma página e mesmo coletor, lendo a noite simulada que roda dentro do próprio Worker.
+[env.ensaio]
+name = "apuracao-2turno-2026-ensaio"
+main = "publicacao/worker-ensaio.js"
+
+[env.ensaio.vars]
+MODO = "simulacao"                        # descobre o 2º turno pela configuração (simulada), como no dia 25, e a página mostra a faixa "simulação"
+BASE = "https://tse-simulado.ensaio.invalid"
+HOSTS_EXTRAS_TESTE = "tse-simulado.ensaio.invalid"   # só o host simulado interno; nada sai para a rede
+INTERVALO_S = "15"
+PAUSADO = "nao"
+MAX_NOVOS_POR_EXECUCAO = "12"
+ENSAIO_INICIO = "2026-10-01T00:00:00Z"    # âncora do ciclo de 30 min
+
+[[env.ensaio.durable_objects.bindings]]
+name = "COLETOR"
+class_name = "Coletor"
+
+[env.ensaio.triggers]
+crons = ["* * * * *"]
+
+# Teste de acesso ao TSE pela Cloudflare: o coletor de produção, sem desvio nenhum, lendo os arquivos reais do
+# 1º turno (04/10) em resultados.tse.jus.br. A página mostra a faixa de ensaio. Se /dados/v1/saude.json trouxer
+# status 200/304 e conferência "compativel", o TSE aceita a Cloudflare; 403/429 ("bloqueada") aciona o plano B
+# (docs/publicacao/CONTINGENCIA.md). Depois do teste, apague este Worker no painel da Cloudflare.
+[env.teste-tse]
+name = "apuracao-2turno-2026-teste-tse"
+
+[env.teste-tse.vars]
+MODO = "ensaio"
+INTERVALO_S = "15"
+PAUSADO = "nao"
+MAX_NOVOS_POR_EXECUCAO = "12"
+
+[[env.teste-tse.durable_objects.bindings]]
+name = "COLETOR"
+class_name = "Coletor"
+
+[env.teste-tse.triggers]
+crons = ["* * * * *"]

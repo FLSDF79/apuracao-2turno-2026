@@ -1,0 +1,32 @@
+# Roda os testes offline sobre os arquivos oficiais guardados em tests/fixtures.
+name: Testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Testes de consistência das fontes
+        run: python3 -m unittest discover -s tests -v
+      - name: Dependências de desenvolvimento (só TypeScript para checagem; nada vai para produção)
+        run: npm ci
+      - name: Checagem de tipos (JSDoc + checkJs)
+        run: npm run tipos
+      - name: Testes do coletor e do motor de cálculo
+        run: npm test
+      - name: Exemplos do contrato estão atualizados
+        run: node tools/gerar-exemplo.mjs && git diff --exit-code exemplos

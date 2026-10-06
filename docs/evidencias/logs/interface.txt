@@ -1,0 +1,133 @@
+$ node --test tests/interface/interface.test.js
+
+TAP version 13
+# Subtest: lê o ensaio do 1º turno sem problemas e com os votos oficiais
+ok 1 - lê o ensaio do 1º turno sem problemas e com os votos oficiais
+  ---
+  duration_ms: 4.040162
+  type: 'test'
+  ...
+# Subtest: todos os territórios, regiões e Brasil calculado chegam à tela
+ok 2 - todos os territórios, regiões e Brasil calculado chegam à tela
+  ---
+  duration_ms: 0.722987
+  type: 'test'
+  ...
+# Subtest: não mostra eleito sem publicação oficial (o campo e = s dos classificados não conta)
+ok 3 - não mostra eleito sem publicação oficial (o campo e = s dos classificados não conta)
+  ---
+  duration_ms: 2.592295
+  type: 'test'
+  ...
+# Subtest: percentuais e diferença vêm do coletor, sem recálculo
+ok 4 - percentuais e diferença vêm do coletor, sem recálculo
+  ---
+  duration_ms: 0.688197
+  type: 'test'
+  ...
+# Subtest: recorte que falhou fica defasado, e sem arquivo fica indisponível ou aguardando, nunca zero
+ok 5 - recorte que falhou fica defasado, e sem arquivo fica indisponível ou aguardando, nunca zero
+  ---
+  duration_ms: 1.40122
+  type: 'test'
+  ...
+# Subtest: campo ausente vira null (travessão); zero confirmado continua 0
+ok 6 - campo ausente vira null (travessão); zero confirmado continua 0
+  ---
+  duration_ms: 1.90719
+  type: 'test'
+  ...
+# Subtest: empate e sem votos são estados próprios, não cor de candidato
+ok 7 - empate e sem votos são estados próprios, não cor de candidato
+  ---
+  duration_ms: 1.29964
+  type: 'test'
+  ...
+# Subtest: conferência: classificação, aviso e linhas A × B vêm prontos
+ok 8 - conferência: classificação, aviso e linhas A × B vêm prontos
+  ---
+  duration_ms: 0.813041
+  type: 'test'
+  ...
+# Subtest: faixas de margem para a intensidade do mapa
+ok 9 - faixas de margem para a intensidade do mapa
+  ---
+  duration_ms: 0.329464
+  type: 'test'
+  ...
+# Subtest: histórico ordenado pelo horário do TSE e com correções mantidas
+ok 10 - histórico ordenado pelo horário do TSE e com correções mantidas
+  ---
+  duration_ms: 1.130988
+  type: 'test'
+  ...
+# Subtest: governador: 7 UFs, separado do presidente, com nomes dos candidatos
+ok 11 - governador: 7 UFs, separado do presidente, com nomes dos candidatos
+  ---
+  duration_ms: 1.007491
+  type: 'test'
+  ...
+# Subtest: saúde do coletor
+ok 12 - saúde do coletor
+  ---
+  duration_ms: 0.413454
+  type: 'test'
+  ...
+# Subtest: cores fixas: troca persiste e não aceita duas cores iguais
+ok 13 - cores fixas: troca persiste e não aceita duas cores iguais
+  ---
+  duration_ms: 0.439046
+  type: 'test'
+  ...
+# Subtest: horários sempre em Brasília
+ok 14 - horários sempre em Brasília
+  ---
+  duration_ms: 0.179158
+  type: 'test'
+  ...
+# Subtest: versão de contrato errada é avisada
+ok 15 - versão de contrato errada é avisada
+  ---
+  duration_ms: 1.408193
+  type: 'test'
+  ...
+# Subtest: contagem que não é inteiro ≥ 0 vira ausente e é registrada
+ok 16 - contagem que não é inteiro ≥ 0 vira ausente e é registrada
+  ---
+  duration_ms: 1.12773
+  type: 'test'
+  ...
+# Subtest: resposta sem brasil e sem territórios é rejeitada inteira
+ok 17 - resposta sem brasil e sem territórios é rejeitada inteira
+  ---
+  duration_ms: 0.349935
+  type: 'test'
+  ...
+# Subtest: marca de teste: simulação, ensaio, outro turno e modo desconhecido; oficial do 2º turno sem marca
+ok 18 - marca de teste: simulação, ensaio, outro turno e modo desconhecido; oficial do 2º turno sem marca
+  ---
+  duration_ms: 3.911503
+  type: 'test'
+  ...
+# Subtest: três horários separados: publicação do TSE, consulta e mudança, do bloco tempos do coletor
+ok 19 - três horários separados: publicação do TSE, consulta e mudança, do bloco tempos do coletor
+  ---
+  duration_ms: 1.155738
+  type: 'test'
+  ...
+# Subtest: assinatura do conteúdo ignora horários de coleta e muda com os números
+ok 20 - assinatura do conteúdo ignora horários de coleta e muda com os números
+  ---
+  duration_ms: 6.027103
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 131.395552
+

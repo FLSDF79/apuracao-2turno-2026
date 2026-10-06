@@ -1,0 +1,86 @@
+# Publica o painel na Cloudflare (página + coletor único). Substitui o antigo fluxo do GitHub Pages,
+# que não roda coletor.
+#
+# Precisa de dois segredos no repositório (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   token com o modelo "Edit Cloudflare Workers"
+#   CLOUDFLARE_ACCOUNT_ID  ID da conta (painel da Cloudflare, Workers & Pages, barra lateral)
+#   ADMIN_TOKEN            (opcional) 32+ caracteres aleatórios; liga /admin/* no Worker
+# Sem eles o fluxo roda os testes, monta o site e avisa que pulou a publicação.
+#
+# Push na main publica a PRODUÇÃO. "Run workflow" deixa escolher produção ou ensaio.
+name: Publicar na Cloudflare
+
+on:
+  push:
+    branches: [main]
+  pull_request:          # em PR só testa e monta; nunca publica
+  workflow_dispatch:
+    inputs:
+      ambiente:
+        description: "ensaio (TSE simulado), teste-tse (1º turno real lido do TSE, prova o acesso pela Cloudflare) ou producao (2º turno oficial)"
+        type: choice
+        options: [ensaio, teste-tse, producao]
+        default: ensaio
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-${{ github.event_name == 'pull_request' && github.ref || github.event.inputs.ambiente || 'producao' }}
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Dependências de desenvolvimento (só verificação de tipos)
+        run: npm ci
+      - name: Testes (tipos, fontes, coletor, página, ensaio)
+        run: |
+          npm run tipos
+          npm run tipos:painel
+          python3 -m unittest discover -s tests
+          npm test
+          node --test tests/interface/*.test.js
+          node --test tests/publicacao/*.test.mjs
+      - name: Montar o site
+        run: node publicacao/montar-site.mjs
+      - name: Publicar
+        id: publicar
+        if: github.event_name != 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          AMBIENTE: ${{ github.event.inputs.ambiente || 'producao' }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::warning::Segredos da Cloudflare ausentes: publicação pulada (testes e montagem ok)."
+            exit 0
+          fi
+          if [ "$AMBIENTE" = "producao" ]; then ENV="--env="; else ENV="--env=$AMBIENTE"; fi
+          npx --yes wrangler@4 deploy $ENV | tee deploy.log
+          # endereço publicado (workers.dev), usado na conferência abaixo
+          echo "url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1)" >> "$GITHUB_OUTPUT"
+          # segredo de administração (opcional): copiado do segredo ADMIN_TOKEN do GitHub, nunca escrito em log
+          if [ -n "$ADMIN_TOKEN" ]; then printf '%s' "$ADMIN_TOKEN" | npx --yes wrangler@4 secret put ADMIN_TOKEN $ENV; fi
+      - name: Conferir no ar
+        if: github.event_name != 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          URL_PUBLICADA: ${{ steps.publicar.outputs.url }}
+          URL_PAINEL: ${{ vars.URL_PAINEL }}
+          AMBIENTE: ${{ github.event.inputs.ambiente || 'producao' }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then exit 0; fi
+          # domínio próprio da produção (variável URL_PAINEL), se houver; senão o endereço workers.dev do deploy
+          URL=$([ "$AMBIENTE" = "producao" ] && [ -n "$URL_PAINEL" ] && echo "$URL_PAINEL" || echo "$URL_PUBLICADA")
+          if [ -z "$URL" ]; then echo "::warning::Endereço publicado não encontrado na saída do wrangler."; exit 0; fi
+          node publicacao/conferir-no-ar.mjs "$URL" --esperar 90

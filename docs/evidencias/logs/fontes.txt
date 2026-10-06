@@ -1,0 +1,19 @@
+$ python3 -m unittest discover -s tests -v
+
+
+test_comparecimento_oficial_usa_eleitorado_das_secoes_instaladas (test_fixtures_tse.CategoriasDeVoto.test_comparecimento_oficial_usa_eleitorado_das_secoes_instaladas) ... ok
+test_identidades (test_fixtures_tse.CategoriasDeVoto.test_identidades) ... ok
+test_percentual_oficial_usa_vvc (test_fixtures_tse.CategoriasDeVoto.test_percentual_oficial_usa_vvc) ... ok
+test_arquivos_declaram_eleicao_turno_cargo (test_fixtures_tse.Configuracao.test_arquivos_declaram_eleicao_turno_cargo) ... ok
+test_codigos_2026 (test_fixtures_tse.Configuracao.test_codigos_2026) ... ok
+test_arquivos_batem_com_manifesto (test_fixtures_tse.Manifesto.test_arquivos_batem_com_manifesto) ... ok
+test_presidente_vai_ao_segundo_turno (test_fixtures_tse.SegundoTurnoGovernador.test_presidente_vai_ao_segundo_turno) ... ok
+test_ufs_com_segundo_turno (test_fixtures_tse.SegundoTurnoGovernador.test_ufs_com_segundo_turno) ... ok
+test_df_e_exterior_sao_recortes_distintos (test_fixtures_tse.SomaTerritorialPresidente.test_df_e_exterior_sao_recortes_distintos) ... ok
+test_secoes_eleitorado_e_votos (test_fixtures_tse.SomaTerritorialPresidente.test_secoes_eleitorado_e_votos) ... ok
+test_votos_por_candidato (test_fixtures_tse.SomaTerritorialPresidente.test_votos_por_candidato) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.025s
+
+OK
