@@ -1,100 +1,199 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-tema="escuro">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0d1117">
-<title>Apuração 2º turno 2026 — Presidente</title>
-<meta name="description" content="Painel independente de apuração em tempo real do 2º turno presidencial de 25/10/2026, com dados abertos do TSE.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%228%22 height=%2216%22 fill=%22%232f6bff%22/%3E%3Crect x=%228%22 width=%228%22 height=%2216%22 fill=%22%23e5383b%22/%3E%3C/svg%3E">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b0d12">
+<title>Apuração 2º turno 2026 · Presidente</title>
+<meta name="description" content="Painel independente com dados oficiais do TSE para acompanhar a apuração do 2º turno presidencial de 25/10/2026 por Brasil, região, UF e exterior.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%228%22 height=%2216%22 fill=%22%233d74ff%22/%3E%3Crect x=%228%22 width=%228%22 height=%2216%22 fill=%22%23e5383b%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="pular" href="#brasil">Pular para o placar</a>
+
+<div class="faixa-teste" id="faixaTeste" role="note" hidden><strong id="faixaTit"></strong><span id="faixaTxt"></span></div>
+
 <header class="topo">
-  <div>
-    <h1>Apuração Presidente 2026</h1>
-    <p class="sub" id="subtitulo">Carregando…</p>
+  <div class="marca">
+    <p class="sobretitulo" id="sobretitulo">Eleições 2026 · Presidente · 2º turno · 25/10</p>
+    <h1>Apuração <span class="h1-fino">em tempo real</span></h1>
+    <p class="independente">Painel independente com dados oficiais do TSE</p>
   </div>
-  <div class="status" id="status"><span class="ponto"></span><span id="statusTxt">conectando</span></div>
+  <div class="topo-dir">
+    <dl class="tempos" aria-label="Horários dos dados, em horário de Brasília">
+      <div><dt>Publicado pelo TSE</dt><dd class="mono" id="tPub">—</dd></div>
+      <div><dt>Última mudança nos números</dt><dd class="mono" id="tMud">—</dd></div>
+      <div><dt>Última consulta ao TSE</dt><dd class="mono" id="tCon">—</dd></div>
+    </dl>
+    <div class="saude" id="saude"><span class="ponto" aria-hidden="true"></span><span id="saudeTxt">conectando</span></div>
+    <div class="acoes">
+      <button class="btn" type="button" id="btnCores" aria-haspopup="dialog">Cores</button>
+      <button class="btn" type="button" id="btnTema" aria-label="Alternar tema claro ou escuro">Tema</button>
+      <button class="btn" type="button" id="btnExportar" aria-haspopup="menu">Exportar</button>
+      <button class="btn btn-forte" type="button" id="btnTV">Modo TV</button>
+    </div>
+  </div>
 </header>
 
-<div id="avisos" aria-live="polite"></div>
+<nav class="abas" aria-label="Áreas do painel">
+  <a href="#brasil">Brasil</a>
+  <a href="#mapa-area">Mapa</a>
+  <a href="#estados">Estados e regiões</a>
+  <a href="#conferencia">Conferência</a>
+  <a href="#historico">Histórico</a>
+  <a href="#fontes">Fontes e saúde</a>
+  <a href="#governador">Governador</a>
+</nav>
 
-<main>
-  <!-- 1. Placar nacional -->
-  <section class="card" id="placar">
-    <div class="progresso">
-      <div class="prog-txt"><strong id="pctSecoes">–</strong> das seções totalizadas <span id="secoesNum" class="mut"></span></div>
-      <div class="barra"><div id="barraSecoes"></div></div>
+<div id="avisos" class="avisos"></div>
+<p id="anuncio" class="so-leitor" aria-live="polite"></p>
+
+<main id="conteudo">
+  <!-- Visão Brasil -->
+  <section id="brasil" class="bloco bloco-brasil" aria-labelledby="t-brasil">
+    <h2 id="t-brasil" class="rotulo-secao">Visão Brasil</h2>
+    <div class="totalizacao">
+      <div class="tot-num"><span id="totPct" class="tot-pct">—</span><span class="tot-txt">das seções totalizadas</span></div>
+      <div class="tot-barra" role="progressbar" aria-label="Seções totalizadas no Brasil" aria-valuemin="0" aria-valuemax="100" id="totBarra"><div></div></div>
+      <div class="tot-det mono" id="totDet">—</div>
     </div>
-    <div class="cands" id="cands"></div>
-    <div class="barra-disputa" id="barraDisputa"></div>
-    <div class="dif" id="diferenca"></div>
-    <div class="mini-grid" id="miniGrid"></div>
-    <p class="mut atual" id="ultimaAtualizacao"></p>
+    <div class="placar" id="placar"></div>
+    <div class="disputa" id="disputa" aria-hidden="true"></div>
+    <p class="diferenca" id="diferenca"></p>
+    <dl class="numeros" id="numeros"></dl>
+    <p class="origem mono" id="origemBR"></p>
   </section>
 
-  <!-- 7. Projeção -->
-  <section class="card" id="projecao">
-    <h2>Projeção simples <span class="tag">ESTIMATIVA</span></h2>
-    <div id="projConteudo"></div>
-    <details>
-      <summary>Metodologia</summary>
-      <p>Para cada UF (e Exterior), os votos ainda não totalizados são estimados assim:
-      <em>eleitorado das seções não totalizadas × comparecimento já observado na UF × proporção de votos válidos já observada na UF</em>.
-      Esses votos válidos faltantes são divididos entre os candidatos na <strong>mesma proporção atual de cada UF</strong>.
-      UFs ainda sem nenhuma seção totalizada usam as proporções nacionais do momento.
-      Somam-se os votos já apurados aos estimados e calcula-se o % de válidos.</p>
-      <p>É uma conta aritmética, não um modelo estatístico: ignora diferenças dentro da UF (capital × interior, zonas que chegam antes), votos em trânsito e o ritmo real da totalização. <strong>Não é resultado oficial.</strong></p>
-    </details>
-  </section>
-
-  <!-- 2. Conferência soma UFs x nacional -->
-  <section class="card" id="conferencia">
-    <h2>Conferência: soma das UFs × total nacional</h2>
-    <div id="confConteudo"></div>
-  </section>
-
-  <!-- 5. Mapa -->
-  <section class="card" id="mapaCard">
-    <h2>Mapa por estado</h2>
-    <div class="legenda" id="legenda"></div>
-    <div class="mapa-wrap">
-      <svg id="mapa" role="img" aria-label="Mapa do Brasil por estado"></svg>
-      <div id="tooltip" class="tooltip" hidden></div>
+  <!-- Mapa -->
+  <section id="mapa-area" class="bloco bloco-mapa" aria-labelledby="t-mapa">
+    <div class="cab-secao">
+      <h2 id="t-mapa" class="rotulo-secao">Mapa</h2>
+      <div class="controles" role="group" aria-label="Opções do mapa">
+        <div class="seg" role="group" aria-label="Recorte">
+          <button type="button" data-nivel="uf" aria-pressed="true">Estados</button>
+          <button type="button" data-nivel="regiao" aria-pressed="false">Regiões</button>
+        </div>
+        <div class="seg" role="group" aria-label="Forma">
+          <button type="button" data-forma="geo" aria-pressed="true">Geográfico</button>
+          <button type="button" data-forma="grade" aria-pressed="false">Grade</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="chkIntensidade" checked> Intensidade pela margem</label>
+      </div>
     </div>
-    <p class="mut peq">Cor = candidato à frente; intensidade = margem em pontos percentuais dos votos válidos. Cinza = sem seções totalizadas. Toque/passe o mouse num estado.</p>
+    <div class="mapa-grid">
+      <div class="mapa-wrap">
+        <svg id="mapa" role="group" aria-label="Mapa do Brasil por estado; cada estado é um botão"></svg>
+        <button type="button" class="ext-cartao" id="extCartao" data-id="zz"></button>
+        <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+      </div>
+      <aside class="mapa-lado">
+        <div class="legenda" id="legenda"></div>
+        <div class="volume">
+          <h3 class="rotulo-mini">Onde estão os votos</h3>
+          <p class="nota">O mapa colore por quem lidera, não por quantidade. As barras mostram a vantagem em votos de cada <span id="volUnid">UF</span>, ordenada pelo tamanho.</p>
+          <div id="volume" class="vol-lista"></div>
+        </div>
+      </aside>
+    </div>
   </section>
 
-  <!-- 6. Evolução -->
-  <section class="card" id="evolucaoCard">
-    <h2>Evolução: % de votos válidos × % apurado</h2>
-    <svg id="grafico" role="img" aria-label="Gráfico de evolução"></svg>
-    <p class="mut peq" id="grafNota">Histórico guardado neste navegador (localStorage) a partir do momento em que o painel foi aberto. Linhas tracejadas = pausas de mais de 10 min na totalização do TSE.</p>
-    <button class="btn" id="limparHist" type="button">Limpar histórico deste navegador</button>
+  <!-- Estados e regiões -->
+  <section id="estados" class="bloco" aria-labelledby="t-estados">
+    <div class="cab-secao">
+      <h2 id="t-estados" class="rotulo-secao">Estados e regiões</h2>
+      <div class="controles">
+        <div class="chips" id="filtroRegiao" role="group" aria-label="Filtrar por região"></div>
+        <input type="search" id="busca" class="busca" placeholder="Buscar UF" aria-label="Buscar estado">
+      </div>
+    </div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela de regiões, exterior e Brasil (role para os lados)"><table id="tabRegioes" class="tabela"></table></div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela de estados, DF e exterior (role para os lados)"><table id="tabUFs" class="tabela"></table></div>
+    <p class="nota">Regiões e Brasil vêm do coletor, que soma votos absolutos e contagens de seções antes de calcular percentuais. O painel não faz média de percentuais.</p>
   </section>
 
-  <!-- 4. Regiões -->
-  <section class="card" id="regioesCard">
-    <h2>Totais por região</h2>
-    <div class="tabela-wrap"><table id="tabRegioes"></table></div>
+  <!-- Conferência -->
+  <section id="conferencia" class="bloco" aria-labelledby="t-conf">
+    <h2 id="t-conf" class="rotulo-secao">Conferência · soma territorial × total do TSE</h2>
+    <div id="confCab" class="conf-cab"></div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela da conferência"><table id="tabConf" class="tabela tabela-conf"></table></div>
+    <div id="confCobertura" class="conf-cob"></div>
+    <p class="nota"><strong>A</strong> é a soma que o coletor faz das 27 UFs e do exterior. <strong>B</strong> é o total nacional publicado pelo TSE. São duas representações dos mesmos votos, por isso nunca se somam. Uma diferença temporária costuma ser arquivo publicado em horário diferente, não irregularidade.</p>
   </section>
 
-  <!-- 3. Tabela por UF -->
-  <section class="card" id="ufsCard">
-    <h2>Por estado <span class="mut peq">(toque no cabeçalho para ordenar)</span></h2>
-    <div class="tabela-wrap"><table id="tabUFs"></table></div>
+  <!-- Histórico -->
+  <section id="historico" class="bloco" aria-labelledby="t-hist">
+    <div class="cab-secao">
+      <h2 id="t-hist" class="rotulo-secao">Histórico observado</h2>
+      <div class="seg" role="group" aria-label="Eixo horizontal">
+        <button type="button" data-eixo="tempo" aria-pressed="true">Por horário</button>
+        <button type="button" data-eixo="secoes" aria-pressed="false">Por % totalizado</button>
+      </div>
+    </div>
+    <div class="hist-grid">
+      <figure><figcaption class="rotulo-mini">% dos votos válidos</figcaption><svg id="grafPct" role="img" aria-label="Evolução do percentual de votos válidos"></svg></figure>
+      <figure><figcaption class="rotulo-mini">Diferença em votos</figcaption><svg id="grafMargem" role="img" aria-label="Evolução da diferença em votos"></svg></figure>
+    </div>
+    <p class="nota" id="histNota"></p>
+  </section>
+
+  <!-- Fontes e saúde -->
+  <section id="fontes" class="bloco" aria-labelledby="t-fontes">
+    <h2 id="t-fontes" class="rotulo-secao">Fontes e saúde</h2>
+    <div id="fontesResumo" class="fontes-resumo"></div>
+    <div class="aviso-base">
+      <strong>Nenhum TRE publica arquivo próprio de resultados.</strong> Desde 2020 a totalização é centralizada no TSE, e os 27 recortes estaduais vêm da mesma base do TSE. O painel mostra cada recorte com essa origem, sem fingir que são 27 fontes independentes.
+      <a id="lnkInventario" target="_blank" rel="noopener">Ver inventário das fontes</a>
+    </div>
+    <div class="tabela-wrap" tabindex="0" role="region" aria-label="Tabela das fontes por recorte"><table id="tabFontes" class="tabela tabela-fontes"></table></div>
+    <div class="eventos" id="eventos"></div>
+    <ul class="links-oficiais" id="linksOficiais"></ul>
+  </section>
+
+  <!-- Governador -->
+  <section id="governador" class="bloco" aria-labelledby="t-gov">
+    <h2 id="t-gov" class="rotulo-secao">Governador · 2º turno em 7 UFs</h2>
+    <p class="nota">Módulo separado: os votos para governador nunca entram nos totais de presidente.</p>
+    <div id="govLista" class="gov-lista"></div>
   </section>
 </main>
 
-<footer>
-  <p><strong>Dados: TSE – Divulgação de Resultados. Painel independente, sem vínculo oficial.</strong></p>
-  <p class="mut peq" id="fonteInfo"></p>
-  <p class="mut peq">Mapa: malha estadual do IBGE. Horários do TSE em horário de Brasília. Atualização automática a cada ~45 s.</p>
+<!-- Detalhe de UF / região -->
+<div class="gaveta" id="gaveta" hidden>
+  <div class="gaveta-fundo" data-fechar></div>
+  <aside class="gaveta-painel" role="dialog" aria-modal="true" aria-labelledby="gavTitulo">
+    <button class="btn fechar" type="button" data-fechar aria-label="Fechar detalhe">Fechar</button>
+    <div id="gavConteudo"></div>
+  </aside>
+</div>
+
+<!-- Cores -->
+<div class="pop" id="popCores" role="dialog" aria-label="Cores dos candidatos" hidden></div>
+<div class="pop" id="popExportar" role="menu" aria-label="Exportar dados" hidden></div>
+
+<footer class="rodape">
+  <div class="rod-col">
+    <p class="rod-tit">Painel independente com dados oficiais</p>
+    <p>Fonte: TSE, Divulgação de Resultados. Sem vínculo com o TSE ou com os TREs. Liderança parcial não é resultado: “eleito” só aparece quando o TSE publica essa situação.</p>
+    <p class="mono pequeno" id="rodContrato"></p>
+  </div>
+  <div class="rod-col autor">
+    <p class="rod-tit">Feito por <a id="lnkAutor" target="_blank" rel="noopener">Fabiano Silva</a></p>
+    <p>Gerente geral bancário em Brasília/DF e consultor de IA aplicada. MBA em Tecnologia para Negócios (IA, Data Science e Big Data) pela PUCRS, mestre em Gestão e Direção de Equipes e graduando em Inteligência Artificial. Criador da NFLS.AI Arena.</p>
+    <p><a id="lnkLinkedin" target="_blank" rel="noopener">LinkedIn</a> · <a id="lnkAutor2" target="_blank" rel="noopener">Sobre o autor</a></p>
+  </div>
 </footer>
 
+<a class="selo" id="selo" target="_blank" rel="noopener" title="Checagem de fatos com apoio da NFLS.AI Arena">
+  <img src="assets/nfls-ai-arena.svg" alt="" width="34" height="16">
+  <span>checagem de fatos · <strong>NFLS.AI Arena</strong></span>
+</a>
+
 <script src="config.js"></script>
-<script src="app.js"></script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>

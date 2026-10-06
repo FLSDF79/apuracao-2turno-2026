@@ -1,0 +1,111 @@
+{
+  "gerado_em": "2026-10-06T14:30:34.516Z",
+  "casos": [
+    {
+      "caso": "placar ensaio",
+      "esperado": [
+        [
+          "22",
+          56104503,
+          "47,03%"
+        ],
+        [
+          "13",
+          53879538,
+          "45,16%"
+        ]
+      ],
+      "exibido": {
+        "pcts": [
+          "47,03%",
+          "45,16%"
+        ],
+        "votos": [
+          "56.104.503 votos",
+          "53.879.538 votos"
+        ]
+      }
+    },
+    {
+      "caso": "tabela UFs ensaio",
+      "linhas": 28,
+      "conferidas": 28,
+      "campos": [
+        "totalizado",
+        "% e votos dos 2 candidatos",
+        "válidos",
+        "brancos"
+      ]
+    },
+    {
+      "caso": "console ensaio",
+      "erros": []
+    },
+    {
+      "caso": "placar simulacao",
+      "esperado": [
+        [
+          "22",
+          23051556,
+          "51,15%"
+        ],
+        [
+          "13",
+          22010901,
+          "48,85%"
+        ]
+      ],
+      "exibido": {
+        "pcts": [
+          "51,15%",
+          "48,85%"
+        ],
+        "votos": [
+          "23.051.556 votos",
+          "22.010.901 votos"
+        ]
+      }
+    },
+    {
+      "caso": "tabela UFs simulacao",
+      "linhas": 28,
+      "conferidas": 28,
+      "campos": [
+        "totalizado",
+        "% e votos dos 2 candidatos",
+        "válidos",
+        "brancos"
+      ]
+    },
+    {
+      "caso": "console simulacao",
+      "erros": []
+    },
+    {
+      "caso": "conteúdo igual",
+      "ultima_mudanca": "25/10 18:10:32",
+      "consulta_antes": "25/10 18:10:32",
+      "consulta_depois": "25/10 18:10:45"
+    },
+    {
+      "caso": "axe dark",
+      "violacoes": [
+        {
+          "id": "region",
+          "impacto": "moderate",
+          "nos": 2
+        }
+      ]
+    },
+    {
+      "caso": "axe light",
+      "violacoes": [
+        {
+          "id": "region",
+          "impacto": "moderate",
+          "nos": 2
+        }
+      ]
+    }
+  ]
+}

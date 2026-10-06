@@ -1,0 +1,18 @@
+{
+  // Checagem de tipos da página (JavaScript puro, sem build): tsc lê os comentários JSDoc e o uso do DOM.
+  // Rodar: npx -p typescript tsc -p js/tsconfig.json
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "strict": false,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
+  },
+  "files": ["tipos.d.ts", "../config.js", "formato.js", "contrato.js", "cores.js", "mapa.js", "exportar.js", "app.js"]
+}
