@@ -74,7 +74,7 @@ test("noite inteira pelo coletor de verdade: regras do prompt valem em todas as 
   for (; agora < INICIO + DURACAO_MIN * 60000; agora += 15000) {
     const r = await rodada(fonte, estado, { modo: "simulacao" });
     estado = r.estado;
-    const snap = { pres: r.saidas["v1/presidente.json"], saude: r.saidas["v1/saude.json"], hist: r.saidas["v1/historico.json"] };
+    const snap = { pres: r.saidas["v1/presidente.json"], saude: r.saidas["v1/saude.json"], hist: r.saidas["v1/historico.json"] ?? anterior?.hist }; // histórico só sai quando muda
     const t = (agora - INICIO) / 60000;
     const c = conferirSnapshot({ ...snap, anterior, t, modoEsperado: "simulacao" });
     assert.deepEqual(c.falhas, [], `t=${t}`);

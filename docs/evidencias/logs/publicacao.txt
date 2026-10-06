@@ -1,67 +1,82 @@
-$ node --test tests/publicacao/ensaio.test.mjs
+$ node --test tests/publicacao/ensaio-ciclo.test.mjs tests/publicacao/ensaio.test.mjs
 
 TAP version 13
-# Subtest: horário publicado sai em Brasília, no formato do TSE
-ok 1 - horário publicado sai em Brasília, no formato do TSE
+# {"rodada":"2026-10-01T00:23:03.168Z","chaves_gravadas":125,"continuar":false}
+# {"rodada":"2026-10-01T00:23:21.182Z","chaves_gravadas":8,"continuar":false}
+# {"rodada":"2026-10-01T00:23:39.191Z","chaves_gravadas":8,"continuar":false}
+# {"rodada":"2026-10-01T00:35:03.020Z","chaves_gravadas":125,"continuar":false}
+# {"rodada":"2026-10-01T00:35:21.032Z","chaves_gravadas":8,"continuar":false}
+# {"rodada":"2026-10-01T00:35:39.048Z","chaves_gravadas":120,"continuar":false}
+# {"rodada":"2026-10-01T00:35:03.014Z","chaves_gravadas":125,"continuar":false}
+# {"rodada":"2026-10-01T00:35:21.028Z","chaves_gravadas":8,"continuar":false}
+# {"rodada":"2026-10-01T00:35:39.044Z","chaves_gravadas":120,"continuar":false}
+# Subtest: ensaio publicado: novo ciclo recomeça do zero, sem estado preso em memória
+ok 1 - ensaio publicado: novo ciclo recomeça do zero, sem estado preso em memória
   ---
-  duration_ms: 13.253185
+  duration_ms: 27299.272305
+  type: 'test'
+  ...
+# Subtest: horário publicado sai em Brasília, no formato do TSE
+ok 2 - horário publicado sai em Brasília, no formato do TSE
+  ---
+  duration_ms: 19.982789
   type: 'test'
   ...
 # Subtest: roteiro: sem 2º turno antes do minuto 2; eleito só no fim; frações nunca passam de 1
-ok 2 - roteiro: sem 2º turno antes do minuto 2; eleito só no fim; frações nunca passam de 1
+ok 3 - roteiro: sem 2º turno antes do minuto 2; eleito só no fim; frações nunca passam de 1
   ---
-  duration_ms: 13.954404
+  duration_ms: 21.779824
   type: 'test'
   ...
 # Subtest: roteiro: SP atrasado deixa o nacional mais novo que a UF; correção faz o AC recuar
-ok 3 - roteiro: SP atrasado deixa o nacional mais novo que a UF; correção faz o AC recuar
+ok 4 - roteiro: SP atrasado deixa o nacional mais novo que a UF; correção faz o AC recuar
   ---
-  duration_ms: 1.227809
+  duration_ms: 0.74925
   type: 'test'
   ...
 # Subtest: TSE simulado: ETag/304 e falhas injetadas com Retry-After
-ok 4 - TSE simulado: ETag/304 e falhas injetadas com Retry-After
+ok 5 - TSE simulado: ETag/304 e falhas injetadas com Retry-After
   ---
-  duration_ms: 55.997833
+  duration_ms: 61.899576
   type: 'test'
   ...
 # Subtest: TSE simulado cíclico recomeça a noite
-ok 5 - TSE simulado cíclico recomeça a noite
+ok 6 - TSE simulado cíclico recomeça a noite
   ---
-  duration_ms: 2.864812
+  duration_ms: 2.376413
   type: 'test'
   ...
 # Subtest: noite inteira pelo coletor de verdade: regras do prompt valem em todas as rodadas
-ok 6 - noite inteira pelo coletor de verdade: regras do prompt valem em todas as rodadas
+ok 7 - noite inteira pelo coletor de verdade: regras do prompt valem em todas as rodadas
   ---
-  duration_ms: 2158.012939
+  duration_ms: 2063.136413
   type: 'test'
   ...
 # Subtest: site montado só com a página e os exemplos (sem fixtures, testes ou coletor)
-ok 7 - site montado só com a página e os exemplos (sem fixtures, testes ou coletor)
+ok 8 - site montado só com a página e os exemplos (sem fixtures, testes ou coletor)
   ---
-  duration_ms: 38.866717
+  duration_ms: 60.767839
   type: 'test'
   ...
 # Subtest: toda referência local da página existe no site montado
-ok 8 - toda referência local da página existe no site montado
+ok 9 - toda referência local da página existe no site montado
   ---
-  duration_ms: 27.072431
+  duration_ms: 47.560551
   type: 'test'
   ...
 # Subtest: wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera
-ok 9 - wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera
+ok 10 - wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera
   ---
-  duration_ms: 1.84128
+  duration_ms: 2.443552
   type: 'test'
   ...
-1..9
-# tests 9
+1..10
+# tests 10
 # suites 0
-# pass 9
+# pass 10
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 2422.362836
+# duration_ms 27483.663814
 

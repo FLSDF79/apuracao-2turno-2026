@@ -36,6 +36,14 @@ export class Coletor extends ColetorProducao {
     if ((await this.state.storage.get("ensaio:ciclo")) !== ciclo) {
       await this.state.storage.deleteAll();
       await this.state.storage.put("ensaio:ciclo", ciclo);
+      // O coletor guarda em memória o estado e o último valor gravado de cada chave (por objeto de storage).
+      // Depois de apagar tudo, os dois precisam ser esquecidos, senão chaves iguais às da noite anterior
+      // (configuração, territórios, corpos oficiais) não seriam regravadas. Um storage novo (mesmo storage
+      // por baixo, outra identidade) zera esse registro sem mexer no código do coletor.
+      this.estado = null;
+      this.storageReal ??= this.state.storage;
+      const real = this.storageReal;
+      this.state = { storage: new Proxy(real, { get: (alvo, k) => { const v = Reflect.get(alvo, k, alvo); return typeof v === "function" ? v.bind(alvo) : v; } }) };
     }
     return super.alarm();
   }

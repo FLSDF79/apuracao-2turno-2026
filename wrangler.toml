@@ -4,6 +4,7 @@
 #
 #   node publicacao/montar-site.mjs && npx wrangler deploy                 # produção (TSE oficial)
 #   node publicacao/montar-site.mjs && npx wrangler deploy --env ensaio    # ensaio com TSE simulado
+#   node publicacao/montar-site.mjs && npx wrangler deploy --env teste-tse # 1º turno real lido do TSE (prova o acesso)
 #
 # Roteiro de operação: docs/publicacao/ROTEIRO-25-10.md
 name = "apuracao-2turno-2026"
@@ -18,6 +19,7 @@ directory = "dist/site"
 MODO = "oficial"
 INTERVALO_S = "15"    # mínimo 10 (o coletor força)
 PAUSADO = "nao"       # "sim" para o coletor parar de consultar o TSE (exige novo deploy)
+MAX_NOVOS_POR_EXECUCAO = "12"   # arquivos novos processados por execução; o resto segue 1 s depois (limite de CPU). Se a CPU passar de 10 ms nos logs, baixe para 8
 
 [[durable_objects.bindings]]
 name = "COLETOR"
@@ -44,6 +46,7 @@ BASE = "https://tse-simulado.ensaio.invalid"
 HOSTS_EXTRAS_TESTE = "tse-simulado.ensaio.invalid"   # só o host simulado interno; nada sai para a rede
 INTERVALO_S = "15"
 PAUSADO = "nao"
+MAX_NOVOS_POR_EXECUCAO = "12"
 ENSAIO_INICIO = "2026-10-01T00:00:00Z"    # âncora do ciclo de 30 min
 
 [[env.ensaio.durable_objects.bindings]]
@@ -51,4 +54,24 @@ name = "COLETOR"
 class_name = "Coletor"
 
 [env.ensaio.triggers]
+crons = ["* * * * *"]
+
+# Teste de acesso ao TSE pela Cloudflare: o coletor de produção, sem desvio nenhum, lendo os arquivos reais do
+# 1º turno (04/10) em resultados.tse.jus.br. A página mostra a faixa de ensaio. Se /dados/v1/saude.json trouxer
+# status 200/304 e conferência "compativel", o TSE aceita a Cloudflare; 403/429 ("bloqueada") aciona o plano B
+# (docs/publicacao/CONTINGENCIA.md). Depois do teste, apague este Worker no painel da Cloudflare.
+[env.teste-tse]
+name = "apuracao-2turno-2026-teste-tse"
+
+[env.teste-tse.vars]
+MODO = "ensaio"
+INTERVALO_S = "15"
+PAUSADO = "nao"
+MAX_NOVOS_POR_EXECUCAO = "12"
+
+[[env.teste-tse.durable_objects.bindings]]
+name = "COLETOR"
+class_name = "Coletor"
+
+[env.teste-tse.triggers]
 crons = ["* * * * *"]

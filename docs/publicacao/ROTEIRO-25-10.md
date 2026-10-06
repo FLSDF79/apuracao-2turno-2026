@@ -24,11 +24,11 @@ Marcos do plano: primeira versão ponta a ponta até 09/10, no ar até 14/10, en
 
 - [ ] PRs #1, #3, #2 e o desta frente mesclados na `main`
 - [ ] Segredos `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID` no GitHub
-- [ ] Decisão sobre o plano da Cloudflare (gratuito ou Workers Paid, ver [custos](OPERACAO.md#custos))
+- [x] Plano da Cloudflare: gratuito (decisão do Fabiano em 06/10, público pequeno; ver [custos](OPERACAO.md#custos))
+- [ ] Teste de acesso ao TSE publicado (`teste-tse`) com `saude.json` mostrando 200/304 e conferência "compativel"
 - [ ] Ensaio publicado e acompanhado no celular e na TV por uma noite inteira (30 min)
 - [ ] `node ensaio/rodar.mjs` sem falhas no commit que vai para o ar
 - [ ] Produção publicada; `conferir-no-ar` mostra o TSE respondendo 200/304 à Cloudflare
-- [ ] Variáveis `URL_PAINEL` e `URL_ENSAIO` no GitHub
 - [ ] Configuração do 2º turno publicada pelo TSE e lida pelo coletor (`eleicao.estado = publicada`)
 - [ ] Candidatos e cores em `config.js` conferidos com a configuração oficial do 2º turno
 - [ ] 24/10: `conferir-no-ar` tudo ok; congelamento de código (só correção crítica)
@@ -43,22 +43,28 @@ Marcos do plano: primeira versão ponta a ponta até 09/10, no ar até 14/10, en
 2. **Segredo de administração.** Crie também o segredo `ADMIN_TOKEN` no GitHub (valor de `openssl rand -hex 32`, guardado num gerenciador de senhas); o fluxo de publicação o copia para o Worker. Pelo terminal: `npx wrangler secret put ADMIN_TOKEN`.
 3. **Segredos no GitHub.** Em *Settings > Secrets and variables > Actions* do repositório, crie `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
 4. **Merge na ordem** #1 (fontes), #3 (coletor), #2 (página) e por último o PR desta frente.
-5. **Publicar o ensaio.** Em *Actions > Publicar na Cloudflare > Run workflow*, escolha `ensaio`. O fluxo roda todos os testes, publica e confere o site no ar.
+5. **Publicar o ensaio e o teste de acesso ao TSE.** Em *Actions > Publicar na Cloudflare > Run workflow*, escolha `ensaio` e depois `teste-tse`. O fluxo roda todos os testes, publica e confere o site no ar no endereço que o deploy mostrar.
 6. **Publicar a produção.** Acontece sozinho a cada push na `main`, ou pelo mesmo botão com `producao`.
-7. **Variáveis do GitHub** (*Settings > Secrets and variables > Actions > Variables*): `URL_PAINEL` e `URL_ENSAIO`, com os endereços que o deploy mostrar (`https://<nome>.<sua-conta>.workers.dev`). Com elas, todo deploy confere o site sozinho.
+7. **Domínio próprio (opcional).** Se a produção ganhar um domínio próprio, crie a variável `URL_PAINEL` no GitHub (*Settings > Secrets and variables > Actions > Variables*) para a conferência usar esse endereço. Sem ela, vale o endereço `workers.dev` do deploy.
 
 Pelo terminal, o mesmo:
 
 ```bash
 node publicacao/montar-site.mjs
 npx wrangler deploy --env ensaio      # ensaio
+npx wrangler deploy --env teste-tse   # 1º turno real lido do TSE pela Cloudflare
 npx wrangler deploy --env=""          # produção
 node publicacao/conferir-no-ar.mjs https://apuracao-2turno-2026.<conta>.workers.dev --esperar 90
 ```
 
 ## Pendência que decide a hospedagem: o TSE aceita consulta vinda da Cloudflare?
 
-Ainda sem resposta (teste em `tools/teste-cloudflare/`, conduzido pela frente 2). Depois do primeiro deploy de produção, a resposta aparece sozinha: `conferir-no-ar` mostra `HTTP do TSE nesta execução`. Se vier `{"200":…}` ou `{"304":…}`, está aceito. Se vier 403, 429 ou erro de conexão, o TSE recusa a Cloudflare e entra o plano B (fim deste roteiro).
+Ainda sem resposta. O teste é o próprio coletor (combinado com a frente 2): o ambiente `teste-tse` publica o coletor de produção, sem desvio nenhum, lendo os arquivos reais do 1º turno em `resultados.tse.jus.br`. Abra `/dados/v1/saude.json` desse endereço:
+
+- `coletor.status_http` com 200 e 304, `configuracao.ultimo_erro` nulo e `presidente.json` com conferência "compativel": o TSE aceita a Cloudflare.
+- 403 ou 429 (`coletor.estado` "bloqueada") ou erro de conexão: o TSE recusa a Cloudflare e entra o plano B (fim deste roteiro).
+
+Depois do teste, apague o Worker `apuracao-2turno-2026-teste-tse` no painel da Cloudflare (*Workers & Pages*), para ele não ficar consultando o TSE à toa.
 
 ## Como saber que o TSE publicou a configuração do 2º turno
 

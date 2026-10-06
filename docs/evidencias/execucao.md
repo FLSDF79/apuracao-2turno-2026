@@ -1,24 +1,24 @@
 # Execução das baterias de teste
 
-Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:32:19.525Z (commit f0f2ed5).
+Gerado por `node publicacao/evidencias.mjs` em 2026-10-06T15:49:43.023Z (commit 73e86de).
 
 | Frente | Bateria | Resultado | Tempo | Saída |
 |---|---|---|---|---|
 | 1 · fontes | Consistência dos arquivos oficiais guardados | ✅ 11 testes, todos ok | 0.1 s | [log](logs/fontes.txt) |
-| 2 · coletor e cálculo | Coletor, normalização, agregação, conferência, histórico | ✅ 52 ok, 0 falha(s) | 1.4 s | [log](logs/coletor.txt) |
+| 2 · coletor e cálculo | Coletor, normalização, agregação, conferência, histórico | ✅ 53 ok, 0 falha(s) | 1.4 s | [log](logs/coletor.txt) |
 | 3 · painel | Leitura do contrato pela página, estados, cores, horários, exportação | ✅ 20 ok, 0 falha(s) | 0.2 s | [log](logs/interface.txt) |
-| 3 · painel | Página no navegador (Chromium): estados, mapa, acessibilidade | ✅ 46 ok, 0 falha(s) | 10.0 s | [log](logs/navegador.txt) |
-| 4 · publicação | Noite simulada inteira pelo coletor, TSE simulado, site e deploy | ✅ 9 ok, 0 falha(s) | 2.5 s | [log](logs/publicacao.txt) |
+| 3 · painel | Página no navegador (Chromium): estados, mapa, acessibilidade | ✅ 46 ok, 0 falha(s) | 10.8 s | [log](logs/navegador.txt) |
+| 4 · publicação | Noite simulada inteira pelo coletor, TSE simulado, site e deploy | ✅ 10 ok, 0 falha(s) | 27.6 s | [log](logs/publicacao.txt) |
 | 2 · coletor e cálculo | Exemplos do contrato regenerados sem diferença | ✅ ok | 0.3 s | [log](logs/exemplos.txt) |
 
 ## Ponta a ponta com dados oficiais reais (1º turno)
 
-2026-10-06T15:08:02.404Z · `node publicacao/ponta-a-ponta.mjs`
+2026-10-06T15:48:19.950Z · `node publicacao/ponta-a-ponta.mjs`
 
 | | Verificação | Detalhe |
 |---|---|---|
 | ✅ | arquivos oficiais íntegros (sha256) | 68 arquivos |
-| ✅ | coletor rodou sobre os arquivos oficiais | 2026-10-06T15:07:50.950Z concluida ok req=38 http={"200":38} conferência=compativel |
+| ✅ | coletor rodou sobre os arquivos oficiais | 2026-10-06T15:48:08.363Z concluida ok req=38 http={"200":38} conferência=compativel |
 | ✅ | placar com dois candidatos | 22 × 13 |
 | ✅ | votos de 22 na tela = contrato | 56.104.503 votos · contrato 56104503 |
 | ✅ | % de 22 na tela = contrato | 47,03% · contrato 47,03% |

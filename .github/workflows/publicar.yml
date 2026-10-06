@@ -17,9 +17,9 @@ on:
   workflow_dispatch:
     inputs:
       ambiente:
-        description: "producao (TSE oficial) ou ensaio (TSE simulado)"
+        description: "ensaio (TSE simulado), teste-tse (1º turno real lido do TSE, prova o acesso pela Cloudflare) ou producao (2º turno oficial)"
         type: choice
-        options: [ensaio, producao]
+        options: [ensaio, teste-tse, producao]
         default: ensaio
 
 permissions:
@@ -53,6 +53,7 @@ jobs:
       - name: Montar o site
         run: node publicacao/montar-site.mjs
       - name: Publicar
+        id: publicar
         if: github.event_name != 'pull_request'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -64,19 +65,22 @@ jobs:
             echo "::warning::Segredos da Cloudflare ausentes: publicação pulada (testes e montagem ok)."
             exit 0
           fi
-          if [ "$AMBIENTE" = "ensaio" ]; then ENV="--env=ensaio"; else ENV="--env="; fi
-          npx --yes wrangler@4 deploy $ENV
+          if [ "$AMBIENTE" = "producao" ]; then ENV="--env="; else ENV="--env=$AMBIENTE"; fi
+          npx --yes wrangler@4 deploy $ENV | tee deploy.log
+          # endereço publicado (workers.dev), usado na conferência abaixo
+          echo "url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1)" >> "$GITHUB_OUTPUT"
           # segredo de administração (opcional): copiado do segredo ADMIN_TOKEN do GitHub, nunca escrito em log
           if [ -n "$ADMIN_TOKEN" ]; then printf '%s' "$ADMIN_TOKEN" | npx --yes wrangler@4 secret put ADMIN_TOKEN $ENV; fi
       - name: Conferir no ar
         if: github.event_name != 'pull_request'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          URL_PUBLICADA: ${{ steps.publicar.outputs.url }}
           URL_PAINEL: ${{ vars.URL_PAINEL }}
-          URL_ENSAIO: ${{ vars.URL_ENSAIO }}
           AMBIENTE: ${{ github.event.inputs.ambiente || 'producao' }}
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then exit 0; fi
-          URL=$([ "$AMBIENTE" = "ensaio" ] && echo "$URL_ENSAIO" || echo "$URL_PAINEL")
-          if [ -z "$URL" ]; then echo "::notice::Defina as variáveis URL_PAINEL e URL_ENSAIO para conferir automaticamente."; exit 0; fi
+          # domínio próprio da produção (variável URL_PAINEL), se houver; senão o endereço workers.dev do deploy
+          URL=$([ "$AMBIENTE" = "producao" ] && [ -n "$URL_PAINEL" ] && echo "$URL_PAINEL" || echo "$URL_PUBLICADA")
+          if [ -z "$URL" ]; then echo "::warning::Endereço publicado não encontrado na saída do wrangler."; exit 0; fi
           node publicacao/conferir-no-ar.mjs "$URL" --esperar 90
