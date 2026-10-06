@@ -84,7 +84,7 @@ coleta_geral: { estado: "ok" | "atrasada" | "pausada" | "bloqueada" | "indisponi
 
 **Coleta:** `{ situacao, url, ultima_tentativa, ultimo_sucesso, ultima_mudanca, status_http, ultimo_erro{em,mensagem,status}, alertas[], sha256, sem_alteracao, nova_versao, correcao, fora_de_ordem, adiado }`
 
-- `sha256`: hash do corpo aceito em uso (link: `snapshots/<sha256>.json`).
+- `sha256`: hash do corpo aceito em uso (link: `snapshots/<sha256>.json`). Só muda quando o TSE publica um arquivo diferente; serve como identificador da versão dos dados.
 - `alertas`: identidades aritméticas que não fecharam no arquivo oficial (ex.: `validos ≠ nominais + legenda`). O dado é mantido como veio; exibir como aviso discreto.
 - `nova_versao` / `correcao`: nesta rodada chegou versão nova / versão nova com queda de votos ou seções (correção oficial aceita).
 - `fora_de_ordem`: `{ recebido, mantido }` quando o TSE devolveu uma geração mais antiga que a já aceita; a mais nova é mantida.
@@ -128,8 +128,8 @@ classificacao: { codigo, texto, motivo, desde }
 
 | `codigo` | Quando |
 |---|---|
-| `compativel` | Todas as linhas com diferença zero e nenhum recorte faltando |
-| `cobertura_incompleta` | Falta o nacional, falta algum recorte, ou algum está `defasado` |
+| `compativel` | Todas as linhas com diferença zero, nenhum recorte faltando e nenhum defasado |
+| `cobertura_incompleta` | Falta o nacional, falta algum recorte, ou algum está `defasado` (mesmo com somas iguais; o `motivo` diz se os valores disponíveis batem) |
 | `horarios_diferentes` | Há diferença, a cobertura está completa e os arquivos têm horários de totalização diferentes |
 | `diferenca_persistente` | A mesma diferença dura 10 min ou mais (configurável), ou os arquivos têm o mesmo horário e somas diferentes |
 
@@ -147,8 +147,8 @@ As UFs saem da configuração oficial do 2º turno (`abr` da eleição 6260 no `
 ## `historico.json`
 
 ```text
-serie_brasil: [ { coletado_em, totalizacao, idg, pct_totalizadas, votos{numero:int}, pct_validos{numero:float}, disputa, correcao: bool } ]
-correcoes: [ { recorte, disputa, eleicao, coletado_em, de_idg, para_idg, totalizacao, quedas: [ {campo, antes, depois} ] } ]
+serie_brasil: [ { coletado_em, totalizacao, idg, sha256, pct_totalizadas, votos{numero:int}, pct_validos{numero:float}, disputa, correcao: bool } ]
+correcoes: [ { recorte, disputa, eleicao, coletado_em, de_idg, para_idg, de_sha256, para_sha256, totalizacao, quedas: [ {campo, antes, depois} ] } ]
 eventos: [ { em, tipo, recorte, disputa, ... } ]   (últimos 200)
 ```
 

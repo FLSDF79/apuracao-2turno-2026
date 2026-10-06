@@ -88,10 +88,19 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
     const d = estado.descoberta?.disputas?.[chave];
     if (!d || d.estado !== "publicada") continue;
     const rec = await resolverRecortes(chave, d, estado, fonte, op, fonteCfg, inicio, log, snapshot);
-    for (const abr of rec) {
+    // Sentinela: enquanto a disputa não tem nenhum arquivo publicado, só o primeiro (o nacional, quando
+    // existe) é consultado. Se ele der 404, os outros esperam a próxima rodada sem gerar 404 em série,
+    // que pausaria o coletor e atrasaria a primeira leitura da noite.
+    const ordem = rec.includes(BRASIL) ? [BRASIL, ...rec.filter((x) => x !== BRASIL)] : rec;
+    const semDados = !Object.keys(estado.ultimos).some((id) => id.startsWith(`${chave}:${d.eleicao}:`));
+    let sentinelaSem = false;
+    for (const abr of ordem) {
       const id = `${chave}:${d.eleicao}:${abr}`;
       const url = urlResultado(estado.config, fonteCfg, d.eleicao, d.cargo, abr);
-      const r = await fonte.obter(url);
+      const r = sentinelaSem
+        ? { ok: false, url, status: null, adiado: true, nao_publicado: true, erro: "aguardando o primeiro arquivo da disputa ser publicado", horario_coleta: new Date(fonte.agora()).toISOString() }
+        : await fonte.obter(url);
+      if (semDados && abr === ordem[0] && r.nao_publicado) sentinelaSem = true;
       log.push(r);
       const anterior = estado.coleta[id] ?? {};
       const coleta = {
@@ -135,16 +144,17 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
             coleta.fora_de_ordem = null;
             const reg = registrarVersao(estado.historico[id], norm, r.horario_coleta);
             estado.historico[id] = reg.historico;
+            const snap = await snapshot(r, { tipo: "resultado", disputa: chave, eleicao: d.eleicao, recorte: abr, idg: norm.idg, geracao: norm.horario.geracao, totalizacao: norm.horario.totalizacao, aceito: true });
+            const shaAnterior = anterior.sha256 ?? null;
+            if (snap) coleta.sha256 = snap.sha256;
             if (reg.nova) coleta.ultima_mudanca = r.horario_coleta;
             if (reg.correcao) {
-              estado.correcoes.push({ recorte: abr, disputa: chave, eleicao: d.eleicao, ...reg.correcao });
+              estado.correcoes.push({ recorte: abr, disputa: chave, eleicao: d.eleicao, ...reg.correcao, de_sha256: shaAnterior, para_sha256: coleta.sha256 });
               evento("correcao_oficial", { recorte: abr, disputa: chave });
             }
             if (norm.alertas.length) evento("alerta_aritmetico", { recorte: abr, disputa: chave, alertas: norm.alertas });
             coleta.nova_versao = reg.nova;
             coleta.correcao = Boolean(reg.correcao);
-            const snap = await snapshot(r, { tipo: "resultado", disputa: chave, eleicao: d.eleicao, recorte: abr, idg: norm.idg, geracao: norm.horario.geracao, totalizacao: norm.horario.totalizacao, aceito: true });
-            if (snap) coleta.sha256 = snap.sha256;
           }
         }
       } else {
@@ -179,7 +189,7 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   if (dPres?.eleicao) {
     const idBr = `presidente:${dPres.eleicao}:${BRASIL}`;
     if (estado.coleta[idBr]?.nova_versao && pres.brasil.oficial) {
-      estado.series[idBr] = acrescentarPonto(estado.series[idBr], pontoSerie(pres.brasil.oficial, estado.coleta[idBr].ultimo_sucesso, estado.coleta[idBr].correcao));
+      estado.series[idBr] = acrescentarPonto(estado.series[idBr], pontoSerie(pres.brasil.oficial, estado.coleta[idBr].ultimo_sucesso, estado.coleta[idBr].correcao, estado.coleta[idBr].sha256));
       estado.coleta[idBr].nova_versao = false;
     }
   }

@@ -61,12 +61,17 @@ export function conferir(A, B, { defasados = [], anterior = null, agora = new Da
   if (!B) {
     codigo = "cobertura_incompleta";
     motivo = "Total nacional do TSE indisponível nesta rodada.";
-  } else if (comDiferenca.length === 0 && faltando.length === 0) {
+  } else if (comDiferenca.length === 0 && faltando.length === 0 && defasados.length === 0) {
     codigo = "compativel";
-    motivo = defasados.length ? `Valores iguais, mas ${defasados.join(", ").toUpperCase()} com dado da rodada anterior.` : "Todas as linhas batem.";
+    motivo = "Todas as linhas batem.";
   } else if (faltando.length || defasados.length) {
+    // Recorte defasado não está "atualizado": mesmo com somas iguais, a cobertura desta rodada é incompleta.
     codigo = "cobertura_incompleta";
-    motivo = [faltando.length && `Sem dado: ${faltando.join(", ").toUpperCase()}.`, defasados.length && `Defasados: ${defasados.join(", ").toUpperCase()}.`].filter(Boolean).join(" ");
+    motivo = [
+      faltando.length && `Sem dado: ${faltando.join(", ").toUpperCase()}.`,
+      defasados.length && `Defasados (dado da rodada anterior): ${defasados.join(", ").toUpperCase()}.`,
+      comDiferenca.length === 0 && "Os valores disponíveis batem.",
+    ].filter(Boolean).join(" ");
   } else {
     const mesmaDiferenca = anterior && anterior.assinatura === assinatura && ["horarios_diferentes", "diferenca_persistente"].includes(anterior.classificacao.codigo);
     const desde = mesmaDiferenca ? anterior.classificacao.desde : agora;

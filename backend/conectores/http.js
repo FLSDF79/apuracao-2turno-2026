@@ -12,6 +12,7 @@ export const PADRAO = {
   pausaBloqueioMs: 10 * 60 * 1000, // documentação do TSE: bloqueio de 10 min
   pausa404Ms: 2 * 60 * 1000,
   limite404Seguidos: 3,
+  espera404Ms: 15000, // arquivo ainda não publicado: tenta de novo na rodada seguinte
   maxPorSegundo: 10,
   userAgent: "apuracao-2turno-2026/1 (painel independente; github.com/FLSDF79/apuracao-2turno-2026)",
   // Únicos destinos que o backend consulta. Qualquer outra URL é recusada antes de sair da máquina.
@@ -132,7 +133,7 @@ export class Fonte {
           this.pausar(this.op.pausa404Ms, `${this.estado.seguidos404} respostas 404 seguidas`);
         }
         st.falhas += 1;
-        st.proximaEm = this.agora() + 60000; // fixo: o disjuntor global já segura sequências; atraso máximo de 1 min quando o arquivo surgir
+        st.proximaEm = this.agora() + this.op.espera404Ms; // fixo: a rodada só testa um arquivo por disputa enquanto nada foi publicado
         return { ok: false, url, status: 404, nao_publicado: true, erro: "arquivo ainda não publicado (404)", horario_coleta: coleta };
       }
       const espera = segundosRetryAfter(retryAfter, this.agora());

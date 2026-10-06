@@ -14,10 +14,10 @@ Cada critério do prompt (seções 2, 3, 4, 7, 8 e 9) que cabe ao coletor tem pe
 | Liderança, empate e sem votos (liderança parcial ≠ vitória) | `calcular` › disputa: liderança, empate e ausência de votos |
 | "Eleito" só quando a fonte diz | `normalizar` › 'eleito' só vem da situação textual…; `rodada` › noite simulada… (eleito só no fim) |
 | Governador separado de presidente, só nas 7 UFs | `calcular` › governador: os 7 arquivos…; `rodada` › governador com abrangência 'br'… |
-| Conferência A × B com 4 classes; A e B nunca somados | `conferencia` › os 5 testes (compatível, cobertura incompleta, horários diferentes, persistente, sem nacional) |
+| Conferência A × B com 4 classes; A e B nunca somados; defasado nunca é compatível | `conferencia` › os 5 testes (compatível, cobertura incompleta com UF ausente ou defasada, horários diferentes, persistente, sem nacional) |
 | Diferença temporária não é tratada como erro | `conferencia` › nacional mais novo que uma UF: horários diferentes… |
 | Arquivo cumulativo substitui, não soma; sem recontagem em rodadas repetidas | `historico` › mesma versão não duplica…; `confiabilidade` › snapshot: … rodadas repetidas não duplicam nem recontam |
-| Correção oficial aceita e registrada | `historico` › … queda vira correção aceita; `rodada` › noite simulada… (correção no AC) |
+| Correção oficial aceita e registrada, com hash de antes e depois | `historico` › … queda vira correção aceita; `rodada` › noite simulada… (correção no AC, `de_sha256`/`para_sha256`) |
 | Resposta fora de ordem não substitui a mais nova | `confiabilidade` › resposta fora de ordem… |
 | Validação de esquema; resposta incompleta rejeitada com motivo | `confiabilidade` › resposta incompleta é rejeitada com motivo… |
 | Inconsistência aritmética vira alerta sem descartar o dado oficial | `confiabilidade` › identidade aritmética quebrada vira alerta… |
@@ -27,6 +27,7 @@ Cada critério do prompt (seções 2, 3, 4, 7, 8 e 9) que cabe ao coletor tem pe
 | Descoberta só pela configuração oficial; sem adivinhar URL | `descoberta` › os 5 testes |
 | Não confundir eleições (ensaio × 2º turno) | `normalizar` › arquivo de outra eleição…; `rodada` › troca do ensaio para o 2º turno não mistura eleições |
 | Respeitar o TSE: 304, backoff, Retry-After, pausa em bloqueio e 404 em série, limite por segundo | `fonte` › os 7 testes |
+| Configuração publicada antes dos arquivos: sem 404 em série, leitura assim que surgem | `rodada` › configuração do 2º turno publicada antes dos arquivos… |
 | Backend não consulta URL arbitrária | `confiabilidade` › o backend só consulta endereços do TSE…; configuração com modelo de diretório apontando para outro host… |
 | Administração protegida, segredo fora do frontend | `confiabilidade` › token de administração… (as rotas foram conferidas também no `wrangler dev`: 401 sem token, 404 fora da lista) |
 | Tabela TSE × IBGE explícita e conferida | `territorios` › tabela TSE × IBGE… |

@@ -112,21 +112,6 @@
   },
   {
    "coletado_em": "2026-10-06T13:00:02.000Z",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
-   "etag": "\"67f114c0\"",
-   "sha256": "2866703eb4fc0ad6f17f0e081a00ab1175490b0786325e700cff1d8b40d25bca",
-   "bytes": 9301,
-   "tipo": "resultado",
-   "disputa": "presidente",
-   "eleicao": "6257",
-   "recorte": "br",
-   "idg": "2837531",
-   "geracao": "2026-10-05T12:51:47-03:00",
-   "totalizacao": "2026-10-05T12:51:05-03:00",
-   "aceito": true
-  },
-  {
-   "coletado_em": "2026-10-06T13:00:02.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/zz/zz-c0001-e006257-u.json",
    "etag": "\"fbc2bcee\"",
    "sha256": "cbf1779709adc288948611b53f3cea920e4094262e44ee957237c8e90cac939b",
@@ -261,7 +246,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-06T13:00:01.000Z",
+   "coletado_em": "2026-10-06T13:00:02.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/rj/rj-c0001-e006257-u.json",
    "etag": "\"727256da\"",
    "sha256": "8a67b766e614b72140c0f6e026a097e4b20098f0c66cd528bb6a7aed194fda6a",
@@ -411,7 +396,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-06T13:00:00.000Z",
+   "coletado_em": "2026-10-06T13:00:01.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/go/go-c0001-e006257-u.json",
    "etag": "\"de1c083d\"",
    "sha256": "0bca25dc783c2b3c711f0cfe7432fe9e10d78d5ef8449c6d1368740bbe2dc1d6",
@@ -542,6 +527,21 @@
    "recorte": "ac",
    "idg": "2837527",
    "geracao": "2026-10-05T12:51:40-03:00",
+   "totalizacao": "2026-10-05T12:51:05-03:00",
+   "aceito": true
+  },
+  {
+   "coletado_em": "2026-10-06T13:00:00.000Z",
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
+   "etag": "\"67f114c0\"",
+   "sha256": "2866703eb4fc0ad6f17f0e081a00ab1175490b0786325e700cff1d8b40d25bca",
+   "bytes": 9301,
+   "tipo": "resultado",
+   "disputa": "presidente",
+   "eleicao": "6257",
+   "recorte": "br",
+   "idg": "2837531",
+   "geracao": "2026-10-05T12:51:47-03:00",
    "totalizacao": "2026-10-05T12:51:05-03:00",
    "aceito": true
   },

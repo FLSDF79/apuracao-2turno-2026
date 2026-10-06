@@ -112,21 +112,6 @@
   },
   {
    "coletado_em": "2026-10-25T21:10:32.000Z",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
-   "etag": "\"2114-GERALDOALCKMINsgpPSB-9276b1c7\"",
-   "sha256": "adc7e4a76c85fa1b73731684e2ac145545edb34ccad1c928559745fcb302aed2",
-   "bytes": 2114,
-   "tipo": "resultado",
-   "disputa": "presidente",
-   "eleicao": "6258",
-   "recorte": "br",
-   "idg": "1792951800",
-   "geracao": "2026-10-25T18:10:00-03:00",
-   "totalizacao": "2026-10-25T18:10:00-03:00",
-   "aceito": true
-  },
-  {
-   "coletado_em": "2026-10-25T21:10:32.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/zz/zz-c0001-e006258-u.json",
    "etag": "\"2060-GERALDOALCKMINsgpPSB-e37ef84c\"",
    "sha256": "9547cba8ff226fd8394bf0ac95540a016b8ccc408257948bcf2772c13889d900",
@@ -246,7 +231,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T21:10:31.000Z",
+   "coletado_em": "2026-10-25T21:10:32.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rj/rj-c0001-e006258-u.json",
    "etag": "\"2089-GERALDOALCKMINsgpPSB-b8fd489f\"",
    "sha256": "4e7ccb9857613852ae46afc01f7f6deaf57dad8269faf5d1a5994042a4d957d3",
@@ -396,7 +381,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T21:10:30.000Z",
+   "coletado_em": "2026-10-25T21:10:31.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/go/go-c0001-e006258-u.json",
    "etag": "\"2088-GERALDOALCKMINsgpPSB-c4f8a478\"",
    "sha256": "b3746e34f2ec3ca1c7429c65701849f0d345a784e26c9f56840ce2bd67994cce",
@@ -531,6 +516,21 @@
    "aceito": true
   },
   {
+   "coletado_em": "2026-10-25T21:10:30.000Z",
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
+   "etag": "\"2114-GERALDOALCKMINsgpPSB-9276b1c7\"",
+   "sha256": "adc7e4a76c85fa1b73731684e2ac145545edb34ccad1c928559745fcb302aed2",
+   "bytes": 2114,
+   "tipo": "resultado",
+   "disputa": "presidente",
+   "eleicao": "6258",
+   "recorte": "br",
+   "idg": "1792951800",
+   "geracao": "2026-10-25T18:10:00-03:00",
+   "totalizacao": "2026-10-25T18:10:00-03:00",
+   "aceito": true
+  },
+  {
    "coletado_em": "2026-10-25T21:00:33.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/to/to-c0003-e006260-u.json",
    "etag": "\"2346-SGOMESsgpREPUBLICANOS-650dff25\"",
@@ -630,21 +630,6 @@
    "disputa": "governador",
    "eleicao": "6260",
    "recorte": "ac",
-   "idg": "1792951200",
-   "geracao": "2026-10-25T18:00:00-03:00",
-   "totalizacao": "2026-10-25T18:00:00-03:00",
-   "aceito": true
-  },
-  {
-   "coletado_em": "2026-10-25T21:00:32.000Z",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
-   "etag": "\"2116-GERALDOALCKMINsgpPSB-56e03c34\"",
-   "sha256": "9ace792e665df91ff94368011469a0c4f1abb3989b8ec69c4083a3a870763d63",
-   "bytes": 2116,
-   "tipo": "resultado",
-   "disputa": "presidente",
-   "eleicao": "6258",
-   "recorte": "br",
    "idg": "1792951200",
    "geracao": "2026-10-25T18:00:00-03:00",
    "totalizacao": "2026-10-25T18:00:00-03:00",
@@ -786,7 +771,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T21:00:31.000Z",
+   "coletado_em": "2026-10-25T21:00:32.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rj/rj-c0001-e006258-u.json",
    "etag": "\"2089-GERALDOALCKMINsgpPSB-7b382279\"",
    "sha256": "5218da9ba7f6356376cc9cca8836f926cba35959204bdb4c420504ebc856e4ea",
@@ -936,7 +921,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T21:00:30.000Z",
+   "coletado_em": "2026-10-25T21:00:31.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/go/go-c0001-e006258-u.json",
    "etag": "\"2088-GERALDOALCKMINsgpPSB-916e275e\"",
    "sha256": "fb479a88eb4910f1a9339cf90d95bb6cf9bb71ab3698a3725ae4f5901581c114",
@@ -1071,6 +1056,21 @@
    "aceito": true
   },
   {
+   "coletado_em": "2026-10-25T21:00:30.000Z",
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
+   "etag": "\"2116-GERALDOALCKMINsgpPSB-56e03c34\"",
+   "sha256": "9ace792e665df91ff94368011469a0c4f1abb3989b8ec69c4083a3a870763d63",
+   "bytes": 2116,
+   "tipo": "resultado",
+   "disputa": "presidente",
+   "eleicao": "6258",
+   "recorte": "br",
+   "idg": "1792951200",
+   "geracao": "2026-10-25T18:00:00-03:00",
+   "totalizacao": "2026-10-25T18:00:00-03:00",
+   "aceito": true
+  },
+  {
    "coletado_em": "2026-10-25T20:40:33.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/to/to-c0003-e006260-u.json",
    "etag": "\"2330-SGOMESsgpREPUBLICANOS-b798516a\"",
@@ -1170,21 +1170,6 @@
    "disputa": "governador",
    "eleicao": "6260",
    "recorte": "ac",
-   "idg": "1792950000",
-   "geracao": "2026-10-25T17:40:00-03:00",
-   "totalizacao": "2026-10-25T17:40:00-03:00",
-   "aceito": true
-  },
-  {
-   "coletado_em": "2026-10-25T20:40:32.000Z",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
-   "etag": "\"2115-GERALDOALCKMINsgpPSB-5ec55df3\"",
-   "sha256": "270c14f18ba8b3ef22dca0a3a801eae727b0bf702ea9c9abb69140c1d64640b2",
-   "bytes": 2115,
-   "tipo": "resultado",
-   "disputa": "presidente",
-   "eleicao": "6258",
-   "recorte": "br",
    "idg": "1792950000",
    "geracao": "2026-10-25T17:40:00-03:00",
    "totalizacao": "2026-10-25T17:40:00-03:00",
@@ -1326,7 +1311,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T20:40:31.000Z",
+   "coletado_em": "2026-10-25T20:40:32.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rj/rj-c0001-e006258-u.json",
    "etag": "\"2092-GERALDOALCKMINsgpPSB-7502207a\"",
    "sha256": "ae56b96c23c0c367f62e53f43e27440541d5e39164b3b4302e5a9f6066635a32",
@@ -1476,7 +1461,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T20:40:30.000Z",
+   "coletado_em": "2026-10-25T20:40:31.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/go/go-c0001-e006258-u.json",
    "etag": "\"2084-GERALDOALCKMINsgpPSB-cab0b93f\"",
    "sha256": "8627e2783d2a0afe7e609328979f09a572f34858db54f7f6f4a3e9d86c9a3e25",
@@ -1611,6 +1596,21 @@
    "aceito": true
   },
   {
+   "coletado_em": "2026-10-25T20:40:30.000Z",
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
+   "etag": "\"2115-GERALDOALCKMINsgpPSB-5ec55df3\"",
+   "sha256": "270c14f18ba8b3ef22dca0a3a801eae727b0bf702ea9c9abb69140c1d64640b2",
+   "bytes": 2115,
+   "tipo": "resultado",
+   "disputa": "presidente",
+   "eleicao": "6258",
+   "recorte": "br",
+   "idg": "1792950000",
+   "geracao": "2026-10-25T17:40:00-03:00",
+   "totalizacao": "2026-10-25T17:40:00-03:00",
+   "aceito": true
+  },
+  {
    "coletado_em": "2026-10-25T20:20:33.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/to/to-c0003-e006260-u.json",
    "etag": "\"2331-SGOMESsgpREPUBLICANOS-e176a597\"",
@@ -1710,21 +1710,6 @@
    "disputa": "governador",
    "eleicao": "6260",
    "recorte": "ac",
-   "idg": "1792948800",
-   "geracao": "2026-10-25T17:20:00-03:00",
-   "totalizacao": "2026-10-25T17:20:00-03:00",
-   "aceito": true
-  },
-  {
-   "coletado_em": "2026-10-25T20:20:32.000Z",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
-   "etag": "\"2109-GERALDOALCKMINsgpPSB-68b7bb5\"",
-   "sha256": "a00943ef0498d7d057df0c368a83e9f20481a523d385e979c7e568b9d68c822c",
-   "bytes": 2109,
-   "tipo": "resultado",
-   "disputa": "presidente",
-   "eleicao": "6258",
-   "recorte": "br",
    "idg": "1792948800",
    "geracao": "2026-10-25T17:20:00-03:00",
    "totalizacao": "2026-10-25T17:20:00-03:00",
@@ -1866,7 +1851,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T20:20:31.000Z",
+   "coletado_em": "2026-10-25T20:20:32.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/rj/rj-c0001-e006258-u.json",
    "etag": "\"2086-GERALDOALCKMINsgpPSB-2fa76e2e\"",
    "sha256": "5a88bf4a0e5853398d4ae3b261505b2e86032549e1798fe4933c7867395d43f4",
@@ -2016,7 +2001,7 @@
    "aceito": true
   },
   {
-   "coletado_em": "2026-10-25T20:20:30.000Z",
+   "coletado_em": "2026-10-25T20:20:31.000Z",
    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/go/go-c0001-e006258-u.json",
    "etag": "\"2076-GERALDOALCKMINsgpPSB-c39daeb6\"",
    "sha256": "64b41f7921d2039eefc389228220fd906a1033b31462e5f850a392ec94b7f6e3",
@@ -2145,6 +2130,21 @@
    "disputa": "presidente",
    "eleicao": "6258",
    "recorte": "ac",
+   "idg": "1792948800",
+   "geracao": "2026-10-25T17:20:00-03:00",
+   "totalizacao": "2026-10-25T17:20:00-03:00",
+   "aceito": true
+  },
+  {
+   "coletado_em": "2026-10-25T20:20:30.000Z",
+   "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
+   "etag": "\"2109-GERALDOALCKMINsgpPSB-68b7bb5\"",
+   "sha256": "a00943ef0498d7d057df0c368a83e9f20481a523d385e979c7e568b9d68c822c",
+   "bytes": 2109,
+   "tipo": "resultado",
+   "disputa": "presidente",
+   "eleicao": "6258",
+   "recorte": "br",
    "idg": "1792948800",
    "geracao": "2026-10-25T17:20:00-03:00",
    "totalizacao": "2026-10-25T17:20:00-03:00",
