@@ -3,21 +3,26 @@
 // Não consulta o TSE, não soma territórios e não recalcula percentuais nem a conferência.
 import * as F from "./formato.js";
 import {
-  UFS, REGIOES, REGIAO_DA_UF, NOMES, SITUACOES, CONFERENCIA, MODOS,
-  normalizar, normalizarHistorico, normalizarGovernador, visualTerritorio, FAIXAS_MARGEM
+  UFS, REGIOES, REGIAO_DA_UF, NOMES, SITUACOES, CONFERENCIA, MODOS, PUBLICACAO,
+  normalizar, normalizarHistorico, correcoesHistorico, normalizarGovernador, normalizarSaude, visualTerritorio, FAIXAS_MARGEM
 } from "./contrato.js";
 import { PALETAS, carregarCores, salvarCores, trocar } from "./cores.js";
 import { prepararGeo, svgGeo, svgGrade, defs } from "./mapa.js";
-import { csvTerritorios, csvHistorico, jsonCompleto, baixar } from "./exportar.js";
+import { csvHistorico, baixar, baixarURL } from "./exportar.js";
 
 const CFG = window.PAINEL_CONFIG;
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
-const FONTE = CFG.fontes[params.get("fonte")] ? params.get("fonte") : CFG.fontePadrao;
-const URLS = CFG.fontes[FONTE];
+const FONTE = CFG.fontes[params.get("fonte")] ? params.get("fonte") : params.get("fonte") === "amostra" ? "ensaio" : CFG.fontePadrao;
+const BASE = CFG.fontes[FONTE];
+// Arquivos do contrato v1 (docs/contrato/CONTRATO-DADOS.md)
+const URLS = {
+  estado: BASE + "presidente.json", historico: BASE + "historico.json", governador: BASE + "governador.json",
+  saude: BASE + "saude.json", csvPresidente: BASE + "export/presidente.csv", csvGovernador: BASE + "export/governador.csv"
+};
 
 const E = {
-  bruto: null, modelo: null, problemas: [], historico: [], gov: null,
+  bruto: null, modelo: null, problemas: [], historico: [], correcoes: [], gov: null, saude: null,
   ultimoOk: null, erro: null, carregou: false, ciclo: 0, timer: null,
   cores: carregarCores(CFG.candidatos),
   op: { nivel: "uf", forma: "geo", intensidade: true, eixo: "tempo", regiao: "todas", busca: "", ordem: { col: "uf", asc: true } },
@@ -66,9 +71,10 @@ async function atualizar() {
     // preserva o último dado válido e mostra a defasagem
     E.erro = err.name === "AbortError" ? "tempo esgotado" : err.message || String(err);
   }
-  try { E.historico = normalizarHistorico(await buscar(URLS.historico)); } catch { /* mantém o anterior */ }
+  try { const h = await buscar(URLS.historico); E.historico = normalizarHistorico(h); E.correcoes = correcoesHistorico(h); } catch { /* mantém o anterior */ }
   if (E.ciclo % 3 === 1 || !E.gov) {
     try { E.gov = normalizarGovernador(await buscar(URLS.governador)); } catch { /* mantém o anterior */ }
+    try { E.saude = normalizarSaude(await buscar(URLS.saude)); } catch { /* mantém o anterior */ }
   }
   E.carregou = true;
   renderTudo();
@@ -104,10 +110,9 @@ function avisoHTML(tipo, html) { return `<div class="aviso ${tipo}">${html}</div
 function renderAvisos() {
   const L = [];
   const m = E.modelo;
-  if (FONTE !== "api") L.push(avisoHTML("alerta forte", `${FONTE === "simulacao" ? "SIMULAÇÃO: números fictícios montados a partir do 1º turno, só para testar o painel." : "AMOSTRA: resultado final do 1º turno (04/10) no formato do painel, para pré-visualização."} <a href="./">Ver dados ao vivo</a>`));
-  else if (m && MODOS[m.eleicao.modo]) L.push(avisoHTML("alerta forte", MODOS[m.eleicao.modo]));
+  if (m && MODOS[m.eleicao.modo]) L.push(avisoHTML("alerta forte", `${MODOS[m.eleicao.modo]}${FONTE !== "api" ? ' <a href="./">Ver dados ao vivo</a>' : ""}`));
   if (E.erro && !m) {
-    L.push(avisoHTML("erro", `Não foi possível ler os dados do coletor (<span class="mono">${F.esc(URLS.estado)}</span>: ${F.esc(E.erro)}). ${FONTE === "api" ? `Se o coletor ainda não foi publicado, pré-visualize com a <a href="?fonte=amostra">amostra do 1º turno</a> ou a <a href="?fonte=simulacao">simulação de noite de apuração</a>.` : ""} Nova tentativa a cada ${CFG.atualizacaoSeg} s.`));
+    L.push(avisoHTML("erro", `Não foi possível ler os dados do coletor (<span class="mono">${F.esc(URLS.estado)}</span>: ${F.esc(E.erro)}). ${FONTE === "api" ? `Se o coletor ainda não foi publicado, pré-visualize com o <a href="?fonte=ensaio">ensaio com o 1º turno</a> ou a <a href="?fonte=simulacao">simulação de noite de apuração</a>.` : ""} Nova tentativa a cada ${CFG.atualizacaoSeg} s.`));
   } else if (E.erro) {
     L.push(avisoHTML("erro", `Sem conexão com o coletor (${F.esc(E.erro)}). Exibindo o último dado válido, recebido às ${F.h(new Date(E.ultimoOk).toISOString())}.`));
   }
@@ -119,8 +124,9 @@ function renderAvisos() {
     else if (s === "indisponivel") L.push(avisoHTML("erro", `A fonte do TSE está indisponível no momento. ${F.esc(m.coleta.mensagem || "")}`));
     else if (s === "pausada" || s === "atrasada") L.push(avisoHTML("alerta", `Coletor ${s === "pausada" ? "em pausa" : "com atraso"}. ${F.esc(m.coleta.mensagem || "")}`));
     const br = m.territorios.br;
-    if (br.situacao === "nao_iniciada") L.push(avisoHTML("info", "O TSE ainda não divulgou seções totalizadas desta eleição. A divulgação começa após o encerramento da votação em todo o país."));
-    if (br.situacao === "concluida") L.push(avisoHTML("info", "Totalização concluída pelo TSE (100% das seções)."));
+    const pub = PUBLICACAO[m.eleicao.publicacao];
+    if (pub) L.push(avisoHTML("info", pub));
+    if (m.eleicao.estado && m.eleicao.estado !== "publicada" && m.eleicao.motivo) L.push(avisoHTML("info", F.esc(m.eleicao.motivo)));
   }
   $("avisos").innerHTML = L.join("");
 }
@@ -157,7 +163,7 @@ function renderBrasil() {
     const p = pal(c.numero);
     const sitTSE = d.situacao ? `<span class="selo-sit">Situação TSE: ${F.esc(d.situacao)}</span>` : "";
     return `<article class="cand" style="--cor:${p.base};--cor-txt:${corTexto(c.numero)}" aria-label="${F.esc(c.nome)}, ${F.pct(d.pct)} dos votos válidos">
-      <div class="cand-cab"><div><div class="cand-nome" title="${F.esc(c.nomeUrna)}">${F.esc(c.nome)}</div><div class="cand-meta">${F.esc(c.partido || "")} · cor ${p.nome}</div></div><span class="cand-num" aria-label="número">${F.esc(c.numero)}</span></div>
+      <div class="cand-cab"><div><div class="cand-nome" title="${F.esc(c.nomeUrna)}">${F.esc(c.nome)}</div><div class="cand-meta">${F.esc(c.partido || "")}${c.vice ? ` · vice ${F.esc(F.nomeLegivel(c.vice))}` : ""} · cor ${p.nome}</div></div><span class="cand-num" aria-label="número">${F.esc(c.numero)}</span></div>
       <div class="cand-pct">${F.pct(d.pct).replace("%", "<small>%</small>")}</div>
       <div class="cand-votos">${F.int(d.votos)} <span>votos</span></div>
       ${eleito ? `<span class="selo-sit eleito">Eleito · publicado pelo TSE</span>` : frente ? `<span class="selo-sit">À frente na apuração parcial</span>` : ""}
@@ -179,8 +185,8 @@ function renderBrasil() {
   const outros = m.candidatos.outros.length;
   $("numeros").innerHTML =
     item("Votos válidos", F.int(v.validos), v.anuladosSubJudice ? `base do %: ${F.int(v.basePct)}` : "base do % dos candidatos") +
-    item("Brancos", F.int(v.brancos)) +
-    item("Nulos", F.int(v.nulos)) +
+    item("Brancos", F.int(v.brancos), v.pctBrancos !== null ? F.pct(v.pctBrancos) + " do total de votos" : "") +
+    item("Nulos", F.int(v.nulos), v.pctNulos !== null ? F.pct(v.pctNulos) + " do total de votos" : "") +
     item("Anulados sub judice", F.int(v.anuladosSubJudice)) +
     item("Comparecimento", F.int(br.comparecimento.votos), F.pct(br.comparecimento.pct) + " do eleitorado das seções") +
     item("Abstenção", F.int(br.abstencao.votos), F.pct(br.abstencao.pct) + " do eleitorado das seções") +
@@ -271,6 +277,7 @@ function tooltipHTML(id) {
     <div class="linha"><span class="mudo">Diferença</span><span>${dif}</span></div>
     <div class="linha"><span class="mudo">Totalização</span><span>${F.pct(t.secoes.pct)} (${F.int(t.secoes.totalizadas)}/${F.int(t.secoes.previstas)})</span></div>
     <div class="linha"><span class="mudo">Atualização TSE</span><span>${t.totalizado ? F.dh(t.totalizado) : F.dh(t.atualizado)}</span></div>
+    ${t.atrasoMin ? `<div class="linha"><span class="mudo">Atrás do nacional</span><span>${t.atrasoMin} min</span></div>` : ""}
     <div class="mudo" style="margin-top:6px;font-size:.72rem">${E.op.nivel === "uf" ? "Clique para o detalhamento" : "Clique para o detalhe da região"}</div>`;
 }
 
@@ -370,7 +377,7 @@ function renderTabelas() {
   const regs = [...REGIOES.map((r) => m.territorios[r.id]), m.territorios.zz].map(linhaTabela);
   const br = linhaTabela(m.territorios.br);
   $("tabRegioes").innerHTML = `<caption class="rotulo-mini" style="text-align:left;padding:8px 10px">Regiões, exterior e Brasil</caption>` + cab(false) +
-    `<tbody>${regs.map((r) => `<tr data-id="${r.id}">${celulas(r)}</tr>`).join("")}<tr class="total" data-id="br">${celulas({ ...br, nome: "Brasil (TSE)" })}</tr></tbody>`;
+    `<tbody>${regs.map((r) => `<tr data-id="${r.id}">${celulas(r)}</tr>`).join("")}<tr data-id="br-calculado">${celulas({ ...linhaTabela(m.territorios["br-calculado"]), nome: "Brasil (soma das UFs)" })}</tr><tr class="total" data-id="br">${celulas({ ...br, nome: "Brasil (TSE)" })}</tr></tbody>`;
 
   let ufs = [...UFS, "zz"].map((u) => linhaTabela(m.territorios[u]));
   if (E.op.regiao !== "todas") ufs = ufs.filter((r) => (r.id === "zz" ? "ex" : REGIAO_DA_UF[r.id]) === E.op.regiao);
@@ -412,16 +419,16 @@ function ligarTabelas() {
 function renderConferencia() {
   const c = E.modelo.conferencia;
   if (!c) { $("confCab").innerHTML = `<p class="nota">O coletor ainda não publicou a conferência.</p>`; $("tabConf").innerHTML = ""; $("confCobertura").innerHTML = ""; return; }
-  const info = CONFERENCIA[c.situacao] || { rotulo: "Situação não informada", nivel: "info" };
-  $("confCab").innerHTML = `<div class="conf-selo ${info.nivel}">${info.rotulo}</div>
-    <p class="conf-base">${c.mesmaBase ? "<strong>Os dois lados vêm da mesma base do TSE.</strong> Isto é conferência de consistência entre arquivos, não auditoria independente das urnas." : "Os lados vêm de bases diferentes; diferenças podem refletir a origem."}</p>`;
+  const info = CONFERENCIA[c.situacao] || { rotulo: c.texto || "Situação não informada", nivel: "info" };
+  $("confCab").innerHTML = `<div class="conf-selo ${info.nivel}">${F.esc(c.texto || info.rotulo)}</div>
+    <p class="conf-base">${c.aviso ? F.esc(c.aviso) : c.mesmaBase ? "<strong>Os dois lados vêm da mesma base do TSE.</strong> Isto é conferência de consistência entre arquivos, não auditoria independente das urnas." : ""}${c.motivo ? `<br><span class="mono">${F.esc(c.motivo.replace(/\d{4}-\d{2}-\d{2}T[\d:.]+(?:Z|[+-]\d{2}:\d{2})/g, (iso) => F.dh(iso)))}</span>` : ""}</p>`;
   const rot = (l) => principais().some((p) => p.numero === l.item) ? `${nomeCand(l.item)} (${l.item})` : l.rotulo || l.item;
-  $("tabConf").innerHTML = `<thead><tr><th scope="col">Item</th><th scope="col" class="col-a">A · Soma territorial (painel)</th><th scope="col" class="col-b">B · Total nacional (TSE)</th><th scope="col">Diferença A − B</th></tr></thead><tbody>` +
+  $("tabConf").innerHTML = `<thead><tr><th scope="col">Item</th><th scope="col" class="col-a">A · ${F.esc(c.rotuloA || "Soma territorial (painel)")}</th><th scope="col" class="col-b">B · ${F.esc(c.rotuloB || "Total nacional (TSE)")}</th><th scope="col">Diferença A − B</th></tr></thead><tbody>` +
     c.linhas.map((l) => `<tr><td>${F.esc(rot(l))}</td><td>${F.int(l.soma)}</td><td>${F.int(l.tse)}</td><td class="${l.diferenca === 0 ? "dif0" : l.diferenca === null ? "" : "difx"}">${l.diferenca === 0 ? "0" : F.intSinal(l.diferenca)}</td></tr>`).join("") + `</tbody>`;
   const lista = (xs) => (xs.length ? xs.map((u) => (NOMES[u] ? `${u.toUpperCase()}` : u)).join(", ") : "nenhuma");
   $("confCobertura").innerHTML = `
-    <div><b>Horário do total TSE (B)</b>${F.dh(c.horarioTSE)}</div>
-    <div><b>Recorte mais antigo na soma (A)</b>${F.dh(c.horarioSomaMaisAntiga)}</div>
+    <div><b>Horário do total TSE (B)</b>${F.dh(c.horarioTSE)} · ${F.pct(c.pctB)} totalizado</div>
+    <div><b>Recorte mais antigo na soma (A)</b>${F.dh(c.horarioSomaMaisAntiga)} · ${F.pct(c.pctA)} totalizado</div>
     <div><b>UFs ausentes</b>${lista(c.ausentes)}</div>
     <div><b>UFs defasadas</b>${lista(c.defasadas)}</div>`;
 }
@@ -476,15 +483,17 @@ function renderHistorico() {
     series: [{ val: dif, cor: "var(--tinta-2)", rot: (p) => { const d = dif(p); return d === 0 ? "empate" : `${nomeCand(d > 0 ? A.numero : B.numero).split(" ")[0]} +${F.int(Math.abs(d))}`; } }]
   });
   const correcoes = h.filter((p) => p.correcao).length;
+  const outras = E.correcoes.filter((c) => c.recorte !== "br").map((c) => (NOMES[c.recorte] ? c.recorte.toUpperCase() : c.recorte));
   $("histNota").textContent = h.length
-    ? `${h.length} totalizações observadas pelo coletor${correcoes ? `, ${correcoes} com correção oficial (queda de votos publicada pelo TSE, mantida como veio)` : ""}. Acima de zero no gráfico de diferença, ${A.nome} à frente; abaixo, ${B.nome}.`
+    ? `${h.length} totalizações nacionais observadas pelo coletor${correcoes ? `, ${correcoes} com correção oficial (queda publicada pelo TSE, mantida como veio)` : ""}${outras.length ? `. Correções também em: ${[...new Set(outras)].join(", ")}` : ""}. Acima de zero no gráfico de diferença, ${A.nome} à frente; abaixo, ${B.nome}.`
     : "O histórico começa quando o coletor registrar a primeira totalização.";
 }
 
 // ---------------------------------------------------------------- Fontes e saúde
 function renderFontes() {
   const m = E.modelo;
-  const ok = m.fontes.filter((f) => f.http === 200 || f.http === 304).length;
+  const ok = m.fontes.filter((f) => f.situacao === "atualizado").length;
+  const sd = E.saude;
   const saude = { ok: "operando", atrasada: "com atraso", pausada: "em pausa", bloqueada: "bloqueado pelo TSE", indisponivel: "fonte indisponível" }[m.coleta.saude] || "—";
   $("fontesResumo").innerHTML = `
     <div><b>Coletor</b><span>${saude}</span></div>
@@ -493,10 +502,13 @@ function renderFontes() {
     <div><b>Arquivos respondendo</b><span>${ok} de ${m.fontes.length}</span></div>
     <div><b>Página relê o coletor</b><span>a cada ${CFG.atualizacaoSeg} s</span></div>
     <div><b>Contrato de dados</b><span class="mono">${F.esc(m.contrato || "—")}</span></div>` +
+    (sd ? `<div><b>Última rodada</b><span>${sd.requisicoes ?? "—"} requisições em ${sd.duracaoMs != null ? (sd.duracaoMs / 1000).toLocaleString("pt-BR") + " s" : "—"}</span></div>
+    <div><b>Respostas HTTP</b><span class="mono">${Object.entries(sd.statusHttp).map(([k, v]) => `${k}: ${v}`).join(" · ") || "—"}</span></div>
+    <div><b>Pausa</b><span>${sd.pausa ? `até ${F.h(sd.pausa.ate)} (${F.esc(sd.pausa.motivo || "")})` : "nenhuma"}</span></div>` : "") +
     (E.problemas.length ? `<div style="grid-column:1/-1"><b>Inconsistências no snapshot</b><span class="nota">${E.problemas.map(F.esc).join(" ")}</span></div>` : "");
   const nomeF = (id) => (id === "br" ? "Brasil" : NOMES[id] || id);
-  $("tabFontes").innerHTML = `<thead><tr><th scope="col">Recorte</th><th scope="col">Origem efetiva</th><th scope="col">HTTP</th><th scope="col">Totalizado TSE</th><th scope="col">Arquivo gerado</th><th scope="col">Coletado</th><th scope="col">Defasagem</th><th scope="col">Arquivo</th></tr></thead><tbody>` +
-    m.fontes.map((f) => `<tr><td>${F.esc(nomeF(f.id))}</td><td>${F.esc(f.origem || "—")}${f.erro ? `<br><span class="sit indisponivel">${F.esc(f.erro)}</span>` : ""}</td><td>${f.http ?? "—"}</td><td class="mono">${F.dh(f.totalizado)}</td><td class="mono">${F.dh(f.gerado)}</td><td class="mono">${F.dh(f.coletado)}</td><td>${f.defasagemS == null ? "—" : f.defasagemS < 60 ? f.defasagemS + " s" : Math.round(f.defasagemS / 60) + " min"}</td><td>${f.url ? `<a href="${F.esc(f.url)}" target="_blank" rel="noopener">JSON</a>` : "—"}</td></tr>`).join("") + `</tbody>`;
+  $("tabFontes").innerHTML = `<thead><tr><th scope="col">Recorte</th><th scope="col">Origem efetiva</th><th scope="col">HTTP</th><th scope="col">Totalizado TSE</th><th scope="col">Arquivo gerado</th><th scope="col">Coletado</th><th scope="col">Atraso vs. nacional</th><th scope="col">Arquivo</th></tr></thead><tbody>` +
+    m.fontes.map((f) => `<tr><td>${F.esc(nomeF(f.id))}</td><td>${F.esc(f.origem || "—")}${f.erro ? `<br><span class="sit indisponivel">${F.esc(f.erro)}</span>` : ""}</td><td>${f.http ?? "—"}${f.situacao && f.situacao !== "atualizado" ? ` <span class="sit ${f.situacao === "defasado" ? "defasada" : "indisponivel"}">${F.esc(f.situacao)}</span>` : ""}</td><td class="mono">${F.dh(f.totalizado)}</td><td class="mono">${F.dh(f.gerado)}</td><td class="mono">${F.dh(f.coletado)}</td><td>${f.atrasoMin == null ? "—" : f.atrasoMin === 0 ? "mesmo horário" : f.atrasoMin + " min"}</td><td>${f.url ? `<a href="${F.esc(f.url)}" target="_blank" rel="noopener">JSON</a>` : "—"}</td></tr>`).join("") + `</tbody>`;
 }
 
 function renderLinksFixos() {
@@ -626,9 +638,10 @@ function ligarControles() {
 
   $("btnExportar").addEventListener("click", () => {
     $("popExportar").innerHTML = `<h3>Exportar</h3><p>Os arquivos levam a origem e o horário dos dados. Não são publicação oficial.</p><div class="menu">
-      <button class="btn" type="button" data-exp="csv">Territórios (CSV)</button>
-      <button class="btn" type="button" data-exp="hist">Histórico (CSV)</button>
-      <button class="btn" type="button" data-exp="json">Snapshot completo (JSON)</button>
+      <button class="btn" type="button" data-exp="csv">Presidente por território (CSV)</button>
+      <button class="btn" type="button" data-exp="gov">Governador (CSV)</button>
+      <button class="btn" type="button" data-exp="hist">Histórico nacional (CSV)</button>
+      <button class="btn" type="button" data-exp="json">Presidente completo (JSON)</button>
       <button class="btn" type="button" data-fecha-pop>Fechar</button></div>`;
     alternarPop("popExportar");
   });
@@ -638,10 +651,10 @@ function ligarControles() {
     if (!E.modelo) return;
     const carimbo = (E.modelo.coleta.em || new Date().toISOString()).replace(/[:]/g, "-").slice(0, 19);
     const base = `apuracao-${E.modelo.eleicao.codigo || "x"}-${carimbo}`;
-    const url = new URL(URLS.estado, location.href).href;
-    if (b.dataset.exp === "csv") baixar(base + "-territorios.csv", csvTerritorios(E.modelo, url), "text/csv;charset=utf-8");
+    if (b.dataset.exp === "csv") baixarURL(URLS.csvPresidente, base + "-presidente.csv");
+    if (b.dataset.exp === "gov") baixarURL(URLS.csvGovernador, base + "-governador.csv");
     if (b.dataset.exp === "hist") baixar(base + "-historico.csv", csvHistorico(E.historico, principais()), "text/csv;charset=utf-8");
-    if (b.dataset.exp === "json") baixar(base + ".json", jsonCompleto(E.bruto, url, new Date().toISOString()), "application/json");
+    if (b.dataset.exp === "json") baixarURL(URLS.estado, base + "-presidente.json");
   });
 
   $("btnTema").addEventListener("click", () => {

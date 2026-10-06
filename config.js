@@ -1,13 +1,15 @@
 // Configuração da interface do painel.
-// A página só lê os arquivos gerados pelo coletor (frente 2): não consulta o TSE
+// A página só lê os arquivos gerados pelo coletor: não consulta o TSE
 // diretamente nem recalcula totais, percentuais ou a conferência.
 window.PAINEL_CONFIG = {
-  // Onde a página busca os dados prontos. "api" = coletor publicado junto do site.
-  // Para pré-visualizar sem coletor: ?fonte=amostra (1º turno real) ou ?fonte=simulacao.
+  // Pasta de onde a página lê os arquivos do contrato v1 (docs/contrato/CONTRATO-DADOS.md):
+  // presidente.json, historico.json, governador.json, saude.json e export/*.csv.
+  // "api" = coletor publicado junto do site. Para testar sem coletor: ?fonte=ensaio (1º turno real)
+  // ou ?fonte=simulacao (noite de 2º turno simulada), ambos gerados pelo próprio coletor em exemplos/.
   fontes: {
-    api: { estado: "api/estado.json", historico: "api/historico.json", governador: "api/governador.json" },
-    amostra: { estado: "dev/amostra/1t-final/estado.json", historico: "dev/amostra/1t-final/historico.json", governador: "dev/amostra/1t-final/governador.json" },
-    simulacao: { estado: "dev/amostra/simulacao-parcial/estado.json", historico: "dev/amostra/simulacao-parcial/historico.json", governador: "dev/amostra/simulacao-parcial/governador.json" }
+    api: "dados/v1/",
+    ensaio: "exemplos/ensaio-1turno/v1/",
+    simulacao: "exemplos/simulado-2turno/v1/"
   },
   fontePadrao: "api",
 

@@ -17,7 +17,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Amostra continua reproduzível a partir dos arquivos oficiais
-        run: python3 dev/gerar_amostra.py && git diff --exit-code dev/amostra
       - name: Testes da interface
         run: node --test tests/interface/*.test.js

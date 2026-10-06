@@ -21,14 +21,12 @@ node coletor/node.js --modo ensaio --fixtures tests/fixtures/tse-2026-10-06 --um
 node tools/gerar-exemplo.mjs                                 # regenera exemplos/
 ```
 
-## Como funciona (v0, consulta direta pelo navegador)
+## Página
 
-- **Coletor (frente 2, em construção):** único, no servidor, conversa com o TSE e publica snapshots prontos
-  (`api/estado.json`, `api/historico.json`, `api/governador.json`). Todas as somas, percentuais e a conferência são feitos lá.
-- **Página (esta pasta):** HTML, CSS e JavaScript puro, sem build e sem dependências. Só lê os snapshots do coletor
-  a cada 10 s (revalidando por ETag) e apresenta. Não consulta o TSE e não recalcula nada.
-- O formato que a página consome está em [docs/interface/contrato-provisorio.md](docs/interface/contrato-provisorio.md)
-  e fica isolado em `js/contrato.js`; quando o coletor fechar o contrato definitivo, muda só esse arquivo.
+- HTML, CSS e JavaScript puro (`index.html`, `style.css`, `config.js`, `js/`), sem build e sem dependências.
+- Lê os arquivos do contrato v1 publicados pelo coletor (`dados/v1/presidente.json`, `historico.json`, `governador.json`, `saude.json`
+  e `export/*.csv`) a cada 10 s, revalidando por ETag, e só apresenta: não consulta o TSE e não recalcula nada.
+- Só `js/contrato.js` conhece o formato dos arquivos; se o contrato mudar de versão, muda só ele.
 
 ## Áreas do painel
 
@@ -60,22 +58,22 @@ Obs.: o antigo caminho `dados-simplificados/...-r.json` (usado em 2022/2024) **n
 
 ## Pré-visualização sem coletor
 
-Enquanto o coletor não está publicado, a página aceita dados de teste gerados a partir dos arquivos oficiais do 1º turno
-guardados em `tests/fixtures` (script descartável `dev/gerar_amostra.py`, a apagar quando o coletor existir):
+A página aceita os exemplos que o próprio coletor gera em `exemplos/` (`node tools/gerar-exemplo.mjs`):
 
-- `?fonte=amostra`: resultado final real do 1º turno (04/10) no formato do painel.
-- `?fonte=simulacao`: **simulação** de noite de apuração (números fictícios), com UF indisponível, UF defasada, UF sem votos e uma correção oficial no histórico, para testar os estados visuais.
+- `?fonte=ensaio`: arquivos reais do 1º turno de 04/10.
+- `?fonte=simulacao`: noite de 2º turno **simulada** (números fictícios).
 
-Para rodar localmente: `python3 -m http.server` na raiz e abrir `http://localhost:8000/?fonte=simulacao`.
+Para rodar localmente: `python3 -m http.server` na raiz e abrir `http://localhost:8000/?fonte=simulacao`. `?tv=1` abre no modo TV.
 
 ## Configuração
 
-`config.js`: onde ler os snapshots, intervalo de releitura, limite de defasagem, candidatos e cores padrão, UFs com 2º turno para governador e links.
+`config.js`: pasta de onde ler os arquivos do coletor, intervalo de releitura, limite de defasagem, candidatos e cores padrão, UFs com 2º turno para governador e links.
 
 ## Testes
 
 - `python3 -m unittest discover -s tests`: consistência dos arquivos oficiais guardados.
-- `node --test tests/interface/*.test.js`: adaptador de dados, estados visuais, cores, horários e exportação da página.
+- `npm test`: coletor e motor de cálculo.
+- `node --test tests/interface/*.test.js`: leitura do contrato v1 pela página, estados visuais, cores, horários e exportação.
 
 ## Conferência
 
