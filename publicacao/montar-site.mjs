@@ -2,9 +2,10 @@
 // Monta a pasta do site que vai para a Cloudflare (ou para o ensaio local): só os arquivos da página
 // e os exemplos usados em ?fonte=ensaio / ?fonte=simulacao. Fixtures, testes e código do coletor ficam de fora.
 //   node publicacao/montar-site.mjs [destino]     (padrão: dist/site)
-import { cp, mkdir, rm, stat } from "node:fs/promises";
+import { cp, mkdir, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { arquivoHeaders } from "./seguranca.mjs";
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const ARQUIVOS_SITE = ["index.html", "style.css", "config.js", "js", "data", "exemplos"];
@@ -16,6 +17,7 @@ export async function montarSite(destino = join(RAIZ, "dist/site")) {
     await stat(join(RAIZ, item)); // falha alto se a página mudar de estrutura
     await cp(join(RAIZ, item), join(destino, item), { recursive: true });
   }
+  await writeFile(join(destino, "_headers"), arquivoHeaders()); // cabeçalhos de segurança da Cloudflare
   return destino;
 }
 

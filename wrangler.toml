@@ -7,7 +7,7 @@
 #
 # Roteiro de operação: docs/publicacao/ROTEIRO-25-10.md
 name = "apuracao-2turno-2026"
-main = "coletor/cloudflare/worker.js"
+main = "publicacao/worker.js"   # coletor da frente 2 + cabeçalhos de segurança
 compatibility_date = "2026-10-01"
 workers_dev = true
 
@@ -39,7 +39,7 @@ name = "apuracao-2turno-2026-ensaio"
 main = "publicacao/worker-ensaio.js"
 
 [env.ensaio.vars]
-MODO = "oficial"                          # descobre o 2º turno pela configuração (simulada), como no dia 25
+MODO = "simulacao"                        # descobre o 2º turno pela configuração (simulada), como no dia 25, e a página mostra a faixa "simulação"
 BASE = "https://tse-simulado.ensaio.invalid"
 INTERVALO_S = "15"
 PAUSADO = "nao"

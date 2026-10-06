@@ -18,6 +18,24 @@ Página e dados ficam na mesma origem, então não há CORS nem configuração e
 
 O ensaio usa o mesmo coletor e a mesma página da produção. Muda só a origem: um "TSE simulado" (`ensaio/tse-simulado.mjs` + `ensaio/roteiro.mjs`) que publica a configuração do 2º turno, os arquivos com 0%, a apuração subindo, SP atrasado, correção no AC, 503, erro em RR, 429 e, no fim, "Eleito". Os votos são os do 1º turno, escalados. **Não são resultado.**
 
+## Checklist de preparação
+
+Marcos do plano: primeira versão ponta a ponta até 09/10, no ar até 14/10, ensaio geral até 17/10, de 19 a 24/10 só correções.
+
+- [ ] PRs #1, #3, #2 e o desta frente mesclados na `main`
+- [ ] Segredos `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID` no GitHub
+- [ ] Decisão sobre o plano da Cloudflare (gratuito ou Workers Paid, ver [custos](OPERACAO.md#custos))
+- [ ] Ensaio publicado e acompanhado no celular e na TV por uma noite inteira (30 min)
+- [ ] `node ensaio/rodar.mjs` sem falhas no commit que vai para o ar
+- [ ] Produção publicada; `conferir-no-ar` mostra o TSE respondendo 200/304 à Cloudflare
+- [ ] Variáveis `URL_PAINEL` e `URL_ENSAIO` no GitHub
+- [ ] Configuração do 2º turno publicada pelo TSE e lida pelo coletor (`eleicao.estado = publicada`)
+- [ ] Candidatos e cores em `config.js` conferidos com a configuração oficial do 2º turno
+- [ ] 24/10: `conferir-no-ar` tudo ok; congelamento de código (só correção crítica)
+- [ ] 25/10, 7h: bateria final (`node publicacao/evidencias.mjs` + `conferir-no-ar`)
+- [ ] 25/10, 16h30: `conferir-no-ar`; monitor em modo TV
+- [ ] 26/10: coletor pausado
+
 ## Antes de 18/10 (uma vez)
 
 1. **Conta Cloudflare.** Em *My Profile > API Tokens > Create Token*, modelo **Edit Cloudflare Workers**. Copie também o **Account ID** (página *Workers & Pages*, barra lateral).
@@ -71,16 +89,9 @@ Votação de 8h às 17h (Brasília). A divulgação começa depois das 17h.
 | Fim da apuração | "Eleito" só aparece quando o arquivo nacional do TSE trouxer essa situação. |
 | 26/10 | Pausar o coletor (abaixo) para parar de consultar o TSE. A página continua mostrando o último dado. |
 
-### Situações e o que fazer
+### Se algo falhar
 
-| O que aparece | Causa provável | Ação |
-|---|---|---|
-| "Atrasada", UF hachurada | Um arquivo falhou nesta rodada; o painel mantém o último valor válido | Nada. Volta sozinho. |
-| "Bloqueada" ou "Pausada" com motivo 403/429 | O TSE pediu para esperar | Nada. O coletor respeita o `Retry-After` ou espera 10 min. **Não** reduzir o intervalo nem republicar para "forçar". |
-| Conferência "Atualizações em horários diferentes" | Arquivo nacional e de UF gerados em horários distintos | Normal durante a apuração. |
-| Conferência "Diferença persistente a investigar" | Mesma diferença por 10 min | Comparar com o portal do TSE. **Não** é sinal de fraude: as duas colunas vêm da mesma base. |
-| Página parada, "dados defasados" | Coletor parou | `conferir-no-ar`; ver `npx wrangler tail` (logs). O cron de 1 min rearma o coletor. |
-| Erro novo depois de um deploy | Versão nova com problema | `npx wrangler rollback` volta para a versão anterior. |
+Tabela completa (sinal na tela, o que o sistema faz sozinho, o que fazer e o que não fazer): [CONTINGENCIA.md](CONTINGENCIA.md).
 
 ### Pausar ou mudar o intervalo sem mexer no código
 
@@ -97,9 +108,6 @@ npx wrangler deploy --env="" --var INTERVALO_S:30   # intervalo maior (mínimo 1
 
 O que o ensaio confere em cada rodada (`ensaio/conferir.mjs`): votos inteiros; soma das 27 UFs + exterior = coluna A; regiões = soma dos inteiros e totalização pelas seções; regiões + exterior = Brasil, sem contar o DF duas vezes; diferença = A − B; "compatível" só com tudo igual; "eleito" só com a situação oficial; histórico sem soma repetida; último dado válido nunca some. E, por marco: nada de arquivo de resultado antes da configuração, SP atrasado acusado, correção do AC no histórico, 503/429 pausando, RR defasado e de volta, eleito só no fim e conferência final compatível.
 
-## Plano B (se o TSE recusar a Cloudflare)
+## Plano B
 
-Decidir com o resultado do teste. Opções, em ordem de preferência:
-
-1. **Coletor fora da Cloudflare, página na Cloudflare.** `coletor/node.js` roda numa máquina que o TSE aceita (o Mac, ou um runner do GitHub Actions por até 6 h) e envia os arquivos para o Worker. Mantém um só coletor para todos. Precisa de um pequeno receptor no Worker (frente 4) e de um token de envio.
-2. **Consulta direta pelo navegador (como a v0).** Funciona sem servidor, mas cada visitante consulta o TSE, sem conferência centralizada e com risco de bloqueio com muitos acessos.
+Se o TSE recusar a Cloudflare: [CONTINGENCIA.md](CONTINGENCIA.md#plano-b-tse-recusa-a-cloudflare).

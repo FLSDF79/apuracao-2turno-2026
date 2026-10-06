@@ -12,8 +12,7 @@
 import { spawn, execSync } from "node:child_process";
 import { createServer } from "node:http";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { createReadStream, existsSync } from "node:fs";
-import { dirname, join, extname, normalize } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { carregarBase } from "../coletor/simulador.js";
@@ -21,6 +20,7 @@ import { criarTseSimulado } from "./tse-simulado.mjs";
 import { MARCOS, DURACAO_MIN } from "./roteiro.mjs";
 import { montarSite } from "../publicacao/montar-site.mjs";
 import { conferirSnapshot } from "./conferir.mjs";
+import { servirSite } from "../publicacao/servidor-local.mjs";
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
 const { values: a } = parseArgs({
@@ -44,30 +44,29 @@ const base = await carregarBase(join(RAIZ, "tests/fixtures/tse-2026-10-06"));
 const inicioReal = Date.now();
 const relogioRoteiro = () => inicioReal + (Date.now() - inicioReal) * escala;
 const requisicoes = []; // { em, t, rel, status }
+const versoesTse = new Map(); // % totalizado publicado no arquivo nacional → primeira vez servido
 const tse = criarTseSimulado({ base, inicioMs: inicioReal, agora: relogioRoteiro });
 const minutoRoteiro = () => (relogioRoteiro() - inicioReal) / 60000;
 
 const servidorTse = createServer(async (req, res) => {
   const r = await tse(new Request(`http://127.0.0.1${req.url}`, { headers: req.headers }));
   requisicoes.push({ em: Date.now(), t: minutoRoteiro(), rel: req.url, status: r.status });
+  const corpo = r.status === 304 ? null : Buffer.from(await r.arrayBuffer());
+  if (corpo && r.status === 200 && /\/br\/br-c0001-/.test(req.url)) {
+    const pst = JSON.parse(corpo).s?.pst;
+    if (pst && !versoesTse.has(pst)) versoesTse.set(pst, Date.now());
+  }
   res.writeHead(r.status, Object.fromEntries(r.headers));
-  res.end(r.status === 304 ? undefined : Buffer.from(await r.arrayBuffer()));
+  res.end(corpo ?? undefined);
 }).listen(Number(a["porta-tse"]), "127.0.0.1");
 
 // ---------- site (página + dados do coletor, mesma origem, como na Cloudflare) ----------
-const TIPOS = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".csv": "text/csv; charset=utf-8", ".geojson": "application/json", ".svg": "image/svg+xml" };
-const servidorSite = createServer((req, res) => {
-  const caminho = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname)).replace(/^(\.\.[/\\])+/, "");
-  let arq = join(SITE, caminho);
-  if (caminho.endsWith("/")) arq = join(arq, "index.html");
-  if (!arq.startsWith(SITE) || !existsSync(arq)) return res.writeHead(404).end("não encontrado");
-  res.writeHead(200, { "content-type": TIPOS[extname(arq)] ?? "application/octet-stream", "cache-control": "no-store" });
-  createReadStream(arq).pipe(res);
-}).listen(Number(a["porta-site"]), "127.0.0.1");
+const pedidosDados = []; // { em, caminho, pagina } para medir a carga que cada visitante gera
+const servidorSite = await servirSite(SITE, Number(a["porta-site"]), { aoPedir: (req) => req.url.includes("/dados/") && pedidosDados.push({ em: Date.now(), caminho: req.url }) });
 
 // ---------- coletor de verdade ----------
 const logColetor = [];
-const coletor = spawn(process.execPath, [join(RAIZ, "coletor/node.js"), "--saida", join(SITE, "dados"), "--estado", join(SAIDA, "estado-coletor.json"), "--base", `http://127.0.0.1:${a["porta-tse"]}`, "--intervalo", "15"], { stdio: ["ignore", "pipe", "pipe"] });
+const coletor = spawn(process.execPath, [join(RAIZ, "coletor/node.js"), "--saida", join(SITE, "dados"), "--estado", join(SAIDA, "estado-coletor.json"), "--base", `http://127.0.0.1:${a["porta-tse"]}`, "--modo", "simulacao", "--intervalo", "15"], { stdio: ["ignore", "pipe", "pipe"] });
 coletor.stdout.on("data", (b) => logColetor.push(...String(b).trim().split("\n")));
 coletor.stderr.on("data", (b) => logColetor.push(...String(b).trim().split("\n").map((l) => `ERRO ${l}`)));
 // estado limpo a cada ensaio
@@ -100,6 +99,21 @@ async function importarPlaywright() {
   }
 }
 
+// ---------- latência: quando cada % totalizado aparece no arquivo do coletor e na tela ----------
+const noArquivo = new Map(), naTela = new Map();
+const fmt2 = (x) => x.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const amostrador = setInterval(async () => {
+  try {
+    const p = JSON.parse(await readFile(join(SITE, "dados/v1/presidente.json"), "utf8"));
+    const v = p.brasil?.oficial?.indicadores?.pct_totalizadas;
+    if (v != null && !noArquivo.has(fmt2(v))) noArquivo.set(fmt2(v), Date.now());
+  } catch {}
+  try {
+    const v = (await paginas?.desk.$eval("#totPct", (e) => e.textContent))?.replace("%", "").trim();
+    if (v && v !== "—" && !naTela.has(v)) naTela.set(v, Date.now());
+  } catch {}
+}, 1000);
+
 // ---------- laço do ensaio ----------
 const linhas = []; // uma por conferência
 const falhas = [];
@@ -129,7 +143,9 @@ for (const m of MARCOS.filter((m) => m.t < fimMin)) {
       totPct: document.getElementById("totPct")?.textContent,
       saude: document.getElementById("saudeTxt")?.textContent,
       avisos: document.getElementById("avisos")?.innerText.trim(),
+      faixaSimulacao: !!document.querySelector("#avisos .aviso.alerta.forte"),
     }));
+    if (!pagina.faixaSimulacao && m.id !== "antes") falhas.push({ marco: m.id, regra: "pagina-simulacao", detalhe: "página sem a faixa de simulação" });
     marcosVistos.at(-1).pagina = pagina;
     const eleitoNoArquivo = JSON.parse(await readFile(join(SITE, "dados/v1/presidente.json"), "utf8")).eleito?.publicado;
     if (pagina.seloEleito && !eleitoNoArquivo) falhas.push({ marco: m.id, regra: "pagina-eleito", detalhe: "página mostrou Eleito sem o TSE publicar" });
@@ -146,7 +162,7 @@ async function conferir(marco = null) {
     return; // primeira rodada ainda não gravou
   }
   const t = minutoRoteiro();
-  const r = conferirSnapshot({ pres, saude, hist, anterior, t });
+  const r = conferirSnapshot({ pres, saude, hist, anterior, t, modoEsperado: "simulacao" });
   anterior = { pres, saude, hist };
   for (const f of r.falhas) falhas.push({ t: +t.toFixed(2), ...f });
   for (const o of r.observacoes) observacoes.set(o.regra, { primeira_vez_t: +t.toFixed(2), ...o, ...(observacoes.get(o.regra) && { primeira_vez_t: observacoes.get(o.regra).primeira_vez_t }) });
@@ -175,17 +191,37 @@ espera(porId.final?.conferencia === "compativel", "marco-final", `conferência f
 espera(durante(0, 22).every((l) => !l.eleito), "marco-eleito-cedo", "eleito apareceu antes do TSE publicar");
 for (const e of errosConsole) falhas.push({ t: +e.t.toFixed(2), regra: "console-pagina", detalhe: e.texto });
 
+clearInterval(amostrador);
+// disponível no TSE simulado = início do bloco de 30 s em que a versão passou a existir (o roteiro muda a cada 30 s)
+const bloco = 30000 / escala;
+const latencias = [...versoesTse].map(([pst, servido]) => {
+  const disponivel = inicioReal + Math.floor((servido - inicioReal) / bloco) * bloco;
+  return { pct: pst, disponivel_em: new Date(disponivel).toISOString(), coletor_s: noArquivo.has(pst) ? (noArquivo.get(pst) - disponivel) / 1000 : null, tela_s: naTela.has(pst) ? (naTela.get(pst) - disponivel) / 1000 : null };
+}).filter((l) => l.pct !== "0,00");
+const est = (xs) => {
+  const v = xs.filter((x) => x != null).sort((x, y) => x - y);
+  return v.length ? { n: v.length, mediana: v[Math.floor(v.length / 2)], p90: v[Math.floor(v.length * 0.9)], max: v.at(-1) } : null;
+};
+const latencia = { coletor: est(latencias.map((l) => l.coletor_s)), tela: est(latencias.map((l) => l.tela_s)), versoes_sem_tela: latencias.filter((l) => l.tela_s == null).map((l) => l.pct) };
+
+// carga que cada visitante gera no Worker: pedidos a /dados por página aberta
+const minutosAbertos = (Date.now() - inicioReal) / 60000;
+const porVisitante = pedidosDados.length / (paginas ? 2 : 1) / minutosAbertos;
+const cargaVisitante = { pedidos_por_minuto: +porVisitante.toFixed(1), pedidos_por_hora: Math.round(porVisitante * 60), por_arquivo: pedidosDados.reduce((o, q) => ((o[q.caminho.replace(/\?.*/, "")] = (o[q.caminho.replace(/\?.*/, "")] ?? 0) + 1), o), {}) };
+
 // ---------- carga no TSE ----------
 const porMinuto = {};
 for (const q of requisicoes) porMinuto[Math.floor((q.em - inicioReal) / 60000)] = (porMinuto[Math.floor((q.em - inicioReal) / 60000)] ?? 0) + 1;
 const maxPorMin = Math.max(...Object.values(porMinuto));
 const statusTse = requisicoes.reduce((o, q) => ((o[q.status] = (o[q.status] ?? 0) + 1), o), {});
 
-const resultado = { inicio: new Date(inicioReal).toISOString(), escala, falhas, observacoes: [...observacoes.values()], marcos: marcosVistos, linhas, carga: { total: requisicoes.length, max_por_minuto: maxPorMin, status: statusTse }, errosConsole, logColetor: logColetor.slice(-400) };
+const resultado = { inicio: new Date(inicioReal).toISOString(), escala, falhas, observacoes: [...observacoes.values()], marcos: marcosVistos, linhas, carga: { total: requisicoes.length, max_por_minuto: maxPorMin, status: statusTse }, latencia, latencias, cargaVisitante, errosConsole, logColetor: logColetor.slice(-400) };
 await writeFile(join(SAIDA, "resultado.json"), JSON.stringify(resultado, null, 1));
 console.log(`\nfalhas: ${falhas.length}`);
 for (const f of falhas) console.log(" -", JSON.stringify(f));
 for (const o of observacoes.values()) console.log(" observação:", JSON.stringify(o));
+console.log("latência (s):", JSON.stringify(latencia));
+console.log("carga por visitante:", JSON.stringify(cargaVisitante));
 console.log(`carga no TSE simulado: ${requisicoes.length} requisições, pico ${maxPorMin}/min, status ${JSON.stringify(statusTse)}`);
 
 coletor.kill();

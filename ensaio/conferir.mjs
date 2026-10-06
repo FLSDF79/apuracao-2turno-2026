@@ -4,7 +4,7 @@ import { REGIOES, COMPONENTES_BRASIL } from "../nucleo/territorios.js";
 
 const inteiro = (v) => v === null || Number.isInteger(v);
 
-export function conferirSnapshot({ pres, saude, hist, anterior, t }) {
+export function conferirSnapshot({ pres, saude, hist, anterior, t, modoEsperado = null }) {
   const falhas = [];
   const falha = (regra, detalhe) => falhas.push({ regra, detalhe });
   // observação: comportamento que diverge do texto do contrato mas não quebra regra do prompt (vai para o dono do código)
@@ -12,6 +12,8 @@ export function conferirSnapshot({ pres, saude, hist, anterior, t }) {
   const observar = (regra, detalhe) => observacoes.push({ regra, detalhe });
 
   if (pres.schema !== "apuracao-2t-2026/v1") falha("schema", pres.schema);
+  // teste ou 1º turno nunca podem sair rotulados como apuração real do 2º turno
+  if (modoEsperado && pres.modo !== modoEsperado) falha("modo", `arquivo diz modo "${pres.modo}", esperado "${modoEsperado}"`);
   const br = pres.brasil ?? {};
   const terr = pres.territorios ?? {};
 

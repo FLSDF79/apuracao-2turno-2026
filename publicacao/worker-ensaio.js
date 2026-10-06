@@ -3,6 +3,7 @@
 // com a noite de apuração repetindo a cada 30 min. Nunca consulta o TSE de verdade.
 // Os votos são do 1º turno, escalados: não são resultado.
 import producao, { Coletor as ColetorProducao } from "../coletor/cloudflare/worker.js";
+import { comSeguranca } from "./worker.js";
 import { criarTseSimulado } from "../ensaio/tse-simulado.mjs";
 import base from "./base-ensaio.mjs";
 import { DURACAO_MIN } from "../ensaio/roteiro.mjs";
@@ -44,8 +45,9 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     // o "TSE simulado" também fica visível, para quem quiser ver o que o coletor está lendo
-    if (url.pathname.startsWith("/oficial/") || url.pathname === "/_ensaio") return simulador(env)(req);
-    return producao.fetch(req, env, ctx);
+    if (req.method !== "GET" && req.method !== "HEAD") return comSeguranca(new Response("método não permitido", { status: 405 }));
+    if (url.pathname.startsWith("/oficial/") || url.pathname === "/_ensaio") return comSeguranca(await simulador(env)(req));
+    return comSeguranca(await producao.fetch(req, env, ctx));
   },
   scheduled: producao.scheduled,
 };

@@ -72,11 +72,11 @@ test("noite inteira pelo coletor de verdade: regras do prompt valem em todas as 
   let estado = null, anterior = null;
   const linhas = [];
   for (; agora < INICIO + DURACAO_MIN * 60000; agora += 15000) {
-    const r = await rodada(fonte, estado, { modo: "oficial" });
+    const r = await rodada(fonte, estado, { modo: "simulacao" });
     estado = r.estado;
     const snap = { pres: r.saidas["v1/presidente.json"], saude: r.saidas["v1/saude.json"], hist: r.saidas["v1/historico.json"] };
     const t = (agora - INICIO) / 60000;
-    const c = conferirSnapshot({ ...snap, anterior, t });
+    const c = conferirSnapshot({ ...snap, anterior, t, modoEsperado: "simulacao" });
     assert.deepEqual(c.falhas, [], `t=${t}`);
     linhas.push({ t, ...c.resumo });
     anterior = snap;
@@ -98,7 +98,7 @@ test("noite inteira pelo coletor de verdade: regras do prompt valem em todas as 
 test("site montado só com a página e os exemplos (sem fixtures, testes ou coletor)", async () => {
   const destino = await montarSite(join(tmpdir(), `site-${process.pid}`));
   const itens = (await readdir(destino)).sort();
-  assert.deepEqual(itens, ["config.js", "data", "exemplos", "index.html", "js", "style.css"]);
+  assert.deepEqual(itens, ["_headers", "config.js", "data", "exemplos", "index.html", "js", "style.css"]);
 });
 
 test("wrangler.toml aponta para arquivos que existem e para a pasta que o montador gera", async () => {
