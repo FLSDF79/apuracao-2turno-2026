@@ -27,6 +27,16 @@ node tools/gerar-exemplo.mjs                                 # regenera exemplos
 - Lê os arquivos do contrato v1 publicados pelo coletor (`dados/v1/presidente.json`, `historico.json`, `governador.json`, `saude.json`
   e `export/*.csv`) a cada 10 s, revalidando por ETag, e só apresenta: não consulta o TSE e não recalcula nada.
 - Só `js/contrato.js` conhece o formato dos arquivos; se o contrato mudar de versão, muda só ele.
+- Mostra três horários separados, todos em horário de Brasília: **publicado pelo TSE** (geração do arquivo nacional),
+  **última mudança nos números** (do snapshot do coletor ou, sem ele, do último ponto do histórico) e **última consulta ao TSE**.
+  Não há relógio de parede: nada na tela avança se os números não mudaram. Só a idade da consulta cresce.
+- Atualiza sem recarregar. Se o coletor cair ou mandar arquivo incompleto, mantém o último dado válido com aviso.
+  Resposta fora de ordem (snapshot mais velho que o da tela) é ignorada. Contagem que não for inteiro ≥ 0 aparece como “—”
+  e o problema é listado em Fontes e saúde.
+- Ensaio (1º turno), simulação, arquivo de outro turno ou modo desconhecido ganham faixa listrada no topo, selo fixo nas abas,
+  marca d'água no placar e no mapa e prefixo no título da aba. Nunca aparecem como apuração do 2º turno.
+- Sem dados pessoais de visitantes, sem segredos e sem recursos de terceiros além das fontes do Google Fonts.
+  O logo da NFLS.AI Arena está em `assets/` (cópia do arquivo oficial).
 
 ## Áreas do painel
 
@@ -74,6 +84,12 @@ Para rodar localmente: `python3 -m http.server` na raiz e abrir `http://localhos
 - `python3 -m unittest discover -s tests`: consistência dos arquivos oficiais guardados.
 - `npm test`: coletor e motor de cálculo.
 - `node --test tests/interface/*.test.js`: leitura do contrato v1 pela página, estados visuais, cores, horários e exportação.
+- `npm run tipos`: checagem de tipos do TypeScript sobre o JavaScript da página (JSDoc + `checkJs`, `js/tsconfig.json`).
+- `node --test tests/navegador/*.test.mjs`: Chromium via Playwright (`npm i --no-save playwright axe-core`). Confere os valores
+  exibidos com os arquivos de origem (placar, 27 UFs + exterior, regiões, conferência e horários), mapa, tooltip, detalhe, teclado,
+  filtros, ordenação e abas no computador e no celular, modo TV, cenários do coletor (conteúdo igual, conteúdo novo, fora de ordem,
+  fora do ar, incompleto, campo inválido, outro turno, “eleito” só publicado), acessibilidade com axe-core nos dois temas e console sem erros.
+  Com `EVIDENCIAS=1`, guarda capturas e `relatorio.json` em `docs/evidencias/painel/`. O CI roda tudo e anexa as evidências.
 
 ## Conferência
 

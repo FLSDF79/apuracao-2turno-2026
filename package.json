@@ -8,6 +8,8 @@
     "test": "node --test tests/js/*.test.mjs",
     "test:interface": "node --test tests/interface/*.test.js",
     "coletor": "node coletor/node.js",
-    "exemplo": "node tools/gerar-exemplo.mjs"
+    "exemplo": "node tools/gerar-exemplo.mjs",
+    "test:navegador": "node --test tests/navegador/*.test.mjs",
+    "tipos": "npx --yes -p typescript@5.9 tsc -p js/tsconfig.json"
   }
 }
