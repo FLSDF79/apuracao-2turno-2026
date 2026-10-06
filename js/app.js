@@ -32,7 +32,7 @@ const E = {
   bruto: null, modelo: null, problemas: [], historico: [], correcoes: [], eventos: [], gov: null, saude: null,
   ultimoOk: null, erro: null, carregou: false, ciclo: 0, timer: null,
   // assinatura do conteúdo: muda só quando os números mudam (não a cada consulta)
-  assinatura: null, mudouLocal: null, foraDeOrdem: 0, latenciaS: null,
+  assinatura: null, mudouLocal: null, foraDeOrdem: 0, latenciaS: null, histPendente: false, histLido: false,
   cores: carregarCores(CFG.candidatos),
   op: { nivel: "uf", forma: "geo", intensidade: true, eixo: "tempo", regiao: "todas", busca: "", ordem: { col: "uf", asc: true } },
   geo: null, selecionado: null
@@ -86,14 +86,22 @@ async function atualizar() {
       E.bruto = snap; E.modelo = modelo; E.problemas = problemas;
       const pub = Date.parse(modelo.tempos.publicacaoTSE ?? "");
       if (mudou || E.latenciaS === null) E.latenciaS = Number.isFinite(pub) ? Math.max(0, Math.round((Date.now() - pub) / 1000)) : null;
-      if (mudou) anunciar();
+      if (mudou) { anunciar(); E.histPendente = true; }
     }
     E.ultimoOk = Date.now(); E.erro = null;
   } catch (err) {
     // preserva o último dado válido e mostra a defasagem
     E.erro = err.name === "AbortError" ? "tempo esgotado" : err.message || String(err);
   }
-  try { const h = await buscar(URLS.historico); E.historico = normalizarHistorico(h); E.correcoes = correcoesHistorico(h); E.eventos = eventosHistorico(h); } catch { /* mantém o anterior */ }
+  // Histórico só muda quando o arquivo nacional muda; relê nessa hora e, para as ocorrências do coletor,
+  // a cada 6 ciclos. Poupa a cota de requisições do servidor (plano gratuito).
+  if (E.histPendente || !E.histLido || E.ciclo % 6 === 0) {
+    try {
+      const h = await buscar(URLS.historico);
+      E.historico = normalizarHistorico(h); E.correcoes = correcoesHistorico(h); E.eventos = eventosHistorico(h);
+      E.histPendente = false; E.histLido = true;
+    } catch { /* mantém o anterior e tenta de novo no próximo ciclo */ }
+  }
   if (E.ciclo % 3 === 1 || !E.gov) {
     try { E.gov = normalizarGovernador(await buscar(URLS.governador)); } catch { /* mantém o anterior */ }
     try { E.saude = normalizarSaude(await buscar(URLS.saude)); } catch { /* mantém o anterior */ }
@@ -108,6 +116,7 @@ async function atualizar() {
 function renderTudo() {
   aplicarCoresCSS();
   renderMarcaTeste();
+  renderSobretitulo();
   renderAvisos();
   renderSaude();
   renderTempos();
@@ -162,6 +171,14 @@ function anunciar() {
   const [A, B] = principais();
   $("anuncio").textContent = `Números atualizados pelo TSE: ${F.pct(br.secoes.pct)} das seções totalizadas. ${A.nome} ${F.pct(br.candidatos[A.numero]?.pct)}, ${B.nome} ${F.pct(br.candidatos[B.numero]?.pct)}.`;
   document.body.classList.remove("pulso"); void document.body.offsetWidth; document.body.classList.add("pulso");
+}
+
+// Sobretítulo vem do arquivo lido: dado do 1º turno nunca aparece com o rótulo "2º turno".
+function renderSobretitulo() {
+  const el = $("sobretitulo"), e = E.modelo?.eleicao;
+  if (!e || !e.turno) return;
+  const data = /^\d{2}\/\d{2}/.test(e.data || "") ? e.data.slice(0, 5) : "";
+  el.textContent = ["Eleições 2026", e.cargo || "Presidente", `${e.turno}º turno`, data].filter(Boolean).join(" · ");
 }
 
 function renderVazio() {
@@ -220,6 +237,8 @@ function renderBrasil() {
   $("totDet").textContent = `${F.int(br.secoes.totalizadas)} de ${F.int(br.secoes.previstas)} seções · ${SITUACOES[br.situacao]}`;
 
   const [A, B] = principais();
+  // Com 100% totalizado não é mais "parcial", mas "eleito" continua só quando o TSE publica.
+  const totalizada = (pctSec ?? 0) >= 100 || ["totalizada_100", "concluida"].includes(m.eleicao.publicacao);
   const card = (c) => {
     const d = br.candidatos[c.numero] || {};
     const eleito = br.eleito === c.numero;
@@ -230,7 +249,7 @@ function renderBrasil() {
       <div class="cand-cab"><div><div class="cand-nome" title="${F.esc(c.nomeUrna)}">${F.esc(c.nome)}</div><div class="cand-meta">${F.esc(c.partido || "")}${c.vice ? ` · vice ${F.esc(F.nomeLegivel(c.vice))}` : ""} · cor ${p.nome}</div></div><span class="cand-num" aria-label="número">${F.esc(c.numero)}</span></div>
       <div class="cand-pct">${F.pct(d.pct).replace("%", "<small>%</small>")}</div>
       <div class="cand-votos">${F.int(d.votos)} <span>votos</span></div>
-      ${eleito ? `<span class="selo-sit eleito">Eleito · publicado pelo TSE</span>` : frente ? `<span class="selo-sit">À frente na apuração parcial</span>` : ""}
+      ${eleito ? `<span class="selo-sit eleito">Eleito · publicado pelo TSE</span>` : frente ? `<span class="selo-sit">${totalizada ? "Mais votado · 100% totalizado, sem declaração de eleito" : "À frente na apuração parcial"}</span>` : ""}
       ${eleito ? "" : sitTSE}
     </article>`;
   };

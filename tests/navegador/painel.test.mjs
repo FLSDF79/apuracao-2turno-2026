@@ -97,6 +97,16 @@ for (const [nome, q, pasta] of [["ensaio", "?fonte=ensaio", "exemplos/ensaio-1tu
       assert.equal(await p.pagina.$("#relogio"), null);
     });
 
+    test("cabeçalho e rótulo do placar seguem o arquivo lido", async () => {
+      const e = snap.eleicao;
+      assert.equal(await p.pagina.textContent("#sobretitulo"), `Eleições 2026 · ${e.cargo_nome} · ${e.turno}º turno · ${e.data.slice(0, 5)}`);
+      const placar = await p.pagina.textContent("#placar");
+      if (snap.brasil.oficial.indicadores.pct_totalizadas >= 100) {
+        assert.doesNotMatch(placar, /parcial/);
+        assert.match(placar, /100% totalizado, sem declaração de eleito/);
+      } else assert.match(placar, /À frente na apuração parcial/);
+    });
+
     test("identificação de teste destacada", async () => {
       assert.equal(await p.pagina.isVisible("#faixaTeste"), true);
       const tit = await p.pagina.textContent("#faixaTit");
@@ -282,11 +292,13 @@ describe("cenários de atualização e falha", () => {
     tempos: { ...snap.tempos, ultima_consulta_ok: consulta, ultima_mudanca: mudanca, ultima_mudanca_qualquer_recorte: mudanca },
     brasil: { ...structuredClone(snap.brasil), coleta: { ...snap.brasil.coleta, ultimo_sucesso: consulta, ultima_mudanca: mudanca } }
   });
+  let pedidosHistorico = 0;
   async function cenario(respostas, nome) {
     let i = 0;
+    pedidosHistorico = 0;
     const rotas = [
       ["**/dados/v1/presidente.json", (r) => { const x = respostas[Math.min(i++, respostas.length - 1)]; return typeof x === "function" ? x(r) : r.fulfill(json(x)); }],
-      ["**/dados/v1/historico.json", (r) => r.fulfill(json({ serie_brasil: [], correcoes: [] }))],
+      ["**/dados/v1/historico.json", (r) => { pedidosHistorico++; return r.fulfill(json({ serie_brasil: [], correcoes: [] })); }],
       ["**/dados/v1/governador.json", (r) => r.fulfill(json({ ufs: {} }))],
       ["**/dados/v1/saude.json", (r) => r.fulfill(json({ coletor: {} }))]
     ];
@@ -304,6 +316,7 @@ describe("cenários de atualização e falha", () => {
     assert.equal(await c.pagina.textContent("#tMud"), mud1);
     assert.notEqual(await c.pagina.textContent("#tCon"), con1);
     assert.equal(await c.pagina.textContent("#anuncio"), "", "não anuncia mudança que não houve");
+    assert.equal(pedidosHistorico, 1, "histórico não é relido enquanto o placar não muda");
     assert.deepEqual(c.erros, []);
     anotar("conteúdo igual", { ultima_mudanca: mud1, consulta_antes: con1, consulta_depois: await c.pagina.textContent("#tCon") });
     await c.fechar();
