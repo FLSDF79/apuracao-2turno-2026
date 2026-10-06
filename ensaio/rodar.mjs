@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Ensaio geral da noite de apuração (frente 4), ponta a ponta e com relógio real:
-//   TSE simulado (ensaio/tse-simulado.mjs + roteiro) → coletor de verdade (coletor/node.js) → arquivos do contrato
+//   TSE simulado (ensaio/tse-simulado.mjs + roteiro) → coletor de verdade (ensaio/coletor-ensaio.mjs: mesma rodada do backend) → arquivos do contrato
 //   → página de verdade num servidor local → navegador (Playwright) tirando telas nos marcos.
 // A cada rodada confere as regras do prompt sobre os arquivos gerados e, no fim, grava um relatório.
 //
@@ -11,11 +11,11 @@
 // Nada aqui consulta o TSE de verdade.
 import { spawn, execSync } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
-import { carregarBase } from "../coletor/simulador.js";
+import { carregarBase } from "../backend/conectores/simulador.js";
 import { criarTseSimulado } from "./tse-simulado.mjs";
 import { MARCOS, DURACAO_MIN } from "./roteiro.mjs";
 import { montarSite } from "../publicacao/montar-site.mjs";
@@ -66,11 +66,10 @@ const servidorSite = await servirSite(SITE, Number(a["porta-site"]), { aoPedir: 
 
 // ---------- coletor de verdade ----------
 const logColetor = [];
-const coletor = spawn(process.execPath, [join(RAIZ, "coletor/node.js"), "--saida", join(SITE, "dados"), "--estado", join(SAIDA, "estado-coletor.json"), "--base", `http://127.0.0.1:${a["porta-tse"]}`, "--modo", "simulacao", "--intervalo", "15"], { stdio: ["ignore", "pipe", "pipe"] });
+await rm(join(SAIDA, "estado-coletor.json"), { force: true }); // estado limpo a cada ensaio
+const coletor = spawn(process.execPath, [join(RAIZ, "ensaio/coletor-ensaio.mjs"), "--saida", join(SITE, "dados"), "--estado", join(SAIDA, "estado-coletor.json"), "--local", `http://127.0.0.1:${a["porta-tse"]}`, "--modo", "simulacao", "--intervalo", "15"], { stdio: ["ignore", "pipe", "pipe"] });
 coletor.stdout.on("data", (b) => logColetor.push(...String(b).trim().split("\n")));
 coletor.stderr.on("data", (b) => logColetor.push(...String(b).trim().split("\n").map((l) => `ERRO ${l}`)));
-// estado limpo a cada ensaio
-await writeFile(join(SAIDA, "estado-coletor.json"), "null");
 
 // ---------- navegador ----------
 let navegador = null, paginas = null;
@@ -143,7 +142,7 @@ for (const m of MARCOS.filter((m) => m.t < fimMin)) {
       totPct: document.getElementById("totPct")?.textContent,
       saude: document.getElementById("saudeTxt")?.textContent,
       avisos: document.getElementById("avisos")?.innerText.trim(),
-      faixaSimulacao: !!document.querySelector("#avisos .aviso.alerta.forte"),
+      faixaSimulacao: !document.getElementById("faixaTeste")?.hidden && /SIMULA/i.test(document.getElementById("faixaTeste")?.innerText || ""),
     }));
     if (!pagina.faixaSimulacao && m.id !== "antes") falhas.push({ marco: m.id, regra: "pagina-simulacao", detalhe: "página sem a faixa de simulação" });
     marcosVistos.at(-1).pagina = pagina;

@@ -8,7 +8,7 @@
 //
 // Os votos vêm do 1º turno (só os dois finalistas, escalados pela fração apurada): servem para
 // testar o sistema e nunca devem ser exibidos como resultado.
-import { REGIOES } from "../nucleo/territorios.js";
+import { REGIOES } from "../backend/normalizacao/territorios.js";
 
 export const DURACAO_MIN = 26;
 

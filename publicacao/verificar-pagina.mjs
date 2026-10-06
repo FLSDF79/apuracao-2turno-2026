@@ -66,7 +66,10 @@ export async function verificarPagina(url, { tse = null, telas = null, modo = nu
   const tot = await d.$eval("#totPct", (e) => e.textContent.trim());
   ok("% totalizado na tela = contrato", tot === pct2(dados.brasil.oficial.indicadores.pct_totalizadas) + "%", tot);
   if (bruto) ok("% totalizado na tela = arquivo do TSE (pst)", tot === `${bruto.s.pst}%`, `${tot} · TSE ${bruto.s.pst}%`);
-  if (modo && modo !== "oficial") ok(`faixa "${modo}" visível`, await d.$("#avisos .aviso.alerta.forte"), await d.$eval("#avisos", (e) => e.innerText.slice(0, 120)));
+  if (modo && modo !== "oficial") {
+    const faixa = await d.$eval("#faixaTeste", (e) => ({ visivel: !e.hidden, texto: e.innerText.replace(/\s+/g, " ").trim() })).catch(() => ({ visivel: false, texto: "sem #faixaTeste" }));
+    ok(`faixa de teste "${modo}" visível`, faixa.visivel && new RegExp(modo === "ensaio" ? "ENSAIO" : "SIMULA", "i").test(faixa.texto), faixa.texto.slice(0, 120));
+  } else ok("sem faixa de teste nos dados oficiais", await d.$eval("#faixaTeste", (e) => e.hidden).catch(() => true));
   ok("crédito do autor", await d.$eval("footer", (e) => /Fabiano Silva/.test(e.innerText)).catch(() => false));
   ok("selo NFLS.AI Arena", await d.$("#selo"));
   if (telas) await d.screenshot({ path: join(telas, "computador.png"), fullPage: true });

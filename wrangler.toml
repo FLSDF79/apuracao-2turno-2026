@@ -1,5 +1,5 @@
 # Publicação do painel na Cloudflare (frente 4): um Worker serve a página (arquivos estáticos de dist/site)
-# e /dados/v1/* a partir do coletor único (Durable Object com alarme, coletor/cloudflare/worker.js).
+# e /dados/v1/* a partir do coletor único (Durable Object com alarme, backend/execucao/cloudflare/worker.js).
 # Página e dados na mesma origem: sem CORS e sem configuração extra na página.
 #
 #   node publicacao/montar-site.mjs && npx wrangler deploy                 # produção (TSE oficial)
@@ -41,6 +41,7 @@ main = "publicacao/worker-ensaio.js"
 [env.ensaio.vars]
 MODO = "simulacao"                        # descobre o 2º turno pela configuração (simulada), como no dia 25, e a página mostra a faixa "simulação"
 BASE = "https://tse-simulado.ensaio.invalid"
+HOSTS_EXTRAS_TESTE = "tse-simulado.ensaio.invalid"   # só o host simulado interno; nada sai para a rede
 INTERVALO_S = "15"
 PAUSADO = "nao"
 ENSAIO_INICIO = "2026-10-01T00:00:00Z"    # âncora do ciclo de 30 min

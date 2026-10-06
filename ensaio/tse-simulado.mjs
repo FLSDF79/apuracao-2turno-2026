@@ -4,8 +4,8 @@
 //
 // Usa Request/Response da plataforma web, então o mesmo handler roda em Node 22 (ensaio local)
 // e num Worker da Cloudflare (ensaio publicado).
-import { montarSite } from "../coletor/simulador.js";
-import { COMPONENTES_BRASIL } from "../nucleo/territorios.js";
+import { montarSite } from "../backend/conectores/simulador.js";
+import { COMPONENTES_BRASIL } from "../backend/normalizacao/territorios.js";
 import { noite, DURACAO_MIN } from "./roteiro.mjs";
 
 function hash(s) {
@@ -15,7 +15,7 @@ function hash(s) {
 }
 
 /**
- * @param base       { cfg, pres, gov } de coletor/simulador.js#carregarBase (ou montado a partir de JSON importado)
+ * @param base       { cfg, pres, gov } de backend/conectores/simulador.js#carregarBase (ou montado a partir de JSON importado)
  * @param inicioMs   instante real do início do ensaio
  * @param agora      relógio (injetável)
  * @param ciclico    se true, a noite recomeça depois de DURACAO_MIN + 4 min (ensaio publicado que fica no ar)

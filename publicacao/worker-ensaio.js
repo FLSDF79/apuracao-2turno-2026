@@ -2,7 +2,7 @@
 // "TSE simulado" que roda dentro deste Worker (ensaio/tse-simulado.mjs + ensaio/roteiro.mjs),
 // com a noite de apuração repetindo a cada 30 min. Nunca consulta o TSE de verdade.
 // Os votos são do 1º turno, escalados: não são resultado.
-import producao, { Coletor as ColetorProducao } from "../coletor/cloudflare/worker.js";
+import producao, { Coletor as ColetorProducao } from "../backend/execucao/cloudflare/worker.js";
 import { comSeguranca } from "./worker.js";
 import { criarTseSimulado } from "../ensaio/tse-simulado.mjs";
 import base from "./base-ensaio.mjs";

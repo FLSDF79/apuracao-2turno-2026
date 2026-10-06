@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Primeira versão ponta a ponta com DADOS OFICIAIS REAIS (1º turno de 04/10/2026, baixados do TSE em 06/10):
 //   arquivos do TSE (conferidos pelo MANIFEST.sha256) → coletor de verdade (modo "ensaio")
-//   → normalização e cálculo (nucleo/) → contrato v1 → página de verdade → navegador.
+//   → normalização e cálculo (backend/) → contrato v1 → página de verdade → navegador.
 // A tela mostra a faixa "ENSAIO · dados oficiais do 1º turno": nunca é apresentado como 2º turno.
 //
 //   node publicacao/ponta-a-ponta.mjs [--saida pasta] [--porta 8792]
@@ -28,7 +28,7 @@ console.log("2. coletor real lendo os arquivos oficiais (modo ensaio, 1º turno)
 const site = await montarSite(join(a.saida, "site"));
 await rm(join(a.saida, "estado.json"), { force: true }); // sempre do zero: lê os arquivos de verdade (200), não o cache
 const t0 = Date.now();
-const col = spawnSync(process.execPath, [join(RAIZ, "coletor/node.js"), "--modo", "ensaio", "--fixtures", FIX, "--uma-vez", "--saida", join(site, "dados"), "--estado", join(a.saida, "estado.json")], { encoding: "utf8" });
+const col = spawnSync(process.execPath, [join(RAIZ, "backend/execucao/node.js"), "--modo", "ensaio", "--fixtures", FIX, "--uma-vez", "--saida", join(site, "dados"), "--estado", join(a.saida, "estado.json")], { encoding: "utf8" });
 console.log(`   ${col.stdout.trim()} (${Date.now() - t0} ms)`);
 
 console.log("3. página no navegador, números na tela contra o arquivo do TSE");

@@ -10,10 +10,10 @@ import { tmpdir } from "node:os";
 import { noite, MARCOS, DURACAO_MIN, horaTSE } from "../../ensaio/roteiro.mjs";
 import { criarTseSimulado } from "../../ensaio/tse-simulado.mjs";
 import { conferirSnapshot } from "../../ensaio/conferir.mjs";
-import { carregarBase } from "../../coletor/simulador.js";
-import { Fonte } from "../../coletor/fonte.js";
-import { rodada } from "../../coletor/rodada.js";
-import { COMPONENTES_BRASIL } from "../../nucleo/territorios.js";
+import { carregarBase } from "../../backend/conectores/simulador.js";
+import { Fonte } from "../../backend/conectores/http.js";
+import { rodada } from "../../backend/coletor/rodada.js";
+import { COMPONENTES_BRASIL } from "../../backend/normalizacao/territorios.js";
 import { montarSite } from "../../publicacao/montar-site.mjs";
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "../..");

@@ -1,6 +1,6 @@
 // Regras do prompt conferidas sobre cada snapshot do contrato v1 durante o ensaio.
 // Independe do código do coletor: refaz as contas a partir dos inteiros publicados.
-import { REGIOES, COMPONENTES_BRASIL } from "../nucleo/territorios.js";
+import { REGIOES, COMPONENTES_BRASIL } from "../backend/normalizacao/territorios.js";
 
 const inteiro = (v) => v === null || Number.isInteger(v);
 
@@ -64,9 +64,7 @@ export function conferirSnapshot({ pres, saude, hist, anterior, t, modoEsperado 
     if (conf.classificacao.codigo === "compativel") {
       if (conf.linhas.some((l) => l.diferenca !== 0)) falha("conferencia-compativel", "compatível com diferença ≠ 0");
       if (conf.colunas.a.faltando?.length) falha("conferencia-compativel", "compatível com recorte faltando");
-      // O contrato diz "defasado → cobertura_incompleta"; o coletor hoje mantém "compatível" (com o aviso no motivo)
-      // quando os valores guardados batem. Registrado como observação para a frente 2.
-      if (conf.colunas.a.defasados?.length) observar("conferencia-compativel-defasado", `compatível com ${conf.colunas.a.defasados.length} recorte(s) defasado(s); contrato pede cobertura_incompleta`);
+      if (conf.colunas.a.defasados?.length) falha("conferencia-compativel", `compatível com ${conf.colunas.a.defasados.length} recorte(s) defasado(s); contrato pede cobertura_incompleta`);
     }
   }
 
