@@ -16,6 +16,9 @@ Painel independente (pt-BR, modo escuro, mobile) da apuração do **2º turno de
 
 ## Endpoints do TSE usados (estrutura de 2026)
 
+Inventário completo das fontes (TSE e 27 TREs), códigos conferidos, campos e limites de acesso: [docs/fontes/INVENTARIO.md](docs/fontes/INVENTARIO.md).
+
+
 | O quê | URL |
 |---|---|
 | Configuração geral (eleições, códigos, 2º turno) | `https://resultados.tse.jus.br/oficial/comum/config/ele-c.json` |
