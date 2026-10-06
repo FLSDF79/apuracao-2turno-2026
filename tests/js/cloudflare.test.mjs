@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { Fonte } from "../../backend/conectores/http.js";
 import { rodada } from "../../backend/coletor/rodada.js";
 import { fetchDeFixtures } from "../../backend/conectores/fixtures.js";
-import { carregarEstado, gravarEstado, gravarSaidas } from "../../backend/armazenamento/durable-object.js";
+import { carregarEstado, gravarEstado, gravarSaidas, esquecerGravados } from "../../backend/armazenamento/durable-object.js";
 import { RAIZ, relogio } from "./apoio.mjs";
 
 // Imitação mínima do storage de Durable Object (get, put em lote com limite de 128, list por prefixo)
@@ -51,4 +51,17 @@ test("plano gratuito: rodada sem novidade do TSE regrava poucas chaves (linhas g
   assert.ok(gravadas[0] > 50, `primeira rodada grava tudo (${gravadas[0]})`);
   // 5.760 rodadas/dia a cada 15 s; o plano gratuito permite 100 mil linhas gravadas por dia.
   for (const n of gravadas.slice(1)) assert.ok(n * 5760 < 100000, `rodada sem novidade gravou ${n} chaves`);
+});
+
+test("depois de apagar o storage, esquecerGravados faz tudo ser gravado de novo", async () => {
+  const st = storageFalso();
+  const r = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...relogio() }), null, { modo: "ensaio" });
+  await gravarEstado(st, r.estado);
+  await gravarSaidas(st, r.saidas, r.brutos);
+  st.m.clear(); // storage.deleteAll()
+  assert.equal(await gravarSaidas(st, r.saidas, r.brutos), 0); // sem esquecer: acha que já gravou
+  esquecerGravados(st);
+  assert.ok((await gravarEstado(st, r.estado)) > 0);
+  assert.ok((await gravarSaidas(st, r.saidas, r.brutos)) > 0);
+  assert.ok(await st.get("saida:v1/territorios.json"));
 });
