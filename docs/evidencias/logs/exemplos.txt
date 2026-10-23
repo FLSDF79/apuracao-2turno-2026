@@ -1,0 +1,5 @@
+$ sh -c node tools/gerar-exemplo.mjs && git diff --exit-code --stat exemplos && echo 'exemplos atualizados'
+
+exemplos gerados em exemplos/
+exemplos atualizados
+

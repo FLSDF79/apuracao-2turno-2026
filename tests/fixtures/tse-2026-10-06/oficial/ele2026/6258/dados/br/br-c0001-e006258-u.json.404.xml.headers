@@ -1,0 +1,16 @@
+HTTP/2 404 
+content-length: 248
+x-amz-request-id: tx000008dc18d1b0529f7c0-006ac4f1df-1d41987-default
+accept-ranges: bytes
+x-ratelimit-limit: 2000, 2000;w=1
+x-ratelimit-remaining: 1852
+x-ratelimit-reset: 1
+cache-control: max-age=53
+expires: Tue, 06 Oct 2026 13:05:31 GMT
+date: Tue, 06 Oct 2026 13:04:38 GMT
+alt-svc: h3=":443"; ma=93600
+content-type: application/json
+strict-transport-security: max-age=63072000 ; includeSubDomains ; preload
+akamai-grn: 0.296c1002.1791291878.1cb43647
+cdn-cache-status: Hit from child
+
