@@ -72,6 +72,8 @@ a:hover { text-decoration-color: var(--ambar); }
 .pular:focus { left: 8px; }
 .so-leitor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; }
 
+[hidden] { display: none !important; }
+
 /* ---------- faixa de teste (ensaio, simulação, outro turno) ---------- */
 .faixa-teste {
   position: relative; z-index: 40; display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap;
@@ -377,9 +379,10 @@ main { max-width: 1320px; margin: 0 auto; padding: 8px 20px 40px; display: grid;
 .selo {
   position: fixed; right: 10px; bottom: 10px; z-index: 30; display: inline-flex; align-items: center; gap: 6px;
   font-size: .62rem; letter-spacing: .02em; color: var(--mudo); text-decoration: none;
-  background: color-mix(in srgb, var(--cartao) 92%, transparent); border: 1px solid var(--regua); border-radius: 999px; padding: 3px 9px 3px 4px; opacity: .78;
+  background: color-mix(in srgb, var(--cartao) 92%, transparent); border: 1px solid var(--regua); border-radius: 999px; padding: 3px 9px 3px 4px;
 }
-.selo:hover { opacity: 1; color: var(--tinta); }
+.selo:hover { color: var(--tinta); }
+body.modo-teste .gaveta-painel::before { content: var(--marca); display: block; margin-bottom: 10px; font-size: .7rem; font-weight: 900; letter-spacing: .12em; color: #1a1300; background: #f2b632; padding: 4px 8px; border-radius: 4px; }
 .selo img { width: 34px; height: 16px; object-fit: contain; display: block; }
 .selo strong { font-weight: 700; }
 

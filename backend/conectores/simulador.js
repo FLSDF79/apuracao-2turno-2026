@@ -6,7 +6,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { COMPONENTES_BRASIL } from "../normalizacao/territorios.js";
 
-const UFS_GOV = ["ac", "am", "df", "es", "rj", "rn", "to"];
+const UFS_GOV = ["ac", "am", "df", "es", "rn", "to"]; // RJ decidido no 1º turno após a retotalização de 10/10/2026
 const BASE = "https://resultados.tse.jus.br";
 const fmt = (n, casas = 2) => n.toFixed(casas).replace(".", ",");
 const pctTxt = (p, t) => (t ? { c: fmt((p * 100) / t), n: String(Number(((p * 100) / t).toFixed(9))).replace(".", ",") } : { c: "0,00", n: "0" });

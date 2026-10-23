@@ -10,7 +10,7 @@ Cada camada é uma pasta em `backend/` e só conversa com a de baixo pelos dados
 |---|---|---|---|
 | Conectores | `backend/conectores/` | `http.js`: requisição condicional (ETag/304), timeout, backoff, Retry-After, pausa global em 403/429 ou 404 em série, limite de 10 req/s, lista de hosts permitidos. `tse.js`: descoberta pela configuração oficial (`ele-c.json` + abrangência) e montagem das URLs pelos modelos `arq` do próprio TSE. `simulador.js` e `fixtures.js`: fontes de teste, sempre marcadas como tal | interpretar números |
 | Normalização | `backend/normalizacao/` | `validar.js`: esquema mínimo (rejeita resposta incompleta, turno ou eleição errados) e identidades aritméticas (viram alerta). `normalizar.js`: inteiros, `null` para ausente, horários em ISO, "eleito" só por `st === "Eleito"`. `territorios.js`: tabela TSE × IBGE e regiões | somar recortes |
-| Agregação | `backend/agregacao/` | `calcular.js`: soma de inteiros antes do percentual, regiões, Brasil calculado (27 UFs + exterior). `conferencia.js`: soma territorial × total do TSE, 4 classes. `historico.js`: versões, correções oficiais, série | gravar nada |
+| Agregação | `backend/agregacao/` | `calcular.js`: soma de inteiros antes do percentual, regiões, Brasil calculado (26 UFs + exterior). `conferencia.js`: soma territorial × total do TSE, 4 classes. `historico.js`: versões, correções oficiais, série | gravar nada |
 | Armazenamento | `backend/armazenamento/` | `snapshots.js`: SHA-256 do corpo recebido e índice. `durable-object.js` (Cloudflare) e `arquivos.js` (Node): estado, saídas e corpos oficiais por hash | decidir o que mostrar |
 | API | `backend/api/` | `contrato.js`: monta `presidente.json`, `governador.json`, `territorios.json`. `exportar.js`: CSV com origem e horários | consultar a fonte |
 | Orquestração | `backend/coletor/rodada.js` | Uma rodada: conectores → normalização → agregação → saídas, com os três horários e os eventos | |
@@ -79,7 +79,7 @@ O p95 no Node fica entre 8 e 16 ms. É dominado pelo coletor de lixo do próprio
 
 ## Tabela TSE × IBGE
 
-Fonte única: `backend/normalizacao/territorios.js`, publicada em `/dados/v1/territorios.json`. Chave do TSE = sigla em minúsculas usada nos caminhos e no campo `cdabr`; código IBGE = código de UF de 2 dígitos. O teste `tabela TSE × IBGE` confere as 27 UFs contra a malha do mapa (`data/br-uf.geojson`) e contra a abrangência oficial do TSE. Exterior (`zz`) e Brasil (`br`) não têm código IBGE de UF.
+Fonte única: `backend/normalizacao/territorios.js`, publicada em `/dados/v1/territorios.json`. Chave do TSE = sigla em minúsculas usada nos caminhos e no campo `cdabr`; código IBGE = código de UF de 2 dígitos. O teste `tabela TSE × IBGE` confere as 26 UFs contra a malha do mapa (`data/br-uf.geojson`) e contra a abrangência oficial do TSE. Exterior (`zz`) e Brasil (`br`) não têm código IBGE de UF.
 
 | TSE | IBGE | Nome | Tipo | Região |
 |---|---|---|---|---|

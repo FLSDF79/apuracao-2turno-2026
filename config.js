@@ -28,7 +28,7 @@ window.PAINEL_CONFIG = {
   ],
 
   // UFs com 2º turno para governador (conferido no ele-c.json e nos arquivos do 1º turno).
-  governadorUFs: ["ac", "am", "df", "es", "rj", "rn", "to"],
+  governadorUFs: ["ac", "am", "df", "es", "rn", "to"], // RJ saiu: o TSE retotalizou e declarou eleito no 1º turno (08–10/10/2026)
 
   // Links oficiais exibidos no painel.
   links: {

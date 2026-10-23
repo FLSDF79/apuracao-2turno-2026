@@ -10,16 +10,17 @@
   "rodada_em": "2026-10-25T21:10:33.000Z",
   "proxima_em": "2026-10-25T21:10:48.000Z",
   "intervalo_s": 15,
+  "ritmo": "normal",
   "rodada": {
    "inicio": "2026-10-25T21:10:30.000Z",
    "fim": "2026-10-25T21:10:33.000Z",
    "duracao_ms": 3000,
-   "requisicoes": 38,
+   "requisicoes": 37,
    "adiadas": 0,
    "recusadas": 0
   },
   "status_http": {
-   "200": 35,
+   "200": 34,
    "304": 3
   },
   "latencia_ms": {
@@ -63,7 +64,6 @@
     "am",
     "df",
     "es",
-    "rj",
     "rn",
     "to"
    ]
@@ -592,22 +592,6 @@
    "ultimo_erro": null,
    "alertas": [],
    "sha256": "b5aeb105d4d6c91efe0c9bbea2c09c8341ae463811825f51db3f1fcfd93c74e1",
-   "situacao": "atualizado",
-   "sem_alteracao": false,
-   "fora_de_ordem": null,
-   "nova_versao": true,
-   "correcao": false
-  },
-  {
-   "id": "governador:6260:rj",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/rj/rj-c0003-e006260-u.json",
-   "ultima_tentativa": "2026-10-25T21:10:33.000Z",
-   "ultimo_sucesso": "2026-10-25T21:10:33.000Z",
-   "ultima_mudanca": "2026-10-25T21:10:33.000Z",
-   "status_http": 200,
-   "ultimo_erro": null,
-   "alertas": [],
-   "sha256": "aafc56e5dd0bbc0c796530e77b3971a097cc0bfcc097fecb37e30de4570879b0",
    "situacao": "atualizado",
    "sem_alteracao": false,
    "fora_de_ordem": null,

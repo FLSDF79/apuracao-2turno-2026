@@ -197,18 +197,26 @@ function renderAvisos() {
   }
   if (m) {
     const idade = F.idadeSeg(m.coleta.em);
-    if (FONTE === "api" && idade !== null && idade > CFG.defasagemAvisoSeg) L.push(avisoHTML("alerta", `Dados defasados: a última coleta do TSE foi ${F.ha(m.coleta.em)} (${F.dh(m.coleta.em)}). Os números abaixo são o último dado válido.`));
+    if (FONTE === "api" && idade !== null && idade > limiteDefasagem(m)) L.push(avisoHTML("alerta", `Dados defasados: a última coleta do TSE foi ${F.ha(m.coleta.em)} (${F.dh(m.coleta.em)}). Os números abaixo são o último dado válido.`));
     if (E.problemas.length) L.push(avisoHTML("alerta", `O arquivo do coletor veio com ${E.problemas.length} problema(s) de formato. Campos inválidos aparecem como “—”. <a href="#fontes">Ver detalhes</a>`));
     const s = m.coleta.saude;
-    if (s === "bloqueada") L.push(avisoHTML("erro", `O TSE pediu pausa ou bloqueou as consultas. O coletor aguarda antes de tentar de novo, como manda a orientação oficial. ${F.esc(m.coleta.mensagem || "")}`));
-    else if (s === "indisponivel") L.push(avisoHTML("erro", `A fonte do TSE está indisponível no momento. ${F.esc(m.coleta.mensagem || "")}`));
-    else if (s === "pausada" || s === "atrasada") L.push(avisoHTML("alerta", `Coletor ${s === "pausada" ? "em pausa" : "com atraso"}. ${F.esc(m.coleta.mensagem || "")}`));
+    // A mensagem do coletor traz horários em UTC (ISO); mostra no horário de Brasília.
+    const msg = (t) => F.esc((t || "").replace(/\d{4}-\d{2}-\d{2}T[\d:.]+(?:Z|[+-]\d{2}:\d{2})/g, (iso) => F.dh(iso)));
+    if (s === "bloqueada") L.push(avisoHTML("erro", `O TSE pediu pausa ou bloqueou as consultas. O coletor aguarda antes de tentar de novo, como manda a orientação oficial. ${msg(m.coleta.mensagem)}`));
+    else if (s === "indisponivel") L.push(avisoHTML("erro", `A fonte do TSE está indisponível no momento. ${msg(m.coleta.mensagem)}`));
+    else if (s === "pausada" || s === "atrasada") L.push(avisoHTML("alerta", `Coletor ${s === "pausada" ? "em pausa" : "com atraso"}. ${msg(m.coleta.mensagem)}`));
     const br = m.territorios.br;
     const pub = PUBLICACAO[m.eleicao.publicacao];
     if (pub) L.push(avisoHTML("info", pub));
     if (m.eleicao.estado && m.eleicao.estado !== "publicada" && m.eleicao.motivo) L.push(avisoHTML("info", F.esc(m.eleicao.motivo)));
   }
   $("avisos").innerHTML = L.join("");
+}
+
+// No ritmo ocioso (sem mudança real há minutos) o coletor consulta a cada 60 s: o aviso de defasagem
+// acompanha o intervalo publicado, com o mínimo da configuração.
+function limiteDefasagem(m) {
+  return Math.max(CFG.defasagemAvisoSeg, (m.coleta.intervaloS || 0) * 2 + 15);
 }
 
 function renderSaude() {
@@ -218,9 +226,11 @@ function renderSaude() {
   else if (E.erro) { cls = "erro"; txt = "sem conexão · último dado " + F.ha(new Date(E.ultimoOk).toISOString()); }
   else if (m) {
     const idade = F.idadeSeg(m.coleta.em);
-    const parado = FONTE === "api" && idade !== null && idade > CFG.defasagemAvisoSeg;
+    const parado = FONTE === "api" && idade !== null && idade > limiteDefasagem(m);
     cls = m.teste ? "teste" : parado || (m.coleta.saude && m.coleta.saude !== "ok") ? "alerta" : "ok";
-    txt = m.teste ? "dados de teste" : `consulta ok ${F.ha(m.tempos.consultaOk || m.coleta.em)}`;
+    const rot = { indisponivel: "TSE indisponível", bloqueada: "TSE pediu pausa", pausada: "coletor em pausa", atrasada: "coleta atrasada" }[m.coleta.saude];
+    const ult = F.ha(m.tempos.consultaOk || m.coleta.em);
+    txt = m.teste ? "dados de teste" : rot ? `${rot} · último dado ${ult}` : parado ? `coleta parada · último dado ${ult}` : `consulta ok ${ult}`;
   }
   el.className = "saude " + cls;
   $("saudeTxt").textContent = txt;
@@ -292,7 +302,7 @@ function pintura(id) {
     else { fill = "#8a8f99"; escuro = true; } // líder fora do par configurado (só no 1º turno)
     rotulo = F.pct(t.candidatos[vis.lider]?.pct, 1).replace("%", "");
   }
-  const aria = t ? `${t.nome}: ${resumoTexto(t)}` : id;
+  const aria = t ? `${id.toUpperCase()} ${t.nome}: ${resumoTexto(t)}` : id;
   return { fill, defasada: vis.defasada, rotulo, escuro, neutro, aria: F.esc(aria) };
 }
 
@@ -637,7 +647,10 @@ function renderGovernador() {
   const g = E.gov;
   if (!g) { $("govLista").innerHTML = `<p class="nota">Aguardando os dados de governador do coletor.</p>`; return; }
   const aviso = g.modo !== "oficial" ? `<p class="aviso alerta forte" style="grid-column:1/-1;margin:0">${F.esc(MODOS[g.modo] || "Dados de teste, não oficiais.")}</p>` : g.turno !== null && g.turno !== 2 ? `<p class="aviso alerta forte" style="grid-column:1/-1;margin:0">Arquivo de outro turno: não é a apuração do 2º turno.</p>` : "";
-  $("govLista").innerHTML = aviso + CFG.governadorUFs.map((uf) => {
+  // Ordem da configuração; uma UF que o coletor publicar fora dela também aparece (a fonte manda).
+  const lista = [...new Set([...CFG.governadorUFs, ...Object.keys(g.ufs || {})])];
+  $("t-gov").textContent = `Governador · 2º turno em ${lista.length} UFs`;
+  $("govLista").innerHTML = aviso + lista.map((uf) => {
     const t = g.ufs[uf];
     if (!t || t.situacao === "indisponivel") return `<article class="gov" id="gov-${uf}"><h3>${NOMES[uf]} <span>indisponível</span></h3></article>`;
     const info = t.candidatosInfo || {};
@@ -665,7 +678,7 @@ function abrirDetalhe(id, foco = true) {
   };
   const dl = (pares) => `<dl class="gav-dl">${pares.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
   const tipo = t.tipo === "regiao" ? "Região (soma do coletor)" : t.id === "zz" ? "Votos no exterior" : t.id === "br" ? "Total nacional" : `UF · região ${REGIOES.find((r) => r.sigla === REGIAO_DA_UF[t.id])?.nome || ""}`;
-  const gov = CFG.governadorUFs.includes(id) ? `<p><a href="#gov-${id}" data-fechar>Ver 2º turno para governador em ${NOMES[id]}</a></p>` : "";
+  const gov = CFG.governadorUFs.includes(id) || (E.gov?.ufs && id in E.gov.ufs) ? `<p><a href="#gov-${id}" data-fechar>Ver 2º turno para governador em ${NOMES[id]}</a></p>` : "";
   $("gavConteudo").innerHTML = `<h3 class="gav-tit" id="gavTitulo">${F.esc(t.nome)}</h3><p class="gav-sub">${tipo} · ${SITUACOES[t.situacao]}</p>
     ${t.situacao === "indisponivel" ? `<p class="aviso erro">Fonte indisponível neste momento. ${fonte?.erro ? F.esc(fonte.erro) : ""}</p>` : `
     <div class="gav-cands">${c(A)}${c(B)}</div>

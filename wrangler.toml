@@ -18,6 +18,7 @@ directory = "dist/site"
 [vars]
 MODO = "oficial"
 INTERVALO_S = "15"    # mínimo 10 (o coletor força)
+INTERVALO_OCIOSO_S = "60"   # sem mudança real há 5 min (antes das 17h de domingo), consulta a cada 60 s; volta a 15 s na 1ª mudança. Cotas diárias do plano gratuito
 PAUSADO = "nao"       # "sim" para o coletor parar de consultar o TSE (exige novo deploy)
 MAX_NOVOS_POR_EXECUCAO = "12"   # arquivos novos processados por execução; o resto segue 1 s depois (limite de CPU). Se a CPU passar de 10 ms nos logs, baixe para 8
 

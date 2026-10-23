@@ -22,11 +22,20 @@ export const OPCOES_PADRAO = {
   // UFs com 2º turno de governador, conferidas pela situação "2º turno" nos arquivos oficiais do 1º turno
   // (tests/test_fixtures_tse.py). Usadas no modo ensaio (a 6259 tem as 27 UFs) e como filtro se a configuração
   // do 2º turno listar a 6260 com abrangência "br": consultar as 27 daria 20 respostas 404 e bloqueio do IP.
-  ufsGovernador2T: ["ac", "am", "df", "es", "rj", "rn", "to"],
+  // O RJ saiu da lista: em 08/10/2026 o TSE anulou os votos de Garotinho e a retotalização de 10/10 deu
+  // Douglas Ruas eleito no 1º turno (st "Eleito" no rj-c0003-e006259-u.json). A configuração da 6260
+  // publicada em 18/10 confirma: ac, am, df, es, rn, to.
+  ufsGovernador2T: ["ac", "am", "df", "es", "rn", "to"],
   // Máximo de arquivos com conteúdo novo processados numa execução. Acima disso o resto fica para uma
   // execução seguinte (retorno continuar: true) e os arquivos públicos só são refeitos quando todos
   // chegarem. No Node não há limite; no Worker, mantém cada execução dentro do limite de CPU do plano gratuito.
   maxNovosPorExecucao: Infinity,
+  // Ritmo ocioso: sem nenhuma mudança real há ociosoAposMin minutos (manhã de domingo, madrugada), a
+  // próxima rodada vem em intervaloOciosoS. A primeira mudança volta ao intervaloS na rodada seguinte.
+  // No Worker (padrão 60 s) isso cabe nas cotas diárias do plano gratuito: linhas gravadas e duração do
+  // Durable Object. null = sem ritmo ocioso (Node).
+  intervaloOciosoS: null,
+  ociosoAposMin: 5,
 };
 
 const DISPUTAS = ["presidente", "governador"];
@@ -40,7 +49,7 @@ const MAX_EVENTOS = 500;
 const MAX_CORRECOES = 1000;
 
 /**
- * @returns {Promise<{ estado: object, saidas: Record<string, object|string>, brutos: Record<string, string>, log: object[], continuar?: boolean }>}
+ * @returns {Promise<{ estado: object, saidas: Record<string, object|string>, brutos: Record<string, string>, log: object[], continuar?: boolean, proximaS?: number }>}
  *   brutos: corpos oficiais novos nesta rodada, por SHA-256, para o adaptador guardar
  */
 export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
@@ -241,14 +250,20 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   const fimRodada = new Date(fonte.agora()).toISOString();
   const pausa = fonte.pausado();
   const situacoes = Object.values(estado.coleta).map((c) => c.situacao);
+  const estadoColeta = pausa ? (/40[3]|429/.test(pausa.motivo) ? "bloqueada" : "pausada")
+    : !estado.config ? "indisponivel"
+    : situacoes.some((x) => x === "defasado" || x === "indisponivel") ? "atrasada" : "ok";
+  const ultimaMudanca = [pres.gerado_em, gov.gerado_em].filter(Boolean).sort().pop() ?? null;
+  const ocioso = Boolean(op.intervaloOciosoS && op.intervaloOciosoS > op.intervaloS) && estadoColeta === "ok"
+    && (!ultimaMudanca || seg(fimRodada, ultimaMudanca) >= op.ociosoAposMin * 60);
+  const intervaloS = ocioso ? op.intervaloOciosoS : op.intervaloS;
   const resumoColeta = {
-    estado: pausa ? (/40[3]|429/.test(pausa.motivo) ? "bloqueada" : "pausada")
-      : !estado.config ? "indisponivel"
-      : situacoes.some((x) => x === "defasado" || x === "indisponivel") ? "atrasada" : "ok",
+    estado: estadoColeta,
     mensagem: pausa ? `${pausa.motivo} (até ${pausa.ate})` : !estado.config ? estado.config_erro?.mensagem ?? "configuração do TSE ainda não lida" : null,
     rodada_em: fimRodada,
-    proxima_em: new Date(Date.parse(fimRodada) + op.intervaloS * 1000).toISOString(),
-    intervalo_s: op.intervaloS,
+    proxima_em: new Date(Date.parse(fimRodada) + intervaloS * 1000).toISOString(),
+    intervalo_s: intervaloS,
+    ritmo: ocioso ? "ocioso" : "normal",
   };
   pres.coleta_geral = resumoColeta;
   gov.coleta_geral = resumoColeta;
@@ -301,7 +316,7 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
   saidas["v1/export/presidente.csv"] = csvPresidente(pres);
   saidas["v1/export/governador.csv"] = csvGovernador(gov);
   estado.fonte = fonte.estado;
-  return { estado, saidas, brutos, log };
+  return { estado, saidas, brutos, log, proximaS: intervaloS };
 }
 
 function contar(lista) {

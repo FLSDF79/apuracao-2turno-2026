@@ -2,7 +2,7 @@
  "schema": "apuracao-2t-2026/v1",
  "tipo": "snapshots",
  "modo": "ensaio",
- "total": 38,
+ "total": 37,
  "como_conferir": "Cada entrada traz a URL oficial, o horário da fonte, o horário da coleta e o SHA-256 do corpo recebido. O corpo exato fica em snapshots/<sha256>.json.",
  "snapshots": [
   {
@@ -33,21 +33,6 @@
    "idg": "2454218",
    "geracao": "2026-10-04T23:02:10-03:00",
    "totalizacao": "2026-10-04T23:01:26-03:00",
-   "aceito": true
-  },
-  {
-   "coletado_em": "2026-10-06T13:00:03.000Z",
-   "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/rj/rj-c0003-e006259-u.json",
-   "etag": "\"ea467daa\"",
-   "sha256": "a76307dfeddacff97a336180fe4491595190f9b206e7545f6a037d2a68657160",
-   "bytes": 7705,
-   "tipo": "resultado",
-   "disputa": "governador",
-   "eleicao": "6259",
-   "recorte": "rj",
-   "idg": "2126601",
-   "geracao": "2026-10-04T22:23:10-03:00",
-   "totalizacao": "2026-10-04T22:19:52-03:00",
    "aceito": true
   },
   {

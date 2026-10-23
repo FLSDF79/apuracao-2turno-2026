@@ -16,7 +16,7 @@ Situação em 06/10/2026, 13h UTC (10h em Brasília). Tudo o que está marcado *
    O governador do DF está na **6259**, junto com os outros 26. A 6261 não tem governador.
 3. **Disputas do 2º turno em 25/10 (confirmado pela situação "2º turno" nos arquivos oficiais):**
    - Presidente (eleição 6258, cargo 1): 22 Flávio Bolsonaro (PL), 47,03% no 1º turno, contra 13 Lula (PT), 45,16%.
-   - Governador (eleição 6260, cargo 3) em 7 UFs:
+   - Governador (eleição 6260, cargo 3) em 6 UFs:
 
    | UF | Candidatos e % dos válidos no 1º turno (fonte: TSE) |
    |---|---|
@@ -24,13 +24,13 @@ Situação em 06/10/2026, 13h UTC (10h em Brasília). Tudo o que está marcado *
    | AM | 55 Omar Aziz 40,63% × 22 Professora Maria do Carmo 24,49% |
    | DF | 11 Celina Leão 49,93% × 13 Leandro Grass 34,47% |
    | ES | 10 Lorenzo Pazolini 49,65% × 15 Ricardo Ferraço 34,06% |
-   | RJ | 22 Douglas Ruas 49,27% × 55 Eduardo Paes 42,76% |
+   | ~~RJ~~ | Saiu do 2º turno: em 08/10/2026 o TSE anulou os votos de Garotinho e a retotalização de 10/10 deu 22 Douglas Ruas eleito com 50,88% (st "Eleito"). A configuração da 6260 de 18/10 lista só ac, am, df, es, rn, to |
    | RN | 44 Allyson 36,94% × 13 Cadu de Lula 36,16% |
    | TO | 44 Professora Dorinha 45,52% × 45 Vicentinho Júnior 43,94% |
 
    A imprensa publicou números ligeiramente diferentes para AM e RN (Agência Brasil: 40,38% e 36,83%). Vale o arquivo oficial.
 4. **A configuração do 2º turno ainda não está publicada.** O `ele-c.json` servido em 06/10 foi gerado em 02/10/2026 18:30:57 e só traz o pleito do 1º turno. Os arquivos `br-c0001-e006258-u.json`, `mun-e006258-cm.json`, `br-c0001-e006260-u.json` e `mun-e006260-cm.json` deram 404 (esperado). Em 2024 o 2º turno apareceu como **pleito novo** no `ele-c.json` (pleito 453, eleição 620, `t: "2"`), com `abr` restrito às UFs e municípios em disputa. O coletor deve descobrir o 2º turno lendo o `ele-c.json`, sem fixar códigos e sem chutar URLs.
-5. **A soma territorial fecha exatamente com o nacional (confirmado).** No 1º turno de presidente, a soma das 27 UFs mais o exterior (`zz`) é igual ao total `br` em todos os campos inteiros: votos de cada um dos 12 candidatos, seções (`s`), eleitorado, comparecimento e abstenção (`e`) e todas as categorias de voto (`v`). DF e exterior são recortes distintos e o `br` não tem um terceiro recorte escondido. Coberto por `tests/test_fixtures_tse.py`.
+5. **A soma territorial fecha exatamente com o nacional (confirmado).** No 1º turno de presidente, a soma das 26 UFs mais o exterior (`zz`) é igual ao total `br` em todos os campos inteiros: votos de cada um dos 12 candidatos, seções (`s`), eleitorado, comparecimento e abstenção (`e`) e todas as categorias de voto (`v`). DF e exterior são recortes distintos e o `br` não tem um terceiro recorte escondido. Coberto por `tests/test_fixtures_tse.py`.
 6. **O percentual oficial usa `vvc` como denominador, não `vv` (confirmado).** Quando há candidato "Anulado sub judice", os votos dele entram em `vvc` (= `vv` + `vansj`) e no `pvap`. Exemplo real: governador do RJ, onde Garotinho teve 274.411 votos anulados sub judice e Douglas Ruas tem 49,27% sobre `vvc` (seriam 50,88% sobre `vv`). O cálculo próprio do painel precisa usar o mesmo denominador para bater com o TSE.
 
 ## 2. Inventário no formato pedido
@@ -41,7 +41,7 @@ Situação em 06/10/2026, 13h UTC (10h em Brasília). Tudo o que está marcado *
 | Página oficial de divulgação | https://www.tse.jus.br/eleicoes/eleicoes-2026-content/divulgacao-dos-resultados-das-eleicoes-2026 e app https://resultados.tse.jus.br/oficial/app/index.html | Uma por TRE, quase todas apontando para o app do TSE ([tabela](tres-2026-levantamento.md)) |
 | Endpoint estruturado | `https://resultados.tse.jus.br/oficial/...` (seção 3) | Nenhum JSON/CSV. TRE-PB tem Excel por município ("sem valor legal"); TRE-PI tem painel de PDFs por seção num bucket do Google |
 | Formato e campos | JSON, campos na seção 4 | PDF (relatórios SISTOT), um Excel |
-| Abrangência | Brasil, 27 UFs, exterior, municípios, zonas e seções | UF, às vezes município e seção |
+| Abrangência | Brasil, 26 UFs, exterior, municípios, zonas e seções | UF, às vezes município e seção |
 | Horário informado | Em cada arquivo: `dg`/`hg` (geração) e `dt`/`ht` (totalização). Divulgação começa às 17h de Brasília | Nenhum horário próprio. Só o TRE-CE repete "a partir das 17h" |
 | Restrições | 100 req/s por IP (bloqueio de 10 min, renovável); vários 404 bloqueiam o IP; 304 conta no limite | Nenhuma relevante. TRE-BA entrega resultados sob pedido |
 | Origem efetiva | Publicação própria (base de totalização) | **Base TSE** em todas as UFs; relatórios próprios são derivados do SISTOT |
@@ -54,12 +54,12 @@ Base `https://resultados.tse.jus.br`, ambiente `oficial`, ciclo `ele2026`. O `el
 |---|---|---|
 | Configuração geral (EA11) | `/oficial/comum/config/ele-c.json` | 200 |
 | Municípios da eleição (EA12) | `/oficial/ele2026/{ele}/config/mun-e{ele6}-cm.json` | 200 (6257, 6259); 404 (6258, 6260) |
-| Resultado unificado (EA20) | `/oficial/ele2026/{ele}/dados/{abr}/{abr}-c{cargo4}-e{ele6}-u.json` | 200 para `br`, 27 UFs e `zz` (presidente) e 27 UFs (governador) |
+| Resultado unificado (EA20) | `/oficial/ele2026/{ele}/dados/{abr}/{abr}-c{cargo4}-e{ele6}-u.json` | 200 para `br`, 26 UFs e `zz` (presidente) e 26 UFs (governador) |
 | Abrangência, sem votos | `/oficial/ele2026/{ele}/dados/{abr}/{abr}-e{ele6}-ab.json` | 200 (`br`, `df`) |
 
 `{ele6}` é o código com 6 dígitos e zeros à esquerda (`006257`); `{cargo4}` tem 4 dígitos (`0001`, `0003`). Os 29 recortes de presidente são `br`, as 27 siglas de UF e `zz` (exterior). O `br-…-ab.json` lista os 29 na ordem `ac…to, zz, br`. Arquivos que não existem respondem 404 com corpo XML `NoSuchKey` de um armazenamento compatível com S3 (bucket `tse-resultados-1`).
 
-Para o 2º turno, por inferência do padrão: presidente em `/oficial/ele2026/6258/dados/{br|uf|zz}/…-c0001-e006258-u.json` e governador em `/oficial/ele2026/6260/dados/{uf}/{uf}-c0003-e006260-u.json`, só nas 7 UFs. Confirmar no `ele-c.json` antes de consultar.
+Para o 2º turno, por inferência do padrão: presidente em `/oficial/ele2026/6258/dados/{br|uf|zz}/…-c0001-e006258-u.json` e governador em `/oficial/ele2026/6260/dados/{uf}/{uf}-c0003-e006260-u.json`, só nas 6 UFs. Confirmar no `ele-c.json` antes de consultar.
 
 O TSE também cita os tipos EA10 (eleitos), EA14 e EA15 (acompanhamento Brasil e UF), EA16 e EA18 (seções e arquivo auxiliar). Não foram baixados para não arriscar 404 sem o nome exato.
 

@@ -24,7 +24,6 @@
    "am",
    "df",
    "es",
-   "rj",
    "rn",
    "to"
   ]
@@ -670,163 +669,6 @@
     }
    }
   },
-  "rj": {
-   "codigo": "rj",
-   "tipo": "uf",
-   "nome": "Rio de Janeiro",
-   "regiao": "SE",
-   "ibge_uf": "33",
-   "coleta": {
-    "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/rj/rj-c0003-e006260-u.json",
-    "ultima_tentativa": "2026-10-25T21:10:33.000Z",
-    "ultimo_sucesso": "2026-10-25T21:10:33.000Z",
-    "ultima_mudanca": "2026-10-25T21:10:33.000Z",
-    "status_http": 200,
-    "ultimo_erro": null,
-    "alertas": [],
-    "sha256": "aafc56e5dd0bbc0c796530e77b3971a097cc0bfcc097fecb37e30de4570879b0",
-    "situacao": "atualizado",
-    "sem_alteracao": false,
-    "fora_de_ordem": null,
-    "nova_versao": true,
-    "correcao": false
-   },
-   "estado_publicacao": "em_apuracao",
-   "candidatos": [
-    {
-     "numero": "22",
-     "sqcand": "190002542887",
-     "nome": "DOUGLAS RUAS DOS SANTOS",
-     "nome_urna": "DOUGLAS RUAS",
-     "partido": {
-      "numero": "22",
-      "sigla": "PL",
-      "nome": "PARTIDO LIBERAL"
-     },
-     "federacao": null,
-     "coligacao": "PL / MOBILIZA / AGIR / AVANTE",
-     "vice": {
-      "sqcand": "190002542886",
-      "nome": "FERNANDA ANCHIETA LOUBACK",
-      "nome_urna": "FERNANDA LOUBACK",
-      "partido": "PL"
-     }
-    },
-    {
-     "numero": "55",
-     "sqcand": "190002543380",
-     "nome": "EDUARDO DA COSTA PAES",
-     "nome_urna": "EDUARDO PAES",
-     "partido": {
-      "numero": "55",
-      "sigla": "PSD",
-      "nome": "PARTIDO SOCIAL DEMOCRÁTICO"
-     },
-     "federacao": null,
-     "coligacao": "PDT / MDB / DC / PSB / PSD / CIDADANIA / PSDB / PCDOB / PT / PV / PRD / SOLIDARIEDADE",
-     "vice": {
-      "sqcand": "190002543379",
-      "nome": "JEANNIE MAYR REIS DE OLIVEIRA",
-      "nome_urna": "JANE REIS",
-      "partido": "MDB"
-     }
-    }
-   ],
-   "eleito": {
-    "publicado": false,
-    "candidatos": []
-   },
-   "resultado": {
-    "origem": "tse",
-    "idg": "1792951800",
-    "andamento": {
-     "codigo": "p",
-     "final_publicado": false
-    },
-    "horario": {
-     "geracao": "2026-10-25T18:10:00-03:00",
-     "totalizacao": "2026-10-25T18:10:00-03:00"
-    },
-    "secoes": {
-     "total": 37675,
-     "totalizadas": 15070,
-     "nao_totalizadas": 22605,
-     "instaladas": 37675,
-     "nao_instaladas": 0,
-     "apuradas": 15070,
-     "nao_apuradas": 22605
-    },
-    "eleitorado": {
-     "total": 12842517,
-     "secoes_totalizadas": 5137006,
-     "secoes_nao_totalizadas": 7705511,
-     "secoes_instaladas": 12842517,
-     "secoes_nao_instaladas": 0,
-     "secoes_apuradas": 5137006,
-     "secoes_nao_apuradas": 7705511,
-     "comparecimento": 3662002,
-     "abstencao": 1475004
-    },
-    "votos": {
-     "total": 3662002,
-     "validos_computados": 3191272,
-     "validos": 3191272,
-     "nominais": 3191272,
-     "anulados": 0,
-     "anulados_sub_judice": 0,
-     "brancos": 200614,
-     "nulos_total": 270116,
-     "nulos": 270116,
-     "nulos_tecnicos": 0,
-     "vsan": 0,
-     "vscv": 0
-    },
-    "indicadores": {
-     "pct_totalizadas": 40,
-     "pct_comparecimento": 71.2866989059386,
-     "pct_abstencao": 28.713301094061404,
-     "base_comparecimento": 5137006,
-     "pct_validos": 87.1455559008433,
-     "pct_brancos": 5.478260252178999,
-     "pct_nulos": 7.376183846977692
-    },
-    "oficial_tse": {
-     "pct_totalizadas": 40,
-     "pct_comparecimento": 71.286698906,
-     "pct_abstencao": 28.713301094,
-     "pct_validos": 87.145555901,
-     "pct_brancos": 5.478260252,
-     "pct_nulos": 7.376183847
-    },
-    "candidatos": [
-     {
-      "numero": "22",
-      "votos": 1708479,
-      "pct_validos": 53.535988157700125,
-      "pct_validos_tse": 53.535988158,
-      "situacao": "",
-      "eleito_publicado": false,
-      "destinacao": "Válido"
-     },
-     {
-      "numero": "55",
-      "votos": 1482793,
-      "pct_validos": 46.464011842299875,
-      "pct_validos_tse": 46.464011842,
-      "situacao": "",
-      "eleito_publicado": false,
-      "destinacao": "Válido"
-     }
-    ],
-    "disputa": {
-     "situacao": "lideranca",
-     "lider": "22",
-     "segundo": "55",
-     "diferenca_votos": 225686,
-     "diferenca_pontos": 7.071976315400249
-    }
-   }
-  },
   "rn": {
    "codigo": "rn",
    "tipo": "uf",
@@ -1163,6 +1005,7 @@
   "mensagem": null,
   "rodada_em": "2026-10-25T21:10:33.000Z",
   "proxima_em": "2026-10-25T21:10:48.000Z",
-  "intervalo_s": 15
+  "intervalo_s": 15,
+  "ritmo": "normal"
  }
 }

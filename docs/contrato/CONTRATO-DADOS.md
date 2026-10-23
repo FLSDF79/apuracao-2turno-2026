@@ -3,7 +3,7 @@
 Este é o formato que o coletor publica e que a página consome. **A página só exibe:** todo número, percentual, diferença, agregação regional e classificação da conferência já sai pronto daqui. Exemplos gerados pelo próprio código:
 
 - [`exemplos/simulado-2turno/v1/`](../../exemplos/simulado-2turno/v1/): noite de 2º turno **simulada** (40% apurado, SP atrasado em relação ao nacional, correção no AC). É o formato que a página vai ver em 25/10. Votos derivados do 1º turno: nunca exibir como resultado.
-- [`exemplos/ensaio-1turno/v1/`](../../exemplos/ensaio-1turno/v1/): arquivos **reais** do 1º turno de 04/10 (12 candidatos a presidente, 7 UFs de governador).
+- [`exemplos/ensaio-1turno/v1/`](../../exemplos/ensaio-1turno/v1/): arquivos **reais** do 1º turno de 04/10 (12 candidatos a presidente, 6 UFs de governador).
 
 Para regenerar: `node tools/gerar-exemplo.mjs`.
 
@@ -13,13 +13,13 @@ Servidos em `/dados/v1/…` (Cloudflare) ou gravados em `<saida>/v1/…` (Node).
 
 | Arquivo | Conteúdo |
 |---|---|
-| `presidente.json` | Placar do Brasil (oficial e calculado), 27 UFs, exterior, 5 regiões, conferência |
-| `governador.json` | Uma entrada por UF com 2º turno de governador (AC, AM, DF, ES, RJ, RN, TO). Nunca agregado entre UFs |
+| `presidente.json` | Placar do Brasil (oficial e calculado), 26 UFs, exterior, 5 regiões, conferência |
+| `governador.json` | Uma entrada por UF com 2º turno de governador (AC, AM, DF, ES, RN, TO). Nunca agregado entre UFs |
 | `historico.json` | Série do arquivo nacional (um ponto por versão nova publicada pelo TSE) e correções detectadas |
 | `saude.json` | Estado do coletor: rodada, códigos HTTP, latência, pausa, situação de cada arquivo consultado |
 | `snapshots.json` | Índice dos últimos 500 corpos recebidos do TSE: URL, ETag, horários, `idg`, SHA-256, aceito ou não |
 | `snapshots/<sha256>.json` | Corpo exato recebido do TSE, imutável. O SHA-256 bate com o do arquivo oficial baixado direto |
-| `territorios.json` | Tabela TSE × IBGE (27 UFs, exterior e Brasil) com região |
+| `territorios.json` | Tabela TSE × IBGE (26 UFs, exterior e Brasil) com região |
 | `export/presidente.csv`, `export/governador.csv` | Exportação pronta (`;`, decimal com vírgula, UTF-8 com BOM: abre direto no Excel em português) |
 
 O JSON de exportação é o próprio `presidente.json`/`governador.json`: já trazem origem, horário do TSE e horário da coleta.
@@ -57,7 +57,7 @@ candidatos: [ { numero, sqcand, nome, nome_urna, partido{numero,sigla,nome}, fed
 brasil: {
   oficial:   Resultado (origem "tse": arquivo br do TSE)       ← placar principal
   coleta:    Coleta
-  calculado: Resultado (origem "calculado": 27 UFs + exterior) ← coluna A da conferência
+  calculado: Resultado (origem "calculado": 26 UFs + exterior) ← coluna A da conferência
 }
 exterior: Territorio (o mesmo objeto de territorios.zz)
 territorios: { ac…to, zz: Territorio }
@@ -139,7 +139,7 @@ A e B **nunca** se somam: são duas representações dos mesmos votos.
 
 ```text
 schema, tipo:"governador", gerado_em, modo, aviso_modo, aviso, fonte, eleicao (6260, cargo 3)
-ufs: { ac, am, df, es, rj, rn, to: { codigo, nome, regiao, ibge_uf, coleta, estado_publicacao, candidatos[], eleito{publicado,candidatos}, resultado: Resultado } }
+ufs: { ac, am, df, es, rn, to: { codigo, nome, regiao, ibge_uf, coleta, estado_publicacao, candidatos[], eleito{publicado,candidatos}, resultado: Resultado } }
 ```
 
 As UFs saem da configuração oficial do 2º turno (`abr` da eleição 6260 no `ele-c.json`). No modo ensaio, são as 7 que foram ao 2º turno no 1º turno.

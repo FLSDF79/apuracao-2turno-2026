@@ -44,7 +44,7 @@ node tools/gerar-exemplo.mjs                                 # regenera exemplos
 
 Visão Brasil · Mapa (estados ou regiões, geográfico ou em grade, intensidade pela margem opcional, barras de vantagem em votos,
 exterior em cartão próprio) · Estados e regiões (tabelas ordenáveis com filtro) · Conferência (A soma territorial × B total do TSE,
-classificada) · Histórico (por horário ou por % totalizado, com correções oficiais marcadas) · Fontes e saúde · Governador (AC, AM, DF, ES, RJ, RN e TO, em módulo separado).
+classificada) · Histórico (por horário ou por % totalizado, com correções oficiais marcadas) · Fontes e saúde · Governador (AC, AM, DF, ES, RN e TO, em módulo separado).
 
 Também: modo TV (`?tv=1` ou botão), tema claro e escuro, cores fixas e trocáveis por candidato (salvas no navegador),
 exportação CSV/JSON com origem e horário, horário de Brasília, crédito de autoria e selo da NFLS.AI Arena.
@@ -88,7 +88,7 @@ Para rodar localmente: `python3 -m http.server` na raiz e abrir `http://localhos
 - `node --test tests/interface/*.test.js`: leitura do contrato v1 pela página, estados visuais, cores, horários e exportação.
 - `npm run tipos`: checagem de tipos do TypeScript sobre o JavaScript da página (JSDoc + `checkJs`, `js/tsconfig.json`).
 - `node --test tests/navegador/*.test.mjs`: Chromium via Playwright (`npm i --no-save playwright axe-core`). Confere os valores
-  exibidos com os arquivos de origem (placar, 27 UFs + exterior, regiões, conferência e horários), mapa, tooltip, detalhe, teclado,
+  exibidos com os arquivos de origem (placar, 26 UFs + exterior, regiões, conferência e horários), mapa, tooltip, detalhe, teclado,
   filtros, ordenação e abas no computador e no celular, modo TV, cenários do coletor (conteúdo igual, conteúdo novo, fora de ordem,
   fora do ar, incompleto, campo inválido, outro turno, “eleito” só publicado), acessibilidade com axe-core nos dois temas e console sem erros.
   Com `EVIDENCIAS=1`, guarda capturas e `relatorio.json` em `docs/evidencias/painel/`. O CI roda tudo e anexa as evidências.

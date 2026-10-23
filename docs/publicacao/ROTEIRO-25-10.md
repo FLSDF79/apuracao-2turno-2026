@@ -39,7 +39,7 @@ Marcos do plano: primeira versão ponta a ponta até 09/10, no ar até 14/10, en
 
 ## Antes de 18/10 (uma vez)
 
-1. **Conta Cloudflare.** Em *My Profile > API Tokens > Create Token*, modelo **Edit Cloudflare Workers**. Copie também o **Account ID** (página *Workers & Pages*, barra lateral).
+1. **Conta Cloudflare.** Em *My Profile > API Tokens > Create Token*, modelo **Edit Cloudflare Workers**. Copie também o **Account ID** (página *Workers & Pages*, quadro *Account Details*). Antes do primeiro deploy, abra *Workers & Pages* uma vez e escolha o subdomínio `workers.dev`: sem ele o deploy pelo GitHub falha.
 2. **Segredo de administração.** Crie também o segredo `ADMIN_TOKEN` no GitHub (valor de `openssl rand -hex 32`, guardado num gerenciador de senhas); o fluxo de publicação o copia para o Worker. Pelo terminal: `npx wrangler secret put ADMIN_TOKEN`.
 3. **Segredos no GitHub.** Em *Settings > Secrets and variables > Actions* do repositório, crie `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
 4. **Merge na ordem** #1 (fontes), #3 (coletor), #2 (página) e por último o PR desta frente.
@@ -111,7 +111,7 @@ Pela administração (precisa do `ADMIN_TOKEN`): `POST /admin/pausar`, `/admin/r
 - **Completo, com relógio real:** `node ensaio/rodar.mjs` sobe o TSE simulado, o coletor (`coletor/node.js`), a página e um navegador; confere cada rodada, tira telas (computador, celular, TV) em cada marco e grava `ensaio/saida/resultado.json`. Leva ~26 min (`--escala 2` para metade).
 - **Publicado:** o ambiente `ensaio` na Cloudflare repete a noite a cada 30 min, para qualquer um acompanhar no celular. `https://<ensaio>/_ensaio` diz em que ponto da noite está.
 
-O que o ensaio confere em cada rodada (`ensaio/conferir.mjs`): votos inteiros; soma das 27 UFs + exterior = coluna A; regiões = soma dos inteiros e totalização pelas seções; regiões + exterior = Brasil, sem contar o DF duas vezes; diferença = A − B; "compatível" só com tudo igual; "eleito" só com a situação oficial; histórico sem soma repetida; último dado válido nunca some. E, por marco: nada de arquivo de resultado antes da configuração, SP atrasado acusado, correção do AC no histórico, 503/429 pausando, RR defasado e de volta, eleito só no fim e conferência final compatível.
+O que o ensaio confere em cada rodada (`ensaio/conferir.mjs`): votos inteiros; soma das 26 UFs + exterior = coluna A; regiões = soma dos inteiros e totalização pelas seções; regiões + exterior = Brasil, sem contar o DF duas vezes; diferença = A − B; "compatível" só com tudo igual; "eleito" só com a situação oficial; histórico sem soma repetida; último dado válido nunca some. E, por marco: nada de arquivo de resultado antes da configuração, SP atrasado acusado, correção do AC no histórico, 503/429 pausando, RR defasado e de volta, eleito só no fim e conferência final compatível.
 
 ## Plano B
 

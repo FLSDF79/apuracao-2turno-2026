@@ -142,7 +142,8 @@ function territorio(id, { nome, tipo, regiao, coleta, resultado, atrasoMin, elei
     },
     candidatos: cand,
     lider: d.lider, margem: d.margem,
-    eleito: eleito || null,
+    // Segunda trava: o contrato marca o eleito, e a página só aceita se o candidato também traz st "Eleito".
+    eleito: eleito && /^eleito$/i.test(cand[eleito]?.situacao || "") ? eleito : null,
     idg: r?.idg ?? null
   };
 }

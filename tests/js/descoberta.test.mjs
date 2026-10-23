@@ -21,13 +21,13 @@ test("modo ensaio usa o 1º turno: 6257 presidente (br) e 6259 governador", () =
   assert.equal(d.disputas.governador.eleicao, "6259");
 });
 
-test("quando a configuração listar o 2º turno (formato de 2024), a descoberta encontra 6258 e as 7 UFs de 6260", async () => {
+test("quando a configuração listar o 2º turno (formato de 2024), a descoberta encontra 6258 e as 6 UFs de 6260", async () => {
   const site = montarSite(await carregarBase(RAIZ), { hora: "25/10/2026 17:00:00", fracao: { padrao: 0 } });
   const d = descobrir(site["oficial/comum/config/ele-c.json"]);
   assert.equal(d.disputas.presidente.estado, "publicada");
   assert.equal(d.disputas.presidente.eleicao, "6258");
   assert.equal(d.disputas.presidente.turno, 2);
-  assert.deepEqual(d.disputas.governador.abrangencias, ["ac", "am", "df", "es", "rj", "rn", "to"]);
+  assert.deepEqual(d.disputas.governador.abrangencias, ["ac", "am", "df", "es", "rn", "to"]);
 });
 
 test("URLs saem dos modelos 'arq' do ele-c.json e apontam para arquivos que existem", () => {

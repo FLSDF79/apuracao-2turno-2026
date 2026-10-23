@@ -19,6 +19,8 @@ function opcoes(env) {
     intervaloS: Math.max(10, Number(env.INTERVALO_S || OPCOES_PADRAO.intervaloS)),
     // Limite de CPU do plano gratuito: arquivos novos além deste número ficam para a execução seguinte.
     maxNovosPorExecucao: Math.max(1, Number(env.MAX_NOVOS_POR_EXECUCAO || 12)),
+    // Sem mudança real há alguns minutos, a rodada seguinte vem em INTERVALO_OCIOSO_S (cotas do plano gratuito).
+    intervaloOciosoS: Math.max(10, Number(env.INTERVALO_OCIOSO_S || 60)),
   };
 }
 
@@ -31,6 +33,7 @@ export class Coletor {
     this.state = state;
     this.env = env;
     this.estado = null;
+    this.proximaS = null;
   }
 
   async pausado() {
@@ -56,10 +59,14 @@ export class Coletor {
 
   async alarm() {
     if (await this.pausado()) return;
-    await this.state.storage.setAlarm(Date.now() + opcoes(this.env).intervaloS * 1000);
+    // Arma antes de rodar (se a rodada falhar, o coletor não para) com o ritmo da rodada anterior.
+    const previsto = this.proximaS ?? opcoes(this.env).intervaloS;
+    await this.state.storage.setAlarm(Date.now() + previsto * 1000);
     const r = await this.executarRodada();
     // Muitos arquivos novos de uma vez: continua em 1 s, numa execução separada (CPU contada à parte).
     if (r.continuar) await this.state.storage.setAlarm(Date.now() + 1000);
+    else if (r.proximaS && r.proximaS !== previsto) await this.state.storage.setAlarm(Date.now() + r.proximaS * 1000);
+    if (!r.continuar && r.proximaS) this.proximaS = r.proximaS;
   }
 
   async fetch(req) {

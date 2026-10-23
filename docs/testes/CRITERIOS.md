@@ -7,13 +7,13 @@ Cada critério do prompt (seções 2, 3, 4, 7, 8 e 9) que cabe ao coletor tem pe
 | Votos e contagens são inteiros; ausente vira `null`, nunca zero | `normalizar` › contagens viram inteiros e campo ausente vira null, não zero |
 | Percentual do candidato sobre vvc, igual ao TSE | `calcular` › percentuais calculados batem com os oficiais do TSE…; base do percentual é vvc… |
 | Somar inteiros antes de dividir (região nunca é média de percentuais) | `calcular` › região soma votos antes do percentual… |
-| Brasil calculado = 27 UFs + exterior, idêntico ao total nacional | `calcular` › Brasil calculado (27 UFs + exterior) é idêntico ao total nacional, campo a campo |
+| Brasil calculado = 26 UFs + exterior, idêntico ao total nacional | `calcular` › Brasil calculado (26 UFs + exterior) é idêntico ao total nacional, campo a campo |
 | Exterior entra uma vez, DF sem dupla contagem | `calcular` › exterior entra uma única vez…; as cinco regiões + exterior somam o Brasil… |
 | Recorte ausente não vira zero e aparece na lista de faltantes | `calcular` › recorte ausente fica listado e não vira zero… |
 | Divisão por zero não gera NaN nem Infinity | `calcular` › divisão por zero vira null |
 | Liderança, empate e sem votos (liderança parcial ≠ vitória) | `calcular` › disputa: liderança, empate e ausência de votos |
 | "Eleito" só quando a fonte diz | `normalizar` › 'eleito' só vem da situação textual…; `rodada` › noite simulada… (eleito só no fim) |
-| Governador separado de presidente, só nas 7 UFs | `calcular` › governador: os 7 arquivos…; `rodada` › governador com abrangência 'br'… |
+| Governador separado de presidente, só nas 6 UFs | `calcular` › governador: os 7 arquivos…; `rodada` › governador com abrangência 'br'… |
 | Conferência A × B com 4 classes; A e B nunca somados; defasado nunca é compatível | `conferencia` › os 5 testes (compatível, cobertura incompleta com UF ausente ou defasada, horários diferentes, persistente, sem nacional) |
 | Diferença temporária não é tratada como erro | `conferencia` › nacional mais novo que uma UF: horários diferentes… |
 | Arquivo cumulativo substitui, não soma; sem recontagem em rodadas repetidas | `historico` › mesma versão não duplica…; `confiabilidade` › snapshot: … rodadas repetidas não duplicam nem recontam |

@@ -40,6 +40,9 @@ test("não mostra eleito sem publicação oficial (o campo e = s dos classificad
   assert.equal(normalizar(ensaio, CFG).modelo.territorios.br.eleito, null);
   const snap = structuredClone(simulado);
   snap.eleito = { publicado: true, candidatos: ["13"], fonte: "br" };
+  // Segunda trava: sem st "Eleito" no próprio candidato, a página não declara eleito.
+  assert.equal(normalizar(snap, CFG).modelo.territorios.br.eleito, null);
+  snap.brasil.oficial.candidatos.find((c) => c.numero === "13").situacao = "Eleito";
   assert.equal(normalizar(snap, CFG).modelo.territorios.br.eleito, "13");
 });
 
@@ -109,9 +112,9 @@ test("histórico ordenado pelo horário do TSE e com correções mantidas", () =
   assert.equal(csv.trim().split("\r\n").length, h.length + 1);
 });
 
-test("governador: 7 UFs, separado do presidente, com nomes dos candidatos", () => {
+test("governador: 6 UFs, separado do presidente, com nomes dos candidatos", () => {
   const g = normalizarGovernador(ler("exemplos/simulado-2turno/v1/governador.json"));
-  assert.deepEqual(Object.keys(g.ufs).sort(), ["ac", "am", "df", "es", "rj", "rn", "to"]);
+  assert.deepEqual(Object.keys(g.ufs).sort(), ["ac", "am", "df", "es", "rn", "to"]);
   assert.equal(g.ufs.df.candidatosInfo["11"].partido, "PP");
 });
 

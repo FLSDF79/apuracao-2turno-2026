@@ -20,7 +20,10 @@ Onde olhar: área **Fontes e saúde** da página, `https://<painel>/dados/v1/sau
 
 ## Plano B: TSE recusa a Cloudflare
 
-Decidido com o resultado do teste de acesso (frente 2). Opções, em ordem:
+Decidido com o resultado do teste de acesso (frente 2). O que existe de fato hoje (conferido em 23/10):
 
-1. **Coletor fora da Cloudflare, página na Cloudflare.** `coletor/node.js` roda numa máquina aceita pelo TSE (o Mac, ou um runner do GitHub Actions por até 6 h) e envia os arquivos prontos ao Worker. Continua sendo um só coletor para todos. Exige um receptor autenticado no Worker (frente 4) e um token de envio.
-2. **Consulta direta pelo navegador, como a v0.** Sem servidor, mas cada visitante consulta o TSE, sem conferência centralizada e com risco de bloqueio com muitos acessos. Só como último recurso.
+1. **v0 no GitHub Pages (pronto).** A versão anterior do painel (commit `4fe9299`, a `main` antes do merge do #4) é estática e cada navegador consulta o TSE direto (`resultados.tse.jus.br` ecoa o `Origin` no CORS), com descoberta automática da 6258 pelo `ele-c.json`. O último site publicado no Pages continua no ar mesmo depois do merge. Sem conferência centralizada e com risco de bloqueio se muitos visitantes abrirem, mas o público é pequeno. É o plano B de domingo.
+2. **Divulgar o portal do TSE** (resultados.tse.jus.br) se nem o v0 responder.
+3. *Não implementado:* coletor fora da Cloudflare (`backend/execucao/node.js` no Mac ou num runner) enviando arquivos ao Worker. Exigiria um receptor autenticado que o Worker não tem (`/admin/*` só aceita estado, pausar, retomar e rodada). A página nova também não consulta o TSE direto: ela só lê `/dados/v1/` e a CSP (`connect-src 'self'`) bloquearia.
+
+Por isso o teste `teste-tse` precisa rodar antes de sábado: se der 403/429, o link a divulgar no domingo é o do v0.

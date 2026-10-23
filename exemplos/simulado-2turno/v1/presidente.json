@@ -4271,6 +4271,7 @@
   "mensagem": null,
   "rodada_em": "2026-10-25T21:10:33.000Z",
   "proxima_em": "2026-10-25T21:10:48.000Z",
-  "intervalo_s": 15
+  "intervalo_s": 15,
+  "ritmo": "normal"
  }
 }

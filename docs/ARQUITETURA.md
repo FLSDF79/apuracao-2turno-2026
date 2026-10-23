@@ -8,7 +8,7 @@ Painel independente da apuração do 2º turno de 25/10/2026, com dados oficiais
  TSE (resultados.tse.jus.br)                         Cloudflare (plano gratuito)
  ┌──────────────────────────┐   a cada 15 s   ┌───────────────────────────────────────────────┐
  │ ele-c.json (configuração) │◄───────────────│ Coletor único (Durable Object + alarme)        │
- │ br / 27 UFs / zz (-u.json)│  ETag, backoff, │  conector → normalização → cálculo → contrato │
+ │ br / 26 UFs / zz (-u.json)│  ETag, backoff, │  conector → normalização → cálculo → contrato │
  │ abrangência (-ab.json)    │  Retry-After    │  estado e histórico no armazenamento do DO    │
  └──────────────────────────┘                 └──────────────────────┬────────────────────────┘
                                                                      │ /dados/v1/*.json, *.csv (cache 5 s)
@@ -25,7 +25,7 @@ Só o coletor fala com o TSE. A página só lê o que ele publica e não recalcu
 |---|---|---|---|
 | Conectores oficiais | `backend/conectores/` (`http.js`, `tse.js`) | HTTP com timeout, ETag/If-Modified-Since, backoff com variação, Retry-After, pausa global em 403/429, sentinela de 404, limite de requisições por segundo, **lista fechada de hosts** (só `resultados.tse.jus.br` e o host de simulação do TSE). URLs montadas só a partir da configuração oficial | frente 2 |
 | Normalização e validação | `backend/normalizacao/` | JSON do TSE → inteiros e percentuais; validação de esquema; ausente (`null`) ≠ zero; territórios com sigla TSE e código IBGE separados | frente 2 |
-| Agregação e conferência | `backend/agregacao/` | Soma de inteiros por região e Brasil (27 UFs + exterior), totalização pelas seções, conferência A × B classificada, histórico com correções | frente 2 |
+| Agregação e conferência | `backend/agregacao/` | Soma de inteiros por região e Brasil (26 UFs + exterior), totalização pelas seções, conferência A × B classificada, histórico com correções | frente 2 |
 | Armazenamento | `backend/armazenamento/` | Estado e últimos dados válidos no Durable Object (SQLite) ou em arquivos (Node); snapshots imutáveis por SHA-256 | frente 2 |
 | API (contrato v1) | `backend/api/`, `backend/execucao/` | `/dados/v1/*.json`, `export/*.csv`, `snapshots/<sha>.json`; administração autenticada | frente 2 |
 | Interface | `index.html`, `style.css`, `config.js`, `js/` | Só apresenta; o único arquivo que conhece o formato é `js/contrato.js` | frente 3 |

@@ -62,15 +62,18 @@ jobs:
           AMBIENTE: ${{ github.event.inputs.ambiente || 'producao' }}
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            # Publicação pedida à mão sem segredos: falha visível, para ninguém achar que publicou.
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "::error::Segredos CLOUDFLARE_API_TOKEN e CLOUDFLARE_ACCOUNT_ID ausentes: nada foi publicado."; exit 1; fi
             echo "::warning::Segredos da Cloudflare ausentes: publicação pulada (testes e montagem ok)."
             exit 0
           fi
+          if [ -n "$ADMIN_TOKEN" ] && [ ${#ADMIN_TOKEN} -lt 32 ]; then echo "::error::ADMIN_TOKEN tem menos de 32 caracteres: a administração ficaria desligada. Gere com: openssl rand -hex 32"; exit 1; fi
           if [ "$AMBIENTE" = "producao" ]; then ENV="--env="; else ENV="--env=$AMBIENTE"; fi
-          npx --yes wrangler@4 deploy $ENV | tee deploy.log
+          npx --yes wrangler@4.149.0 deploy $ENV | tee deploy.log
           # endereço publicado (workers.dev), usado na conferência abaixo
           echo "url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1)" >> "$GITHUB_OUTPUT"
           # segredo de administração (opcional): copiado do segredo ADMIN_TOKEN do GitHub, nunca escrito em log
-          if [ -n "$ADMIN_TOKEN" ]; then printf '%s' "$ADMIN_TOKEN" | npx --yes wrangler@4 secret put ADMIN_TOKEN $ENV; fi
+          if [ -n "$ADMIN_TOKEN" ]; then printf '%s' "$ADMIN_TOKEN" | npx --yes wrangler@4.149.0 secret put ADMIN_TOKEN $ENV; fi
       - name: Conferir no ar
         if: github.event_name != 'pull_request'
         env:

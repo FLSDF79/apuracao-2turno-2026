@@ -218,9 +218,9 @@ describe("mapa, filtros e navegação no computador", () => {
     }
   });
 
-  test("governador em módulo separado, só nas 7 UFs", async () => {
+  test("governador em módulo separado, só nas 6 UFs", async () => {
     const ufs = await p.pagina.$$eval("#govLista .gov", (els) => els.map((e) => e.id));
-    assert.deepEqual(ufs, ["gov-ac", "gov-am", "gov-df", "gov-es", "gov-rj", "gov-rn", "gov-to"]);
+    assert.deepEqual(ufs, ["gov-ac", "gov-am", "gov-df", "gov-es", "gov-rn", "gov-to"]);
   });
 
   test("selo NFLS.AI Arena servido pelo próprio site", async () => {
@@ -387,6 +387,15 @@ describe("cenários de atualização e falha", () => {
     await c.fechar();
   });
 
+  test("modo oficial do 2º turno: nenhuma faixa de teste visível", async () => {
+    const x = comHorario(base, "2026-10-25T21:10:32.000Z");
+    x.modo = "oficial"; delete x.aviso_modo;
+    const c = await cenario([x]);
+    // O display:flex da faixa não pode vencer o atributo hidden.
+    assert.equal(await c.pagina.isVisible("#faixaTeste"), false);
+    await c.fechar();
+  });
+
   test("modo desconhecido é tratado como teste", async () => {
     const x = comHorario(base, "2026-10-25T21:10:32.000Z");
     x.modo = "qualquer";
@@ -403,6 +412,7 @@ describe("cenários de atualização e falha", () => {
     await c.fechar();
     const y = comHorario(base, "2026-10-25T21:10:32.000Z");
     y.eleito = { publicado: true, candidatos: ["13"], fonte: "teste" };
+    y.brasil.oficial.candidatos.find((c) => c.numero === "13").situacao = "Eleito";
     const d = await cenario([y]);
     assert.match(await d.pagina.textContent("#placar"), /Eleito · publicado pelo TSE/);
     await d.fechar();

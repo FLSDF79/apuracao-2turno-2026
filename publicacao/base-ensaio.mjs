@@ -34,12 +34,11 @@ import g0 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/ac/a
 import g1 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/am/am-c0003-e006259-u.json";
 import g2 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/df/df-c0003-e006259-u.json";
 import g3 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/es/es-c0003-e006259-u.json";
-import g4 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/rj/rj-c0003-e006259-u.json";
 import g5 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/rn/rn-c0003-e006259-u.json";
 import g6 from "../tests/fixtures/tse-2026-10-06/oficial/ele2026/6259/dados/to/to-c0003-e006259-u.json";
 
 export default {
   cfg,
   pres: { ac: p0, al: p1, am: p2, ap: p3, ba: p4, ce: p5, df: p6, es: p7, go: p8, ma: p9, mg: p10, ms: p11, mt: p12, pa: p13, pb: p14, pe: p15, pi: p16, pr: p17, rj: p18, rn: p19, ro: p20, rr: p21, rs: p22, sc: p23, se: p24, sp: p25, to: p26, zz: p27, br: p28 },
-  gov: { ac: g0, am: g1, df: g2, es: g3, rj: g4, rn: g5, to: g6 },
+  gov: { ac: g0, am: g1, df: g2, es: g3, rn: g5, to: g6 },
 };

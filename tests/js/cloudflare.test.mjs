@@ -34,7 +34,7 @@ test("estado dividido no storage do Durable Object volta igual e a rodada seguin
   assert.equal(JSON.parse(await st.get("saida:v1/presidente.json")).schema, "apuracao-2t-2026/v1");
   rel.avancar(15000);
   const r2 = await rodada(new Fonte({ fetch: fetchDeFixtures(RAIZ), ...rel, estado: volta.fonte }), volta, { modo: "ensaio" });
-  assert.deepEqual(r2.saidas["v1/saude.json"].coletor.status_http, { 304: 36 });
+  assert.deepEqual(r2.saidas["v1/saude.json"].coletor.status_http, { 304: 35 });
 });
 
 test("plano gratuito: rodada sem novidade do TSE regrava poucas chaves (linhas gravadas por dia)", async () => {

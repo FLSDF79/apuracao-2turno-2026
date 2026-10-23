@@ -19,13 +19,13 @@ test("ensaio com os arquivos reais do 1º turno: contrato completo, conferência
   assert.equal(Object.keys(p.territorios).length, 28);
   assert.equal(p.exterior.codigo, "zz");
   assert.equal(p.eleito.publicado, false); // 1º turno sem eleito para presidente
-  assert.deepEqual(Object.keys(r1.saidas["v1/governador.json"].ufs), ["ac", "am", "df", "es", "rj", "rn", "to"]);
-  assert.equal(registro.length, 38); // config + abrangência + 29 presidente + 7 governador
+  assert.deepEqual(Object.keys(r1.saidas["v1/governador.json"].ufs), ["ac", "am", "df", "es", "rn", "to"]);
+  assert.equal(registro.length, 37); // config + abrangência + 29 presidente + 6 governador
   assert.ok(r1.saidas["v1/export/presidente.csv"].startsWith("﻿recorte;nome"));
 
   rel.avancar(15000);
   const r2 = await rodada(fonte, r1.estado, { modo: "ensaio" });
-  assert.deepEqual(r2.saidas["v1/saude.json"].coletor.status_http, { 304: 36 });
+  assert.deepEqual(r2.saidas["v1/saude.json"].coletor.status_http, { 304: 35 });
   const p2 = r2.saidas["v1/presidente.json"];
   assert.deepEqual(p2.brasil.calculado.votos, p.brasil.calculado.votos); // arquivo cumulativo não é somado de novo
   assert.equal(r2.saidas["v1/historico.json"], undefined); // nada novo: o histórico gravado continua valendo
@@ -128,15 +128,15 @@ test("troca do ensaio para o 2º turno não mistura eleições", async () => {
   assert.equal(r2.saidas["v1/historico.json"].serie_brasil.length, 1);
 });
 
-test("governador com abrangência 'br' na configuração: consulta só as 7 UFs com 2º turno, sem 404", async () => {
+test("governador com abrangência 'br' na configuração: consulta só as 6 UFs com 2º turno, sem 404", async () => {
   const site = montarSite(await carregarBase(RAIZ), { hora: "25/10/2026 18:00:00", fracao: { padrao: 0.2 } });
   const cfg = site["oficial/comum/config/ele-c.json"];
   cfg.pl.at(-1).e.find((e) => e.cd === "6260").abr = [{ cd: "br", cp: [{ cd: "3", ds: "Governador" }] }];
   site["oficial/ele2026/6260/dados/br/br-e006260-ab.json"] = { abr: ["ac", "al", "am", "ba", "df", "es", "rj", "rn", "sp", "to"].map((c) => ({ cdabr: c })) };
   const registro = [];
   const r = await rodada(new Fonte({ fetch: fetchSimulado(() => site, registro), ...relogio() }), null, { modo: "oficial" });
-  assert.deepEqual(Object.keys(r.saidas["v1/governador.json"].ufs), ["ac", "am", "df", "es", "rj", "rn", "to"]);
-  assert.deepEqual(r.saidas["v1/saude.json"].coletor.status_http, { 200: 39 }); // config + 2 abrangências + 29 + 7
+  assert.deepEqual(Object.keys(r.saidas["v1/governador.json"].ufs), ["ac", "am", "df", "es", "rn", "to"]);
+  assert.deepEqual(r.saidas["v1/saude.json"].coletor.status_http, { 200: 38 }); // config + 2 abrangências + 29 + 6
 });
 
 test("resumo da coleta para a página: ok, atrasada e bloqueada", async () => {
@@ -198,7 +198,7 @@ test("configuração do 2º turno publicada antes dos arquivos: um 404 por dispu
   const p = r.saidas["v1/presidente.json"];
   assert.equal(p.estado_publicacao, "aguardando_resultados");
   assert.equal(p.territorios.sp.coleta.situacao, "atualizado");
-  assert.equal(Object.values(r.saidas["v1/governador.json"].ufs).filter((u) => u.coleta.situacao === "atualizado").length, 7);
+  assert.equal(Object.values(r.saidas["v1/governador.json"].ufs).filter((u) => u.coleta.situacao === "atualizado").length, 6);
 });
 
 test("limite de arquivos novos por execução: continua em execuções seguintes e chega ao mesmo resultado", async () => {
@@ -220,11 +220,33 @@ test("limite de arquivos novos por execução: continua em execuções seguintes
   const tudo = await rodar(Infinity);
   const partes = await rodar(10);
   assert.equal(tudo.execucoes, 1);
-  assert.equal(partes.execucoes, 4); // 36 arquivos novos de resultado + config/abrangência
+  assert.equal(partes.execucoes, 4); // 35 arquivos novos de resultado + config/abrangência
   const a = tudo.r.saidas["v1/presidente.json"], b = partes.r.saidas["v1/presidente.json"];
   assert.deepEqual(b.brasil.calculado.votos, a.brasil.calculado.votos);
   assert.equal(b.conferencia.classificacao.codigo, "compativel");
   assert.equal(Object.values(b.territorios).filter((t) => t.coleta.situacao === "atualizado").length, 28);
   assert.equal(partes.r.estado.series["presidente:6258:br"].length, 1);
   assert.equal(partes.r.estado.snapshots.length, tudo.r.estado.snapshots.length);
+});
+
+test("ritmo ocioso: sem mudança real por 5 min passa a 60 s e volta a 15 s na primeira mudança", async () => {
+  const base = await carregarBase(RAIZ);
+  let site = montarSite(base, { hora: "25/10/2026 08:00:00", fracao: { padrao: 0 } });
+  const rel = relogio("2026-10-25T11:00:00Z");
+  const fonte = new Fonte({ fetch: fetchSimulado(() => site, []), ...rel });
+  const op = { modo: "oficial", intervaloOciosoS: 60, ociosoAposMin: 5 };
+  let r = await rodada(fonte, null, op);
+  const cg = () => r.saidas["v1/saude.json"].coletor;
+  const ritmo = () => r.saidas["v1/presidente.json"].coleta_geral;
+  assert.deepEqual([ritmo().ritmo, ritmo().intervalo_s, r.proximaS], ["normal", 15, 15]);
+  for (let i = 0; i < 22; i++) { rel.avancar(15000); r = await rodada(fonte, r.estado, op); }
+  assert.ok(cg());
+  assert.deepEqual([ritmo().ritmo, ritmo().intervalo_s, r.proximaS], ["ocioso", 60, 60]);
+  site = montarSite(base, { hora: "25/10/2026 17:05:00", fracao: { padrao: 0.05 } });
+  rel.avancar(60000);
+  r = await rodada(fonte, r.estado, op);
+  assert.deepEqual([ritmo().ritmo, ritmo().intervalo_s, r.proximaS], ["normal", 15, 15]);
+  // Sem a opção (Node), o ritmo nunca muda.
+  for (let i = 0; i < 25; i++) { rel.avancar(15000); r = await rodada(fonte, r.estado, { modo: "oficial" }); }
+  assert.equal(r.proximaS, 15);
 });

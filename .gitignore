@@ -6,3 +6,4 @@ public/dados/
 estado-coletor.json
 dist/
 ensaio/saida/
+.dev.vars
