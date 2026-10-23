@@ -5,7 +5,7 @@ import { rodada } from "../../backend/coletor/rodada.js";
 import { fetchDeFixtures } from "../../backend/conectores/fixtures.js";
 import { carregarBase, montarSite, fetchSimulado } from "../../backend/conectores/simulador.js";
 import { SCHEMA } from "../../backend/api/contrato.js";
-import { RAIZ, relogio } from "./apoio.mjs";
+import { RAIZ, relogio, ler } from "./apoio.mjs";
 
 test("ensaio com os arquivos reais do 1º turno: contrato completo, conferência compatível e sem recontagem", async () => {
   const rel = relogio("2026-10-06T13:00:00Z");
@@ -249,4 +249,41 @@ test("ritmo ocioso: sem mudança real por 5 min passa a 60 s e volta a 15 s na p
   // Sem a opção (Node), o ritmo nunca muda.
   for (let i = 0; i < 25; i++) { rel.avancar(15000); r = await rodada(fonte, r.estado, { modo: "oficial" }); }
   assert.equal(r.proximaS, 15);
+});
+
+test("ele-c.json antigo servido no meio da noite (sem o 2º turno) não apaga o painel", async () => {
+  const base = await carregarBase(RAIZ);
+  const site = montarSite(base, { hora: "25/10/2026 19:00:00", fracao: { padrao: 0.6 } });
+  const rel = relogio("2026-10-25T22:00:00Z");
+  const fonte = new Fonte({ fetch: fetchSimulado(() => site, []), ...rel });
+  let r = await rodada(fonte, null, { modo: "oficial" });
+  assert.equal(r.saidas["v1/presidente.json"].eleicao.eleicao, "6258");
+  site["oficial/comum/config/ele-c.json"] = ler("comum/config/ele-c.json"); // configuração de 06/10, só o 1º turno
+  rel.avancar(61000);
+  r = await rodada(fonte, r.estado, { modo: "oficial" });
+  const p = r.saidas["v1/presidente.json"];
+  assert.notEqual(p.estado_publicacao, "aguardando_configuracao");
+  assert.equal(p.eleicao.eleicao, "6258");
+  assert.ok(p.brasil.oficial, "nacional continua na tela");
+  assert.equal(Object.keys(r.saidas["v1/governador.json"].ufs).length, 6);
+  assert.ok(r.estado.eventos.some((e) => e.tipo === "configuracao_regrediu"));
+});
+
+test("arquivo com totalização mais antiga (geração igual ou mais nova) é fora de ordem, não correção", async () => {
+  const base = await carregarBase(RAIZ);
+  const novo = montarSite(base, { hora: "25/10/2026 18:30:00", fracao: { padrao: 0.35 } });
+  const velho = montarSite(base, { hora: "25/10/2026 18:00:00", fracao: { padrao: 0.2 } });
+  const k = "oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json";
+  const site = { ...novo };
+  const rel = relogio("2026-10-25T21:31:00Z");
+  const fonte = new Fonte({ fetch: fetchSimulado(() => site, []), ...rel });
+  let r = await rodada(fonte, null, { modo: "oficial" });
+  const antes = r.saidas["v1/presidente.json"].brasil.oficial;
+  // Cache serve a totalização das 18:00 com o carimbo de geração do arquivo novo.
+  site[k] = { ...structuredClone(velho[k]), dg: novo[k].dg, hg: novo[k].hg };
+  rel.avancar(15000);
+  r = await rodada(fonte, r.estado, { modo: "oficial" });
+  const depois = r.saidas["v1/presidente.json"].brasil.oficial;
+  assert.deepEqual(depois.candidatos.map((c) => c.votos), antes.candidatos.map((c) => c.votos));
+  assert.equal(r.estado.correcoes.length, 0);
 });

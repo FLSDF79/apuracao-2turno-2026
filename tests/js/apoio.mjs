@@ -6,7 +6,7 @@ export const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..", "fixture
 export const ler = (rel) => JSON.parse(readFileSync(join(RAIZ, "oficial", rel), "utf8"));
 export const presidente = (abr) => ler(`ele2026/6257/dados/${abr}/${abr}-c0001-e006257-u.json`);
 export const governador = (uf) => ler(`ele2026/6259/dados/${uf}/${uf}-c0003-e006259-u.json`);
-export const UFS_2T_GOV = ["ac", "am", "df", "es", "rj", "rn", "to"];
+export const UFS_2T_GOV = ["ac", "am", "df", "es", "rn", "to"];
 
 /** Relógio controlável para Fonte e rodada. */
 export function relogio(inicio = "2026-10-25T20:00:00Z") {

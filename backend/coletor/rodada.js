@@ -114,7 +114,13 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
     }
   }
   if (estado.config && (estado.config !== ant.config || !estado.descoberta || ant.modo !== op.modo)) {
-    estado.descoberta = descobrir(estado.config, { ciclo: op.ciclo, modo: op.modo });
+    const nova = descobrir(estado.config, { ciclo: op.ciclo, modo: op.modo });
+    // Configuração que "perde" uma disputa já publicada (cache velho do ele-c.json) não apaga o painel.
+    if (ant.modo === op.modo) for (const k of DISPUTAS) {
+      const velha = ant.descoberta?.disputas?.[k];
+      if (velha?.estado === "publicada" && nova.disputas[k]?.estado !== "publicada") { nova.disputas[k] = velha; evento("configuracao_regrediu", { disputa: k }); }
+    }
+    estado.descoberta = nova;
   }
   estado.modo = op.modo;
 
@@ -139,7 +145,7 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
       const r = sentinelaSem
         ? { ok: false, url, status: null, adiado: true, nao_publicado: true, erro: "aguardando o primeiro arquivo da disputa ser publicado", horario_coleta: new Date(fonte.agora()).toISOString() }
         : await fonte.obter(url);
-      if (semDados && abr === ordem[0] && r.nao_publicado) sentinelaSem = true;
+      if (semDados && abr === ordem[0] && !r.ok) sentinelaSem = true;
       log.push(r);
       const anterior = estado.coleta[id] ?? {};
       const coleta = {
@@ -170,7 +176,8 @@ export async function rodada(fonte, estadoAnterior, opcoesEntrada = {}) {
         if (norm) {
           const guardado = estado.ultimos[id];
           // Resposta fora de ordem (ex.: cache servindo versão anterior): geração mais antiga que a guardada.
-          if (guardado && norm.horario.geracao && guardado.horario.geracao && norm.horario.geracao < guardado.horario.geracao) {
+          const maisVelho = (a, b) => a && b && a < b;
+          if (guardado && (maisVelho(norm.horario.geracao, guardado.horario.geracao) || maisVelho(norm.horario.totalizacao, guardado.horario.totalizacao))) {
             coleta.ultimo_sucesso = r.horario_coleta;
             coleta.situacao = "atualizado";
             coleta.sem_alteracao = true;

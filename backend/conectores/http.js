@@ -8,7 +8,7 @@
 export const PADRAO = {
   timeoutMs: 8000,
   backoffBaseMs: 5000,
-  backoffMaxMs: 5 * 60 * 1000,
+  backoffMaxMs: 60 * 1000, // TSE de volta depois de uma queda: no máximo 1 min até a próxima tentativa de cada arquivo (bloqueio 403/429 tem pausa própria)
   pausaBloqueioMs: 10 * 60 * 1000, // documentação do TSE: bloqueio de 10 min
   pausa404Ms: 2 * 60 * 1000,
   limite404Seguidos: 3,
