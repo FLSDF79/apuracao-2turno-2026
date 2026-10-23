@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   testes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # fixo: o ubuntu-latest passou a 26.04, que o Playwright 1.56 não suporta
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
