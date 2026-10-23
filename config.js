@@ -1,33 +1,44 @@
-// Configuração do painel — edite aqui se o TSE mudar algo.
-// Todos os códigos abaixo foram conferidos no arquivo oficial
-// https://resultados.tse.jus.br/oficial/comum/config/ele-c.json (06/10/2026).
+// Configuração da interface do painel.
+// A página só lê os arquivos gerados pelo coletor: não consulta o TSE
+// diretamente nem recalcula totais, percentuais ou a conferência.
 window.PAINEL_CONFIG = {
-  // Raiz dos dados abertos da Divulgação de Resultados do TSE
-  base: "https://resultados.tse.jus.br/oficial",
-  configGeral: "https://resultados.tse.jus.br/oficial/comum/config/ele-c.json",
-  ciclo: "ele2026",
+  // Pasta de onde a página lê os arquivos do contrato v1 (docs/contrato/CONTRATO-DADOS.md):
+  // presidente.json, historico.json, governador.json, saude.json e export/*.csv.
+  // "api" = coletor publicado junto do site. Para testar sem coletor: ?fonte=ensaio (1º turno real)
+  // ou ?fonte=simulacao (noite de 2º turno simulada), ambos gerados pelo próprio coletor em exemplos/.
+  fontes: {
+    api: "dados/v1/",
+    ensaio: "exemplos/ensaio-1turno/v1/",
+    simulacao: "exemplos/simulado-2turno/v1/"
+  },
+  fontePadrao: "api",
 
-  // Eleição Ordinária Federal 2026 — 1º turno (pleito 3220), cargo Presidente = 1
-  eleicao1T: "6257",
-  // Código do 2º turno. O ele-c.json já informa "cdt2": "6258" para a 6257.
-  // Se o TSE publicar outro código, a descoberta automática (abaixo) usa o do arquivo.
-  eleicao2T: "6258",
-  descobrirAuto: true,
+  // Intervalo com que a página relê o snapshot do coletor (segundos). O coletor é
+  // quem conversa com o TSE; aqui é só leitura de arquivo estático com cache.
+  atualizacaoSeg: 10,
+  // A partir de quantos segundos sem coleta nova a página avisa "dados defasados".
+  defasagemAvisoSeg: 90,
 
-  cargo: "1", // Presidente
-
-  // Candidatos (número de urna) e cores: AZUL = Flávio, VERMELHO = Lula
+  // Candidatos do 2º turno presidencial e cor padrão de cada um.
+  // A ordem aqui é a ordem fixa na tela (não muda quando a liderança muda).
+  // A pessoa pode trocar as cores no botão "Cores"; a escolha fica salva no navegador.
   candidatos: [
-    { n: "22", nome: "Flávio Bolsonaro", cor: "#2f6bff", lado: "azul" },
-    { n: "13", nome: "Lula",             cor: "#e5383b", lado: "vermelho" }
+    { numero: "22", nome: "Flávio Bolsonaro", partido: "PL", cor: "azul" },
+    { numero: "13", nome: "Lula", partido: "PT", cor: "vermelho" }
   ],
 
-  // Intervalo de atualização (segundos). Entre 30 e 60 conforme combinado.
-  intervaloSeg: 45,
-  // Depois que a totalização chega a 100%, atualiza com menos frequência
-  intervaloFinalSeg: 300,
-  // Minutos sem nova totalização para considerar "pausa" / "TSE parado"
-  pausaMin: 10,
-  // Divergência máxima tolerada entre soma das UFs e total nacional
-  toleranciaDivergencia: 0.0001 // 0,01%
+  // UFs com 2º turno para governador (conferido no ele-c.json e nos arquivos do 1º turno).
+  governadorUFs: ["ac", "am", "df", "es", "rj", "rn", "to"],
+
+  // Links oficiais exibidos no painel.
+  links: {
+    portalTSE: "https://resultados.tse.jus.br/oficial/app/index.html",
+    docTSE: "https://www.tse.jus.br/eleicoes/informacoes-tecnicas-sobre-a-divulgacao-de-resultados",
+    inventario: "https://github.com/FLSDF79/apuracao-2turno-2026/blob/main/docs/fontes/INVENTARIO.md",
+    autor: "https://nfls-ai-arena.pages.dev/portal/autor",
+    linkedin: "https://www.linkedin.com/in/flsdf79/",
+    nfls: "https://nfls-ai-arena.pages.dev/",
+    // Logo guardado no próprio site (cópia do arquivo oficial da NFLS.AI Arena), sem depender de outro domínio.
+    nflsLogo: "assets/nfls-ai-arena.svg"
+  }
 };
