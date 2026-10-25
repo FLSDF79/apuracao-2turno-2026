@@ -27,7 +27,8 @@ export const CABECALHOS = {
 
 // Plano B (/plano-b/, a versão antiga): cada navegador consulta o TSE direto, então só ela libera
 // connect-src para resultados.tse.jus.br. O resto da política é a mesma.
-export const CSP_PLANO_B = CSP.replace("connect-src 'self'", "connect-src 'self' https://resultados.tse.jus.br");
+export const CSP_PLANO_B = CSP.replace("connect-src 'self'", "connect-src 'self' https://resultados.tse.jus.br")
+  .replace("img-src 'self' data:", "img-src 'self' data: https://resultados.tse.jus.br"); // fotos oficiais dos candidatos
 
 /** Conteúdo do arquivo _headers (Workers Static Assets) */
 export function arquivoHeaders() {

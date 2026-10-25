@@ -19,6 +19,7 @@
   const n = (s) => { if (s == null || s === "") return 0; const v = Number(String(s).replace(",", ".")); return isFinite(v) ? v : 0; };
   const pad = (s, k) => String(s).padStart(k, "0");
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const FOTO_FALHOU = new Set(); // fotos do TSE que não carregaram: não tenta de novo a cada atualização
 
   const estado = {
     ele: null, modo: null, // modo: "2t" | "teste1t" | "forcado" | "demo"
@@ -42,7 +43,7 @@
     const cands = {};
     const carg = (d.carg || []).find((c) => String(c.cd) === String(CFG.cargo)) || (d.carg || [])[0];
     (carg && carg.agr || []).forEach((a) => (a.par || []).forEach((p) => (p.cand || []).forEach((c) => {
-      cands[c.n] = { n: c.n, nome: c.nmu || c.nm, vap: n(c.vap), st: c.st };
+      cands[c.n] = { n: c.n, nome: c.nmu || c.nm, vap: n(c.vap), st: c.st, sq: c.sqcand };
     })));
     const s = d.s || {}, e = d.e || {}, v = d.v || {};
     return {
@@ -256,7 +257,13 @@
     $("barraSecoes").style.width = Math.min(100, p) + "%";
     const pa = pctV(br, CA.n), pb = pctV(br, CB.n);
     const va = votos(br, CA.n), vb = votos(br, CB.n);
-    const card = (c, pct, v, lider) => `<div class="cand ${c.lado}">
+    // Foto oficial do TSE (mesmo servidor dos dados); some se não carregar (ouvinte de erro abaixo, sem onerror por causa do CSP).
+    const foto = (c) => {
+      const sq = br.cands[c.n] && br.cands[c.n].sq;
+      const src = `${CFG.base}/${CFG.ciclo}/${estado.ele}/fotos/br/${sq}.jpeg`;
+      return /^\d+$/.test(sq || "") && !FOTO_FALHOU.has(src) ? `<img class="foto" alt="" loading="lazy" src="${src}">` : "";
+    };
+    const card = (c, pct, v, lider) => `<div class="cand ${c.lado}">${foto(c)}
       <div class="nome">${esc(c.nome)} <span class="mut">${esc(c.n)}</span></div>
       <div class="pct">${f2(pct)}%</div><div class="votos">${fi(v)} votos</div>${lider ? '<span class="lider">à frente</span>' : ""}</div>`;
     $("cands").innerHTML = card(CA, pa, va, va > vb) + card(CB, pb, vb, vb > va);
@@ -487,6 +494,10 @@
   $("limparHist").addEventListener("click", () => {
     if (confirm("Apagar o histórico de evolução guardado neste navegador?")) { try { localStorage.removeItem(chaveHist()); } catch (e) {} memHist = {}; renderGrafico(); }
   });
+  document.addEventListener("error", (ev) => {
+    const el = ev.target;
+    if (el instanceof HTMLImageElement && el.classList.contains("foto")) { FOTO_FALHOU.add(el.getAttribute("src")); el.remove(); }
+  }, true);
   document.addEventListener("visibilitychange", () => { if (!document.hidden && !DEMO) ciclo(); });
 
   carregarGeo().catch(() => {});
