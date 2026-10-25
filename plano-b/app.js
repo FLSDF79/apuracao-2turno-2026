@@ -4,6 +4,7 @@
 (function () {
   "use strict";
   const CFG = window.PAINEL_CONFIG;
+  const GOV = CFG.governador; // pode faltar numa configuração antiga: aí o bloco de governador some
   const UFS = ["ac","al","ap","am","ba","ce","df","es","go","ma","mt","ms","mg","pa","pb","pr","pe","pi","rj","rn","rs","ro","rr","sc","sp","se","to","zz"];
   const NOMES = {ac:"Acre",al:"Alagoas",ap:"Amapá",am:"Amazonas",ba:"Bahia",ce:"Ceará",df:"Distrito Federal",es:"Espírito Santo",go:"Goiás",ma:"Maranhão",mt:"Mato Grosso",ms:"Mato Grosso do Sul",mg:"Minas Gerais",pa:"Pará",pb:"Paraíba",pr:"Paraná",pe:"Pernambuco",pi:"Piauí",rj:"Rio de Janeiro",rn:"Rio Grande do Norte",rs:"Rio Grande do Sul",ro:"Rondônia",rr:"Roraima",sc:"Santa Catarina",sp:"São Paulo",se:"Sergipe",to:"Tocantins",zz:"Exterior"};
   const REGIAO = {ac:"N",ap:"N",am:"N",pa:"N",ro:"N",rr:"N",to:"N",al:"NE",ba:"NE",ce:"NE",ma:"NE",pb:"NE",pe:"NE",pi:"NE",rn:"NE",se:"NE",df:"CO",go:"CO",mt:"CO",ms:"CO",es:"SE",mg:"SE",rj:"SE",sp:"SE",pr:"S",rs:"S",sc:"S",zz:"EX"};
@@ -23,12 +24,12 @@
 
   const estado = {
     ele: null, modo: null, // modo: "2t" | "teste1t" | "forcado" | "demo"
-    ele2T: CFG.eleicao2T, br: null, ufs: {}, ultimoOk: 0, erros: 0,
+    ele2T: CFG.eleicao2T, br: null, ufs: {}, gov: {}, ultimoOk: 0, erros: 0,
     ultimaDescoberta: 0, sort: { col: "uf", asc: true }, sel: null, timer: null
   };
 
   // ---------------- URLs ----------------
-  const urlU = (ele, uf) => `${CFG.base}/${CFG.ciclo}/${ele}/dados/${uf}/${uf}-c${pad(CFG.cargo, 4)}-e${pad(ele, 6)}-u.json`;
+  const urlU = (ele, uf, cargo = CFG.cargo) => `${CFG.base}/${CFG.ciclo}/${ele}/dados/${uf}/${uf}-c${pad(cargo, 4)}-e${pad(ele, 6)}-u.json`;
 
   async function getJSON(url) {
     // cache:"no-cache" => o navegador revalida com If-None-Match/ETag (304 quando não mudou)
@@ -39,9 +40,9 @@
   }
 
   // ---------------- Parse do arquivo "-u.json" do TSE ----------------
-  function parseU(d) {
+  function parseU(d, cargo = CFG.cargo) {
     const cands = {};
-    const carg = (d.carg || []).find((c) => String(c.cd) === String(CFG.cargo)) || (d.carg || [])[0];
+    const carg = (d.carg || []).find((c) => String(c.cd) === String(cargo)) || (d.carg || [])[0];
     (carg && carg.agr || []).forEach((a) => (a.par || []).forEach((p) => (p.cand || []).forEach((c) => {
       cands[c.n] = { n: c.n, nome: c.nmu || c.nm, vap: n(c.vap), st: c.st, sq: c.sqcand };
     })));
@@ -158,7 +159,7 @@
     else { trocarEleicao(CFG.eleicao1T, "teste1t"); }
   }
   function trocarEleicao(ele, modo) {
-    if (estado.ele !== ele) { estado.br = null; estado.ufs = {}; }
+    if (estado.ele !== ele) { estado.br = null; estado.ufs = {}; estado.gov = {}; }
     estado.ele = ele; estado.modo = modo;
   }
 
@@ -171,7 +172,13 @@
       if (!brData) { estado.semArquivo = true; throw new Error("arquivo nacional ausente"); }
     }
     estado.semArquivo = false;
-    const res = await Promise.allSettled(UFS.map((uf) => getJSON(urlU(estado.ele, uf))));
+    // Governador só no 2º turno real de presidente (nunca no 1º turno de teste nem na simulação).
+    const comGov = GOV && estado.ele === estado.ele2T;
+    const [res, resGov] = await Promise.all([
+      Promise.allSettled(UFS.map((uf) => getJSON(urlU(estado.ele, uf)))),
+      comGov ? Promise.allSettled(GOV.ufs.map((uf) => getJSON(urlU(GOV.eleicao, uf, GOV.cargo)))) : Promise.resolve([])
+    ]);
+    resGov.forEach((r, i) => { if (r.status === "fulfilled" && r.value.data) estado.gov[GOV.ufs[i]] = parseU(r.value.data, GOV.cargo); });
     res.forEach((r, i) => { if (r.status === "fulfilled" && r.value.data) estado.ufs[UFS[i]] = parseU(r.value.data); });
     estado.br = parseU(brData);
     estado.falhasUF = res.filter((r) => r.status === "rejected" || !r.value.data).length;
@@ -241,6 +248,7 @@
     if (!br) return;
 
     renderPlacar(br, agora);
+    renderGov();
     const ufsArr = UFS.map((u) => estado.ufs[u]).filter(Boolean);
     renderConferencia(br, ufsArr);
     renderProjecao(br);
@@ -248,6 +256,26 @@
     renderGrafico();
     renderRegioes();
     renderTabelaUF();
+  }
+
+  // Governador: percentual sobre votos válidos do próprio arquivo da UF; "eleito" só pela situação do TSE.
+  function renderGov() {
+    const mostrar = GOV && !DEMO && estado.ele === estado.ele2T && GOV.ufs.some((uf) => estado.gov[uf]);
+    $("govCard").hidden = !mostrar;
+    if (!mostrar) return;
+    $("govGrid").innerHTML = GOV.ufs.map((uf) => {
+      const g = estado.gov[uf];
+      if (!g) return `<div class="gov-uf"><div class="gov-topo"><strong>${esc(NOMES[uf])}</strong></div><p class="mut peq">Aguardando o arquivo do TSE</p></div>`;
+      const cs = Object.values(g.cands).sort((a, b) => b.vap - a.vap);
+      const lider = cs.length > 1 && cs[0].vap > cs[1].vap ? cs[0].n : null;
+      const linhas = cs.map((c) => `<div class="gov-c${c.n === lider ? " lider-gov" : ""}">
+        <span class="gov-nome">${esc(c.nome)} <span class="mut">${esc(c.n)}</span>${/^eleit[oa]$/i.test(c.st || "") ? ' <span class="eleito-gov">eleito(a)</span>' : ""}</span>
+        <span><strong>${f2(pctV(g, c.n))}%</strong> <span class="mut peq">${fi(c.vap)}</span></span></div>`).join("");
+      const w = cs.length ? pctV(g, cs[0].n) : 0;
+      return `<div class="gov-uf"><div class="gov-topo"><strong>${esc(NOMES[uf])}</strong> <span class="mut peq">${f2(pst(g))}% das seções</span></div>${linhas}
+        <div class="gov-barra"><div style="width:${isFinite(w) ? w : 0}%"></div></div>
+        <p class="mut peq">TSE: ${esc(g.dt || "–")} ${esc(g.ht || "")}</p></div>`;
+    }).join("");
   }
 
   function renderPlacar(br, agora) {

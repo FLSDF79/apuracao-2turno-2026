@@ -22,6 +22,10 @@ window.PAINEL_CONFIG = {
     { n: "13", nome: "Lula",             cor: "#e5383b", lado: "vermelho" }
   ],
 
+  // Governador no 2º turno (eleição 6260, cargo 3). UFs conferidas no ele-c.json de 18/10/2026:
+  // o RJ saiu (governador eleito no 1º turno após a retotalização de 10/10).
+  governador: { eleicao: "6260", cargo: "3", ufs: ["ac", "am", "df", "es", "rn", "to"] },
+
   // Intervalo de atualização (segundos). Entre 30 e 60 conforme combinado.
   intervaloSeg: 45,
   // Depois que a totalização chega a 100%, atualiza com menos frequência
