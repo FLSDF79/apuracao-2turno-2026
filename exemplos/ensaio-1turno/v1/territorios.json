@@ -1,0 +1,274 @@
+{
+ "schema": "apuracao-2t-2026/v1",
+ "tipo": "territorios",
+ "fontes": {
+  "tse": "Sigla da UF usada nos caminhos e no campo cdabr dos arquivos do TSE (ele2026); 'zz' = exterior, 'br' = Brasil",
+  "ibge": "Código de UF do IBGE (2 dígitos), o mesmo da malha estadual em data/br-uf.geojson (que é indexada pela sigla)"
+ },
+ "territorios": [
+  {
+   "tse": "ac",
+   "ibge_uf": "12",
+   "nome": "Acre",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "al",
+   "ibge_uf": "27",
+   "nome": "Alagoas",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "am",
+   "ibge_uf": "13",
+   "nome": "Amazonas",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "ap",
+   "ibge_uf": "16",
+   "nome": "Amapá",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "ba",
+   "ibge_uf": "29",
+   "nome": "Bahia",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "ce",
+   "ibge_uf": "23",
+   "nome": "Ceará",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "df",
+   "ibge_uf": "53",
+   "nome": "Distrito Federal",
+   "tipo": "uf",
+   "regiao": "CO"
+  },
+  {
+   "tse": "es",
+   "ibge_uf": "32",
+   "nome": "Espírito Santo",
+   "tipo": "uf",
+   "regiao": "SE"
+  },
+  {
+   "tse": "go",
+   "ibge_uf": "52",
+   "nome": "Goiás",
+   "tipo": "uf",
+   "regiao": "CO"
+  },
+  {
+   "tse": "ma",
+   "ibge_uf": "21",
+   "nome": "Maranhão",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "mg",
+   "ibge_uf": "31",
+   "nome": "Minas Gerais",
+   "tipo": "uf",
+   "regiao": "SE"
+  },
+  {
+   "tse": "ms",
+   "ibge_uf": "50",
+   "nome": "Mato Grosso do Sul",
+   "tipo": "uf",
+   "regiao": "CO"
+  },
+  {
+   "tse": "mt",
+   "ibge_uf": "51",
+   "nome": "Mato Grosso",
+   "tipo": "uf",
+   "regiao": "CO"
+  },
+  {
+   "tse": "pa",
+   "ibge_uf": "15",
+   "nome": "Pará",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "pb",
+   "ibge_uf": "25",
+   "nome": "Paraíba",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "pe",
+   "ibge_uf": "26",
+   "nome": "Pernambuco",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "pi",
+   "ibge_uf": "22",
+   "nome": "Piauí",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "pr",
+   "ibge_uf": "41",
+   "nome": "Paraná",
+   "tipo": "uf",
+   "regiao": "S"
+  },
+  {
+   "tse": "rj",
+   "ibge_uf": "33",
+   "nome": "Rio de Janeiro",
+   "tipo": "uf",
+   "regiao": "SE"
+  },
+  {
+   "tse": "rn",
+   "ibge_uf": "24",
+   "nome": "Rio Grande do Norte",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "ro",
+   "ibge_uf": "11",
+   "nome": "Rondônia",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "rr",
+   "ibge_uf": "14",
+   "nome": "Roraima",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "rs",
+   "ibge_uf": "43",
+   "nome": "Rio Grande do Sul",
+   "tipo": "uf",
+   "regiao": "S"
+  },
+  {
+   "tse": "sc",
+   "ibge_uf": "42",
+   "nome": "Santa Catarina",
+   "tipo": "uf",
+   "regiao": "S"
+  },
+  {
+   "tse": "se",
+   "ibge_uf": "28",
+   "nome": "Sergipe",
+   "tipo": "uf",
+   "regiao": "NE"
+  },
+  {
+   "tse": "sp",
+   "ibge_uf": "35",
+   "nome": "São Paulo",
+   "tipo": "uf",
+   "regiao": "SE"
+  },
+  {
+   "tse": "to",
+   "ibge_uf": "17",
+   "nome": "Tocantins",
+   "tipo": "uf",
+   "regiao": "N"
+  },
+  {
+   "tse": "zz",
+   "ibge_uf": null,
+   "nome": "Exterior",
+   "tipo": "exterior",
+   "regiao": null,
+   "nota": "sem código IBGE; 186 localidades no mun-…-cm.json do TSE"
+  },
+  {
+   "tse": "br",
+   "ibge_uf": null,
+   "nome": "Brasil",
+   "tipo": "brasil",
+   "regiao": null,
+   "nota": "total nacional; não é UF"
+  }
+ ],
+ "regioes": [
+  {
+   "codigo": "N",
+   "nome": "Norte",
+   "ufs": [
+    "ac",
+    "am",
+    "ap",
+    "pa",
+    "ro",
+    "rr",
+    "to"
+   ]
+  },
+  {
+   "codigo": "NE",
+   "nome": "Nordeste",
+   "ufs": [
+    "al",
+    "ba",
+    "ce",
+    "ma",
+    "pb",
+    "pe",
+    "pi",
+    "rn",
+    "se"
+   ]
+  },
+  {
+   "codigo": "CO",
+   "nome": "Centro-Oeste",
+   "ufs": [
+    "df",
+    "go",
+    "ms",
+    "mt"
+   ]
+  },
+  {
+   "codigo": "SE",
+   "nome": "Sudeste",
+   "ufs": [
+    "es",
+    "mg",
+    "rj",
+    "sp"
+   ]
+  },
+  {
+   "codigo": "S",
+   "nome": "Sul",
+   "ufs": [
+    "pr",
+    "rs",
+    "sc"
+   ]
+  }
+ ]
+}

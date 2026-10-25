@@ -1,0 +1,33 @@
+# Plano B no GitHub Pages: a versão antiga (plano-b/, sem coletor, sem projeção), em que cada navegador
+# consulta o TSE direto. Não depende da Cloudflare. Só funciona com o Pages ativo:
+# Settings > Pages > Build and deployment > Source: "GitHub Actions". Depois, "Run workflow" aqui.
+name: Plano B no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  pages:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: plano-b
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

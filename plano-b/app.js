@@ -317,6 +317,7 @@
   }
 
   function renderProjecao(br) {
+    if (!$("projConteudo")) return; // seção removida (plano B sem projeção)
     const pr = projetar();
     const p = pst(br);
     const linha = (c, v) => `<div class="proj-linha"><span style="color:${c.cor}"><strong>${esc(c.nome)}</strong></span><span><strong>${f2((v / pr.V) * 100)}%</strong> <span class="mut">≈ ${fi(v)} votos</span></span></div>`;

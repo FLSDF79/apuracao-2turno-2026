@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">NFLS.AI Arena — Broadcast Intelligence</title>
+  <desc id="desc">Logotipo original em forma de bola de futebol americano, com costuras esportivas e pulso de dados.</desc>
+  <path d="M112 280C300 30 900 30 1088 280C900 530 300 530 112 280Z" fill="#081A33" stroke="#E0444A" stroke-width="22" stroke-linejoin="round"/>
+  <g fill="none" stroke="#F3F5F7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 237C265 120 392 79 510 63" stroke-width="8"/>
+    <path d="M690 63C808 79 935 120 1040 237" stroke-width="8"/>
+    <path d="M160 323C265 440 392 481 510 497" stroke-width="8"/>
+    <path d="M690 497C808 481 935 440 1040 323" stroke-width="8"/>
+    <path d="M430 129V181M485 119V191M540 111V199M595 119V191M650 129V181" stroke-width="16"/>
+  </g>
+  <g fill="none" stroke="#21D4FD" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M380 155H465L486 136L510 176L540 118L570 176L594 136L616 155H820" stroke-width="10"/>
+  </g>
+  <g fill="#21D4FD">
+    <circle cx="358" cy="155" r="9"/>
+    <circle cx="842" cy="155" r="9"/>
+  </g>
+  <g fill="#F3F5F7" font-family="Avenir Next Condensed, DIN Condensed, Arial Narrow, sans-serif" font-weight="900" text-anchor="middle">
+    <text x="600" y="344" font-size="168" letter-spacing="-8"><tspan fill="#E0444A">NFL</tspan><tspan fill="#F3F5F7">S</tspan><tspan fill="#21D4FD">.AI</tspan></text>
+    <text x="600" y="427" font-size="42" letter-spacing="22">ARENA</text>
+  </g>
+</svg>
