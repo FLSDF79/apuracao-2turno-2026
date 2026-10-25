@@ -71,3 +71,16 @@ footer{max-width:1200px;margin:16px auto 30px;padding:0 14px;text-align:center;f
 .proj-linha:last-child{border:0}
 
 .cand .foto{float:right;width:64px;height:80px;object-fit:cover;border-radius:8px;margin-left:8px;border:1px solid var(--borda)}
+
+#govCard{grid-column:1/-1}
+.gov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.gov-uf{border:1px solid var(--borda);border-radius:10px;padding:10px}
+.gov-topo{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:6px}
+.gov-c{display:flex;justify-content:space-between;gap:8px;padding:3px 0}
+.gov-c.lider-gov .gov-nome{color:#f0b429}
+.gov-nome{min-width:0;overflow-wrap:anywhere}
+.eleito-gov{font-size:.7rem;border:1px solid var(--ok);color:var(--ok);border-radius:6px;padding:0 4px}
+.gov-barra{height:6px;background:var(--cinza);border-radius:4px;overflow:hidden;margin:6px 0 4px}
+.gov-barra div{height:100%;background:#f0b429}
+.gov-uf p{margin:0}
+.gov-c>span:last-child{white-space:nowrap;text-align:right}
