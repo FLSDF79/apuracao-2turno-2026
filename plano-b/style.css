@@ -69,3 +69,5 @@ tr.total td{font-weight:700}
 footer{max-width:1200px;margin:16px auto 30px;padding:0 14px;text-align:center;font-size:.85rem}
 .proj-linha{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--borda)}
 .proj-linha:last-child{border:0}
+
+.cand .foto{float:right;width:64px;height:80px;object-fit:cover;border-radius:8px;margin-left:8px;border:1px solid var(--borda)}
