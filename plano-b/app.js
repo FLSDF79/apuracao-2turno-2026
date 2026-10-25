@@ -32,11 +32,16 @@
   const urlU = (ele, uf, cargo = CFG.cargo) => `${CFG.base}/${CFG.ciclo}/${ele}/dados/${uf}/${uf}-c${pad(cargo, 4)}-e${pad(ele, 6)}-u.json`;
 
   async function getJSON(url) {
-    // cache:"no-cache" => o navegador revalida com If-None-Match/ETag (304 quando não mudou)
-    const r = await fetch(url, { cache: "no-cache", mode: "cors" });
-    if (r.status === 404 || r.status === 403) return { status: r.status, data: null };
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    return { status: r.status, data: await r.json() };
+    // cache:"no-cache" => o navegador revalida com If-None-Match/ETag (304 quando não mudou).
+    // Tempo limite: um pedido pendurado não pode travar a atualização.
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), (CFG.tempoLimiteSeg || 15) * 1000);
+    try {
+      const r = await fetch(url, { cache: "no-cache", mode: "cors", signal: ctl.signal });
+      if (r.status === 404 || r.status === 403) return { status: r.status, data: null };
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return { status: r.status, data: await r.json() };
+    } finally { clearTimeout(t); }
   }
 
   // ---------------- Parse do arquivo "-u.json" do TSE ----------------
@@ -132,7 +137,7 @@
   async function ciclo() {
     clearTimeout(estado.timer);
     if (estado.rodando) return;
-    estado.rodando = true;
+    estado.rodando = true; estado.inicioCiclo = Date.now();
     const agora = Date.now();
     try {
       if (DEMO) { await cicloDemo(agora); }
@@ -142,10 +147,35 @@
       console.error(err);
     }
     estado.rodando = false;
-    render(agora);
+    // Uma falha de desenho nunca pode impedir o próximo agendamento.
+    try { render(agora); } catch (err) { console.error(err); }
+    agendar();
+  }
+  function agendar() {
+    clearTimeout(estado.timer);
     const fim = estado.br && pst(estado.br) >= 100;
     const seg = DEMO ? 3 : (fim ? CFG.intervaloFinalSeg : CFG.intervaloSeg);
-    estado.timer = setTimeout(ciclo, (seg + (DEMO ? 0 : Math.random() * 5)) * 1000);
+    const ms = (seg + (DEMO ? 0 : Math.random() * 5)) * 1000;
+    estado.proximo = Date.now() + ms;
+    estado.timer = setTimeout(ciclo, ms);
+  }
+  // Vigia: se o ciclo parar por qualquer motivo (timer perdido, aba suspensa, pedido preso), retoma.
+  setInterval(() => {
+    const agora = Date.now();
+    if (estado.rodando && agora - (estado.inicioCiclo || agora) > 90 * 1000) { estado.rodando = false; ciclo(); return; }
+    if (!estado.rodando && estado.proximo && agora > estado.proximo + 20 * 1000) ciclo();
+  }, 15 * 1000);
+  // Versão publicada: se o painel for atualizado durante a noite, as telas abertas recarregam sozinhas.
+  let versaoInicial = null;
+  async function conferirVersao() {
+    try {
+      const r = await fetch(`versao.txt?t=${Date.now()}`, { cache: "no-store" });
+      if (!r.ok) return;
+      const v = (await r.text()).trim();
+      if (!/^[0-9a-f]{7,40}$/.test(v)) return;
+      if (versaoInicial === null) versaoInicial = v;
+      else if (v !== versaoInicial && !estado.rodando) location.reload();
+    } catch (e) { /* sem versão publicada: segue normal */ }
   }
 
   async function resolverEleicao() {
@@ -530,4 +560,5 @@
 
   carregarGeo().catch(() => {});
   ciclo();
+  if (!DEMO) { conferirVersao(); setInterval(conferirVersao, 3 * 60 * 1000); }
 })();
