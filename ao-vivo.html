@@ -1,0 +1,44 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apuração ao vivo – Presidente 2º turno 2026</title>
+<style>body{font-family:system-ui,sans-serif;background:#0f1115;color:#e8e8e8;margin:0;padding:16px;max-width:900px;margin:auto}
+h1{font-size:1.2rem;margin:.2em 0}.sub{color:#999;font-size:.85rem}.big{font-size:2.4rem;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.card{background:#1a1d24;border-radius:10px;padding:14px}
+.f{border-top:4px solid #2a6bd1}.l{border-top:4px solid #c8102e}.bar{display:flex;height:34px;border-radius:8px;overflow:hidden;background:#333}
+.bar div{transition:width .6s}#bf{background:#2a6bd1}#bl{background:#c8102e}.badge{display:none;background:#e0a800;color:#000;padding:6px 10px;border-radius:6px;font-weight:700;margin:8px 0}
+canvas{width:100%;height:220px;background:#1a1d24;border-radius:10px}a{color:#8ab4ff}footer{text-align:center;color:#777;font-size:.75rem;margin:18px 0}</style></head><body>
+<h1>Apuração ao vivo — Presidente, 2º turno (25/10/2026)</h1>
+<div class="sub" id="st">Carregando…</div>
+<div class="badge" id="md">TSE: resultado MATEMATICAMENTE DEFINIDO</div>
+<div class="card"><div class="sub">Seções totalizadas</div><div class="big" id="pst">aguardando TSE</div></div>
+<div class="grid"><div class="card f"><div>Flávio Bolsonaro (PL · 22)</div><div class="big" id="pf">–</div><div id="vf" class="sub">–</div></div>
+<div class="card l"><div>Lula (PT · 13)</div><div class="big" id="pl">–</div><div id="vl" class="sub">–</div></div></div>
+<div class="bar"><div id="bf" style="width:50%"></div><div id="bl" style="width:50%"></div></div>
+<p id="dif" class="sub">Diferença: –</p>
+<div class="sub">Evolução (% válidos × % seções apuradas)</div><canvas id="ch" width="860" height="220"></canvas>
+<p class="sub">Atualiza a cada 30 s direto dos dados abertos do TSE. Votos válidos excluem brancos e nulos. Histórico guardado neste navegador.</p>
+<footer>Fonte: <a href="https://resultados.tse.jus.br/oficial/app/index.html">TSE – Resultados</a> (<a id="src" href="">JSON</a>) · <b>FLS.AI</b></footer>
+<script>
+const URL_TSE="https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json";
+document.getElementById('src').href=URL_TSE;
+const n=s=>Number(String(s).replace(/\./g,'').replace(',','.'));const fmt=x=>x.toLocaleString('pt-BR');
+let H=JSON.parse(localStorage.getItem('ap26h')||'[]');
+function cands(d){let out=[];JSON.stringify(d,(k,v)=>{if(v&&v.n&&v.vap!==undefined&&v.nmu)out.push(v);return v});return out}
+function draw(){const c=document.getElementById('ch'),x=c.getContext('2d'),W=c.width,Hh=c.height;x.clearRect(0,0,W,Hh);
+x.strokeStyle='#444';x.beginPath();x.moveTo(0,Hh/2);x.lineTo(W,Hh/2);x.stroke();x.fillStyle='#777';x.font='12px sans-serif';x.fillText('50%',4,Hh/2-4);
+const y=p=>Hh-((p-30)/40)*Hh;[['f','#2a6bd1'],['l','#c8102e']].forEach(([k,col])=>{x.strokeStyle=col;x.lineWidth=2;x.beginPath();
+H.forEach((h,i)=>{const X=h.pst/100*W;i?x.lineTo(X,y(h[k])):x.moveTo(X,y(h[k]))});x.stroke()})}
+async function go(){try{const r=await fetch(URL_TSE+'?t='+Date.now(),{cache:'no-store'});const d=await r.json();
+const cs=cands(d),F=cs.find(c=>c.n=='22'),L=cs.find(c=>c.n=='13');
+const P=(d.s&&d.s.pst)||d.pst;const pst=P!==undefined?n(P):null;
+document.getElementById('pst').textContent=pst!==null?P+'%':'aguardando TSE';
+document.getElementById('st').textContent='Gerado pelo TSE em '+d.dg+' às '+d.hg+' (Brasília) · última consulta '+new Date().toLocaleTimeString('pt-BR');
+document.getElementById('md').style.display=(d.md==='s'||d.md==='S')?'block':'none';
+if(F&&L){const pf=n(F.pvap),pl=n(L.pvap),vf=n(F.vap),vl=n(L.vap);
+pf_.textContent=F.pvap+'%';pl_.textContent=L.pvap+'%';vf_.textContent=fmt(vf)+' votos';vl_.textContent=fmt(vl)+' votos';
+const t=pf+pl||1;bf.style.width=(pf/t*100)+'%';bl.style.width=(pl/t*100)+'%';
+const lead=vf>=vl?'Flávio':'Lula';dif.textContent='Diferença: '+fmt(Math.abs(vf-vl))+' votos ('+Math.abs(pf-pl).toFixed(2).replace('.',',')+' p.p.) a favor de '+lead;
+if(pst!==null&&vf+vl>0){const last=H[H.length-1];if(!last||last.hg!==d.hg){H.push({hg:d.hg,pst,f:pf,l:pl});localStorage.setItem('ap26h',JSON.stringify(H))}}draw()}
+}catch(e){document.getElementById('st').textContent='aguardando TSE (falha na consulta: '+e.message+') · '+new Date().toLocaleTimeString('pt-BR')}}
+const pf_=document.getElementById('pf'),pl_=document.getElementById('pl'),vf_=document.getElementById('vf'),vl_=document.getElementById('vl'),bf=document.getElementById('bf'),bl=document.getElementById('bl'),dif=document.getElementById('dif');
+go();setInterval(go,30000);
+</script></body></html>
