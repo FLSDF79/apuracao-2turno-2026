@@ -55,7 +55,7 @@
     })));
     const s = d.s || {}, e = d.e || {}, v = d.v || {};
     return {
-      uf: d.cdabr, dg: d.dg, hg: d.hg, dt: d.dt, ht: d.ht, and: d.and,
+      uf: d.cdabr, dg: d.dg, hg: d.hg, dt: d.dt, ht: d.ht, and: d.and, md: d.md, tf: d.tf,
       ts: n(s.ts), st: n(s.st), pstOficial: s.pstn != null ? n(s.pstn) : null,
       te: n(e.te), est: n(e.est), c: n(e.c), a: n(e.a),
       tv: n(v.tv), vv: n(v.vv), vb: n(v.vb), tvn: n(v.tvn), van: n(v.van),
@@ -290,6 +290,14 @@
     renderTabelaUF();
   }
 
+  // Mesma regra do app oficial do TSE: com a totalização ainda aberta (tf "N"), md "E" ou "S" vira o aviso abaixo.
+  function definicao(x) {
+    const md = String((x && x.md) || "").toUpperCase(), tf = String((x && x.tf) || "").toUpperCase();
+    if (tf !== "N") return "";
+    return md === "E" ? "Eleição matematicamente definida (Eleito)" : md === "S" ? "Eleição matematicamente definida (Segundo turno)" : "";
+  }
+  const ELEITO = (c) => /^eleit[oa]$/i.test((c && c.st) || "");
+
   // Governador: percentual sobre votos válidos do próprio arquivo da UF; "eleito" só pela situação do TSE.
   function renderGov() {
     const mostrar = GOV && !DEMO && estado.ele === estado.ele2T && GOV.ufs.some((uf) => estado.gov[uf]);
@@ -301,10 +309,12 @@
       const cs = Object.values(g.cands).sort((a, b) => b.vap - a.vap);
       const lider = cs.length > 1 && cs[0].vap > cs[1].vap ? cs[0].n : null;
       const linhas = cs.map((c) => `<div class="gov-c${c.n === lider ? " lider-gov" : ""}">
-        <span class="gov-nome">${esc(c.nome)} <span class="mut">${esc(c.n)}</span>${/^eleit[oa]$/i.test(c.st || "") ? ' <span class="eleito-gov">eleito(a)</span>' : ""}</span>
+        <span class="gov-nome">${esc(c.nome)} <span class="mut">${esc(c.n)}</span>${ELEITO(c) ? ' <span class="eleito-gov">eleito(a)</span>' : ""}</span>
         <span><strong>${f2(pctV(g, c.n))}%</strong> <span class="mut peq">${fi(c.vap)}</span></span></div>`).join("");
       const w = cs.length ? pctV(g, cs[0].n) : 0;
+      const def = definicao(g);
       return `<div class="gov-uf"><div class="gov-topo"><strong>${esc(NOMES[uf])}</strong> <span class="mut peq">${f2(pst(g))}% das seções</span></div>${linhas}
+        ${def ? `<p class="def-mat">${esc(def)}</p>` : ""}
         <div class="gov-barra"><div style="width:${isFinite(w) ? w : 0}%"></div></div>
         <p class="mut peq">TSE: ${esc(g.dt || "–")} ${esc(g.ht || "")} (hora local da UF)</p></div>`;
     }).join("");
@@ -325,8 +335,11 @@
     };
     const card = (c, pct, v, lider) => `<div class="cand ${c.lado}">${foto(c)}
       <div class="nome">${esc(c.nome)} <span class="mut">${esc(c.n)}</span></div>
-      <div class="pct">${f2(pct)}%</div><div class="votos">${fi(v)} votos</div>${lider ? '<span class="lider">à frente</span>' : ""}</div>`;
+      <div class="pct">${f2(pct)}%</div><div class="votos">${fi(v)} votos</div>${lider ? '<span class="lider">à frente</span>' : ""}${estado.ele === estado.ele2T && ELEITO(br.cands[c.n]) ? ' <span class="eleito-gov">eleito(a)</span>' : ""}</div>`;
     $("cands").innerHTML = card(CA, pa, va, va > vb) + card(CB, pb, vb, vb > va);
+    const def = estado.ele === estado.ele2T ? definicao(br) : "";
+    $("defMat").hidden = !def;
+    $("defMat").textContent = def;
     const outros = br.vv - va - vb;
     const wa = br.vv ? (va / br.vv) * 100 : 0, wb = br.vv ? (vb / br.vv) * 100 : 0;
     $("barraDisputa").innerHTML = `<div style="width:${wa}%;background:${CA.cor}"></div><div style="width:${100 - wa - wb}%;background:#555"></div><div style="width:${wb}%;background:${CB.cor}"></div><span class="meio"></span>`;

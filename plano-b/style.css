@@ -84,3 +84,5 @@ footer{max-width:1200px;margin:16px auto 30px;padding:0 14px;text-align:center;f
 .gov-barra div{height:100%;background:#f0b429}
 .gov-uf p{margin:0}
 .gov-c>span:last-child{white-space:nowrap;text-align:right}
+.def-mat{margin:6px 0 0;font-size:.85rem;font-weight:700;color:var(--ok)}
+.def-mat[hidden]{display:none}
