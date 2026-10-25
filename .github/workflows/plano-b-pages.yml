@@ -25,6 +25,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Versão publicada: as telas abertas comparam versao.txt e recarregam sozinhas quando muda;
+      # o ?v= nos arquivos evita que o cache do Pages sirva o JavaScript antigo depois da recarga.
+      - name: Carimbar versão
+        run: |
+          echo "$GITHUB_SHA" > plano-b/versao.txt
+          sed -i -e "s#src=\"config.js\"#src=\"config.js?v=$GITHUB_SHA\"#" \
+                 -e "s#src=\"app.js\"#src=\"app.js?v=$GITHUB_SHA\"#" \
+                 -e "s#href=\"style.css\"#href=\"style.css?v=$GITHUB_SHA\"#" plano-b/index.html
+          grep -c "v=$GITHUB_SHA" plano-b/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: plano-b

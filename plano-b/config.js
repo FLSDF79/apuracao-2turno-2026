@@ -26,8 +26,10 @@ window.PAINEL_CONFIG = {
   // o RJ saiu (governador eleito no 1º turno após a retotalização de 10/10).
   governador: { eleicao: "6260", cargo: "3", ufs: ["ac", "am", "df", "es", "rn", "to"] },
 
-  // Intervalo de atualização (segundos). Entre 30 e 60 conforme combinado.
-  intervaloSeg: 45,
+  // Intervalo de atualização (segundos), mais 0–5 s de sorteio para não sincronizar os visitantes.
+  intervaloSeg: 30,
+  // Tempo máximo de cada pedido ao TSE antes de desistir e tentar no próximo ciclo
+  tempoLimiteSeg: 15,
   // Depois que a totalização chega a 100%, atualiza com menos frequência
   intervaloFinalSeg: 300,
   // Minutos sem nova totalização para considerar "pausa" / "TSE parado"
