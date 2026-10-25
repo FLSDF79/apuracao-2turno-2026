@@ -37,7 +37,9 @@
     const ctl = new AbortController();
     const t = setTimeout(() => ctl.abort(), (CFG.tempoLimiteSeg || 15) * 1000);
     try {
-      const r = await fetch(url, { cache: "no-cache", mode: "cors", signal: ctl.signal });
+      // nocache: como o próprio app do TSE, pede a versão mais nova em vez da cópia de até ~50 s do cache da rede.
+      const fresco = url.startsWith(CFG.base) || url === CFG.configGeral ? `${url}${url.includes("?") ? "&" : "?"}nocache=${Date.now()}` : url;
+      const r = await fetch(fresco, { cache: "no-store", mode: "cors", signal: ctl.signal });
       if (r.status === 404 || r.status === 403) return { status: r.status, data: null };
       if (!r.ok) throw new Error("HTTP " + r.status);
       return { status: r.status, data: await r.json() };
@@ -304,7 +306,7 @@
       const w = cs.length ? pctV(g, cs[0].n) : 0;
       return `<div class="gov-uf"><div class="gov-topo"><strong>${esc(NOMES[uf])}</strong> <span class="mut peq">${f2(pst(g))}% das seções</span></div>${linhas}
         <div class="gov-barra"><div style="width:${isFinite(w) ? w : 0}%"></div></div>
-        <p class="mut peq">TSE: ${esc(g.dt || "–")} ${esc(g.ht || "")}</p></div>`;
+        <p class="mut peq">TSE: ${esc(g.dt || "–")} ${esc(g.ht || "")} (hora local da UF)</p></div>`;
     }).join("");
   }
 
