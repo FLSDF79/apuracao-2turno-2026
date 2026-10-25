@@ -25,7 +25,13 @@ export const CABECALHOS = {
   "x-frame-options": "DENY",
 };
 
+// Plano B (/plano-b/, a versão antiga): cada navegador consulta o TSE direto, então só ela libera
+// connect-src para resultados.tse.jus.br. O resto da política é a mesma.
+export const CSP_PLANO_B = CSP.replace("connect-src 'self'", "connect-src 'self' https://resultados.tse.jus.br");
+
 /** Conteúdo do arquivo _headers (Workers Static Assets) */
 export function arquivoHeaders() {
-  return `/*\n${Object.entries(CABECALHOS).map(([k, v]) => `  ${k}: ${v}`).join("\n")}\n`;
+  const bloco = (cab) => Object.entries(cab).map(([k, v]) => `  ${k}: ${v}`).join("\n");
+  // "! cabeçalho" desfaz o valor herdado da regra /* antes de aplicar o do plano B.
+  return `/*\n${bloco(CABECALHOS)}\n/plano-b/*\n  ! content-security-policy\n${bloco({ "content-security-policy": CSP_PLANO_B })}\n`;
 }

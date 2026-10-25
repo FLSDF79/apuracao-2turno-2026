@@ -98,7 +98,7 @@ test("noite inteira pelo coletor de verdade: regras do prompt valem em todas as 
 test("site montado só com a página e os exemplos (sem fixtures, testes ou coletor)", async () => {
   const destino = await montarSite(join(tmpdir(), `site-${process.pid}`));
   const itens = (await readdir(destino)).sort();
-  assert.deepEqual(itens, ["_headers", "assets", "config.js", "data", "exemplos", "index.html", "js", "style.css"]);
+  assert.deepEqual(itens, ["_headers", "assets", "config.js", "data", "exemplos", "index.html", "js", "plano-b", "style.css"]);
 });
 
 test("toda referência local da página existe no site montado", async () => {
@@ -114,4 +114,17 @@ test("wrangler.toml aponta para arquivos que existem e para a pasta que o montad
   assert.match(toml, /directory = "dist\/site"/);
   for (const m of toml.matchAll(/^main = "([^"]+)"/gm)) await readFile(join(RAIZ, m[1]));
   assert.match(toml, /class_name = "Coletor"/);
+});
+
+test("plano B (/plano-b/): versão antiga no site, sem projeção, e só ela pode consultar o TSE pelo navegador", async () => {
+  const destino = await montarSite(join(tmpdir(), `site-pb-${process.pid}`));
+  const headers = await readFile(join(destino, "_headers"), "utf8");
+  const [geral, planoB] = headers.split("/plano-b/*");
+  assert.match(geral, /connect-src 'self';/);
+  assert.match(planoB, /! content-security-policy/);
+  assert.match(planoB, /connect-src 'self' https:\/\/resultados\.tse\.jus\.br;/);
+  const html = await readFile(join(destino, "plano-b/index.html"), "utf8");
+  assert.doesNotMatch(html, /id="projecao"/);
+  for (const f of ["app.js", "config.js", "style.css", "data/br-uf.geojson"]) await readFile(join(destino, "plano-b", f));
+  assert.match(await readFile(join(destino, "plano-b/config.js"), "utf8"), /eleicao2T: "6258"/);
 });
