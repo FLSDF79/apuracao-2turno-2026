@@ -15,6 +15,8 @@
 
   const fmt = new Intl.NumberFormat("pt-BR");
   const f2 = (x) => (isFinite(x) ? x.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "–");
+  // % de seções: trunca como o TSE, para 2 seções faltando não virarem "100,00%".
+  const f2s = (x) => f2(isFinite(x) ? Math.floor(x * 100 + 1e-9) / 100 : x);
   const fi = (x) => (isFinite(x) ? fmt.format(Math.round(x)) : "–");
   const $ = (id) => document.getElementById(id);
   const n = (s) => { if (s == null || s === "") return 0; const v = Number(String(s).replace(",", ".")); return isFinite(v) ? v : 0; };
@@ -313,7 +315,7 @@
         <span><strong>${f2(pctV(g, c.n))}%</strong> <span class="mut peq">${fi(c.vap)}</span></span></div>`).join("");
       const w = cs.length ? pctV(g, cs[0].n) : 0;
       const def = definicao(g);
-      return `<div class="gov-uf"><div class="gov-topo"><strong>${esc(NOMES[uf])}</strong> <span class="mut peq">${f2(pst(g))}% das seções</span></div>${linhas}
+      return `<div class="gov-uf"><div class="gov-topo"><strong>${esc(NOMES[uf])}</strong> <span class="mut peq">${f2s(pst(g))}% das seções</span></div>${linhas}
         ${def ? `<p class="def-mat">${esc(def)}</p>` : ""}
         <div class="gov-barra"><div style="width:${isFinite(w) ? w : 0}%"></div></div>
         <p class="mut peq">TSE: ${esc(g.dt || "–")} ${esc(g.ht || "")} (hora local da UF)</p></div>`;
@@ -322,7 +324,7 @@
 
   function renderPlacar(br, agora) {
     const p = pst(br);
-    $("pctSecoes").textContent = f2(p) + "%";
+    $("pctSecoes").textContent = f2s(p) + "%";
     $("secoesNum").textContent = `(${fi(br.st)} de ${fi(br.ts)})`;
     $("barraSecoes").style.width = Math.min(100, p) + "%";
     const pa = pctV(br, CA.n), pb = pctV(br, CB.n);
@@ -402,7 +404,7 @@
     const p = pst(br);
     const linha = (c, v) => `<div class="proj-linha"><span style="color:${c.cor}"><strong>${esc(c.nome)}</strong></span><span><strong>${f2((v / pr.V) * 100)}%</strong> <span class="mut">≈ ${fi(v)} votos</span></span></div>`;
     $("projConteudo").innerHTML = pr.V > 0 ? (
-      (p >= 100 ? `<p class="peq ok-txt">Totalização concluída: a projeção coincide com o resultado.</p>` : `<p class="peq mut">Estimativa de % de votos válidos ao final, com ${f2(p)}% das seções totalizadas. Votos válidos ainda não totalizados (estimados): ≈ ${fi(pr.falt)}.</p>`) +
+      (p >= 100 ? `<p class="peq ok-txt">Totalização concluída: a projeção coincide com o resultado.</p>` : `<p class="peq mut">Estimativa de % de votos válidos ao final, com ${f2s(p)}% das seções totalizadas. Votos válidos ainda não totalizados (estimados): ≈ ${fi(pr.falt)}.</p>`) +
       linha(CA, pr.A) + linha(CB, pr.B)
     ) : `<p class="mut">Aguardando as primeiras seções totalizadas.</p>`;
   }
@@ -447,7 +449,7 @@
     const x = estado.ufs[uf];
     if (!x) return `<strong>${NOMES[uf]}</strong><br>sem dados`;
     const va = votos(x, CA.n), vb = votos(x, CB.n), m = margem(x);
-    return `<strong>${NOMES[uf]}</strong> · ${f2(pst(x))}% apurado<br>
+    return `<strong>${NOMES[uf]}</strong> · ${f2s(pst(x))}% apurado<br>
       <span style="color:${CA.cor}">■</span> ${esc(CA.nome)}: <strong>${f2(pctV(x, CA.n))}%</strong> (${fi(va)})<br>
       <span style="color:${CB.cor}">■</span> ${esc(CB.nome)}: <strong>${f2(pctV(x, CB.n))}%</strong> (${fi(vb)})<br>
       ${x.vv ? `Margem: ${f2(Math.abs(m))} p.p. (${fi(Math.abs(va - vb))} votos)<br>` : ""}
@@ -539,7 +541,7 @@
   function renderRegioes() {
     const grupos = ["N", "NE", "CO", "SE", "S", "EX"].map((r) => linhaDados(NOME_REG[r], agrega(UFS.filter((u) => REGIAO[u] === r).map((u) => estado.ufs[u]), r)));
     const tot = linhaDados("Total (soma)", agrega(UFS.map((u) => estado.ufs[u]), "t"));
-    const tr = (r, cls) => `<tr class="${cls || ""}"><td>${esc(r.rotulo)}</td><td>${f2(r.pst)}%</td><td>${f2(r.pa)}%</td><td>${fi(r.va)}</td><td>${f2(r.pb)}%</td><td>${fi(r.vb)}</td><td>${celMargem(r)}</td><td>${fi(Math.abs(r.dif))}</td></tr>`;
+    const tr = (r, cls) => `<tr class="${cls || ""}"><td>${esc(r.rotulo)}</td><td>${f2s(r.pst)}%</td><td>${f2(r.pa)}%</td><td>${fi(r.va)}</td><td>${f2(r.pb)}%</td><td>${fi(r.vb)}</td><td>${celMargem(r)}</td><td>${fi(Math.abs(r.dif))}</td></tr>`;
     $("tabRegioes").innerHTML = `<thead><tr><th>Região</th><th>Apurado</th><th>${esc(CA.nome)}</th><th>votos</th><th>${esc(CB.nome)}</th><th>votos</th><th>Margem p.p.</th><th>Dif. votos</th></tr></thead><tbody>${grupos.map((g) => tr(g)).join("")}${tr(tot, "total")}</tbody>`;
   }
   const COLS = [
@@ -554,7 +556,7 @@
     const col = COLS.find((c) => c[0] === estado.sort.col) || COLS[0];
     rows.sort((a, b) => { const x = col[2](a), y = col[2](b); const r = typeof x === "string" ? x.localeCompare(y) : (isFinite(x) ? x : -1e15) - (isFinite(y) ? y : -1e15); return estado.sort.asc ? r : -r; });
     const th = COLS.map((c) => `<th data-col="${c[0]}" class="${c[0] === estado.sort.col ? "ord" + (estado.sort.asc ? " asc" : "") : ""}">${esc(c[1])}</th>`).join("");
-    const tb = rows.map((r) => `<tr title="${NOMES[r.uf]}"><td><span class="chip" style="background:${corUF(r.x)}"></span>${r.rotulo}</td><td>${r.reg}</td><td>${f2(r.pst)}%</td><td>${f2(r.pa)}%</td><td>${fi(r.va)}</td><td>${f2(r.pb)}%</td><td>${fi(r.vb)}</td><td>${celMargem(r)}</td><td>${fi(Math.abs(r.dif))}</td><td>${fi(r.x.vb)}</td><td>${fi(r.x.tvn)}</td><td>${f2(r.abst)}%</td><td>${fi(r.x.te)}</td></tr>`).join("");
+    const tb = rows.map((r) => `<tr title="${NOMES[r.uf]}"><td><span class="chip" style="background:${corUF(r.x)}"></span>${r.rotulo}</td><td>${r.reg}</td><td>${f2s(r.pst)}%</td><td>${f2(r.pa)}%</td><td>${fi(r.va)}</td><td>${f2(r.pb)}%</td><td>${fi(r.vb)}</td><td>${celMargem(r)}</td><td>${fi(Math.abs(r.dif))}</td><td>${fi(r.x.vb)}</td><td>${fi(r.x.tvn)}</td><td>${f2(r.abst)}%</td><td>${fi(r.x.te)}</td></tr>`).join("");
     const t = $("tabUFs");
     t.innerHTML = `<thead><tr>${th}</tr></thead><tbody>${tb}</tbody>`;
     t.querySelectorAll("th").forEach((el) => el.addEventListener("click", () => {
